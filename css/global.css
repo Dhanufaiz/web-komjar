@@ -435,3 +435,154 @@ footer a:hover { text-decoration: underline; }
     }
     .nav-links.active { right: 5%; }
 }
+
+/* =============================================
+   EXACT MATCH FOOTER STYLE (From image_15eafc.jpg)
+   ============================================= */
+
+.main-footer {
+    background-color: #0E221F; /* Warna hijau sangat gelap sesuai gambar */
+    color: #FFFFFF;
+    padding: 60px 8% 30px 8%;
+    font-family: 'Poppins', sans-serif;
+    align-items: left;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: left;
+    gap: 40px;
+    flex-wrap: wrap; /* Menjaga responsivitas di layar kecil */
+}
+
+/* Kolom Kiri */
+.footer-info {
+    flex: 1;
+    min-width: 300px;
+    align-items: left;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.footer-logo img {
+    height: 150px; /* Ukuran proporsional logo lingkaran daun */
+    width: auto;
+    margin-bottom: 25px;    
+}
+
+.footer-title {
+    color: #D36B39; /* Warna orange kecoklatan khas */
+    font-size: 1.2rem;
+    font-weight: normal;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+    align-items: left;
+    text-align: left;
+}
+
+.info-group {
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+.info-label {
+    display: block;
+    color: #D36B39;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.info-value {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 400;
+    transition: color 0.2s ease;
+    text-align: left;
+}
+
+.info-value:hover {
+    color: #F4B942;
+    align-items: left;
+}
+
+.info-value-text {
+    color: #FFFFFF;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: left;
+    max-width: 450px;
+    
+}
+
+/* Kolom Kanan (Maps) */
+.footer-maps {
+    width: 420px;
+    height: 210px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Pembatas */
+.footer-divider {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin: 40px 0 20px 0;
+}
+
+/* Bagian Bawah */
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.copyright {
+    color: #A0AAB2; /* Abu-abu muted ringan */
+    font-size: 0.85rem;
+    font-weight: 400;
+}
+
+.footer-socials {
+    display: flex;
+    gap: 18px;
+}
+
+.footer-socials a {
+    color: #A0AAB2;
+    font-size: 1.2rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.footer-socials a:hover {
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+/* Pengaturan Responsif Layar Handphone */
+@media (max-width: 768px) {
+    .footer-top {
+        flex-direction: column;
+    }
+    .footer-maps {
+        width: 100%;
+        height: 200px;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
