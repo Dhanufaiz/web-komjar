@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran Volunteer - KOMJAR 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/forms.css">
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+            <img src="img/SAKHYA PNG.png" alt="Logo Sakhya Abhipraya">
+            <span>KOMJAR 2026</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="presensi.html">Presensi</a></li>
+            <li><a href="daftar.html" class="active">Pendaftaran</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="form-section">
+            <h2 class="section-title">Form Pendaftaran Volunteer</h2>
+            
+            <div class="playful-card form-container">
+                <p class="form-intro">Silakan isi formulir registrasi data diri dengan benar. Penempatan pilihan departemen mematuhi pembatasan sisa kuota tersedia.</p>
+                
+                <form id="registrationForm" novalidate>
+                    <div class="form-group">
+                        <label for="nama">Nama Lengkap sesuai Identitas 👤</label>
+                        <input type="text" id="nama" required placeholder="Masukkan nama lengkap Anda...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nim">Nomor Induk Mahasiswa (NIM) 🆔</label>
+                        <input type="text" id="nim" required placeholder="Contoh: L0125008...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="whatsapp">Nomor Aktif WhatsApp 📞</label>
+                        <input type="tel" id="whatsapp" required placeholder="Contoh: 08123456789...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dept">Pilihan Alokasi Departemen Kerja 🏢</label>
+                        <select id="dept" required>
+                            <option value="" disabled selected>-- Pilih Departemen --</option>
+                            <option value="Kurikulum">Departemen Kurikulum & Bahan Ajar</option>
+                            <option value="Media">Departemen Media Pembelajaran</option>
+                            <option value="Logistik">Departemen Logistik & Operasional</option>
+                            <option value="Humas">Departemen Humas & Publikasi</option>
+                        </select>
+                        <small class="input-note">* Batas kuota pengisian maksimal 4 pendaftar per bidang departemen</small>
+                    </div>
+
+                    <button type="submit" class="btn-playful btn-main btn-submit-form">Kirim Pendaftaran Panitia 💥</button>
+                </form>
+                
+                <div class="download-list">
+                    <h3 style="font-family: 'Poppins';">📂 Berkas Informasi & Panduan Teknis</h3>
+                    <div class="download-item">
+                        <div class="file-info">
+                            <h4>Buku Panduan Teknis Komjar 2026</h4>
+                            <p>PDF Document • 2.4 MB</p>
+                        </div>
+                        <a href="downloads/panduan-komjar.pdf" download class="btn-playful" style="padding: 8px 15px; font-size: 0.85rem;"><i class="fa-solid fa-download"></i> Unduh</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-top">
+            <div class="footer-info">
+                <div class="footer-logo"><img src="img/SAKHYA PNG.png" alt="Logo"></div>
+                <h3 class="footer-title">Sakhya Abhipraya</h3>
+                <p class="info-value-text">Jl. Ir. Sutami No. 36 A, Jebres, Kota Surakarta, Jawa Tengah 57126</p>
+            </div>
+            <div class="footer-maps">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1m2!1m3!1m2!1s0x2e7a16fdf06e36df%3A0x6e2c366f44d561a3!2sUniversitas%20Sebelas%20Maret!5e0!3m2!1sid!2sid!4v1710000000000!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+        <hr class="footer-divider">
+        <div class="footer-bottom">
+            <p class="copyright">Copyright © 2026 - KOMADIKSI SMART UNS</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+            
+            // Bersihkan error terdahulu
+            document.querySelectorAll('.error-message').forEach(el => el.remove());
+            document.querySelectorAll('.form-group').forEach(el => el.classList.remove('error'));
+            
+            const fields = ['nama', 'nim', 'whatsapp', 'dept'];
+            fields.forEach(id => {
+                const input = document.getElementById(id);
+                if(!input.value.trim()) {
+                    isValid = false;
+                    const group = input.parentElement;
+                    group.classList.add('error');
+                    const errNode = document.createElement('div');
+                    errNode.className = 'error-message';
+                    errNode.innerText = 'Kolom data ini wajib diisi!';
+                    group.appendChild(errNode);
+                }
+            });
+
+            if(isValid) {
+                // Simulasi pemrosesan pengiriman data
+                const btn = document.querySelector('.btn-submit-form');
+                btn.innerText = 'Memproses Pengiriman Berkas...⏳';
+                btn.disabled = true;
+                
+                setTimeout(() => {
+                    window.location.href = 'success.html?type=pendaftaran';
+                }, 1200);
+            }
+        });
+    </script>
+</body>
+</html>

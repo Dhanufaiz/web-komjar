@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presensi Harian - KOMJAR 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/forms.css">
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+            <img src="img/SAKHYA PNG.png" alt="Logo Sakhya Abhipraya">
+            <span>KOMJAR 2026</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="presensi.html" class="active">Presensi</a></li>
+            <li><a href="daftar.html">Pendaftaran</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="form-section">
+            <h2 class="section-title">Form Presensi Mengajar</h2>
+            
+            <div class="playful-card form-container">
+                <p class="form-intro">Kirimkan logbook kehadiran pengajaran harian beserta lampiran dokumentasi foto secara berkala pasca sesi usai.</p>
+                
+                <form id="attendanceForm" novalidate>
+                    <div class="form-group">
+                        <label for="nama_vol">Nama Lengkap Volunteer 👤</label>
+                        <input type="text" id="nama_vol" required placeholder="Masukkan nama Anda...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pertemuan">Sesi Pertemuan Ke- 📝</label>
+                        <select id="pertemuan" required>
+                            <option value="" disabled selected>-- Pilih Pertemuan --</option>
+                            <option value="1">Pertemuan 1</option>
+                            <option value="2">Pertemuan 2</option>
+                            <option value="3">Pertemuan 3</option>
+                            <option value="4">Pertemuan 4</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="materi">Ringkasan Materi Pengajaran 📖</label>
+                        <textarea id="materi" rows="4" placeholder="Jelaskan detail progres materi pokok pengajaran harian..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bukti">Upload Bukti Foto Kegiatan 📷</label>
+                        <input type="file" id="bukti" accept="image/*" required>
+                        <small class="input-note">* Batas ukuran file gambar pelaporan maksimal 2MB (format JPG/PNG)</small>
+                    </div>
+
+                    <button type="submit" class="btn-playful btn-main btn-submit-form" style="background-color: var(--navy); color: white;">Kirim Logbook Kehadiran 📝</button>
+                </form>
+                
+                <div class="download-list">
+                    <h3 style="font-family: 'Poppins';">📋 Template Pendukung Pelaporan</h3>
+                    <div class="download-item">
+                        <div class="file-info">
+                            <h4>Template Excel Logbook Monitoring</h4>
+                            <p>XLSX Document • 1.1 MB</p>
+                        </div>
+                        <a href="downloads/logbook-template.xlsx" download class="btn-playful" style="padding: 8px 15px; font-size: 0.85rem;"><i class="fa-solid fa-download"></i> Unduh</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-top">
+            <div class="footer-info">
+                <div class="footer-logo"><img src="img/SAKHYA PNG.png" alt="Logo"></div>
+                <h3 class="footer-title">Sakhya Abhipraya</h3>
+                <p class="info-value-text">Jl. Ir. Sutami No. 36 A, Jebres, Kota Surakarta, Jawa Tengah 57126</p>
+            </div>
+            <div class="footer-maps">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1m2!1m3!1m2!1s0x2e7a16fdf06e36df%3A0x6e2c366f44d561a3!2sUniversitas%20Sebelas%20Maret!5e0!3m2!1sid!2sid!4v1710000000000!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+        <hr class="footer-divider">
+        <div class="footer-bottom">
+            <p class="copyright">Copyright © 2026 - KOMADIKSI SMART UNS</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+            
+            document.querySelectorAll('.error-message').forEach(el => el.remove());
+            document.querySelectorAll('.form-group').forEach(el => el.classList.remove('error'));
+            
+            const textFields = ['nama_vol', 'pertemuan', 'materi'];
+            textFields.forEach(id => {
+                const input = document.getElementById(id);
+                if(!input.value.trim()) {
+                    isValid = false;
+                    const group = input.parentElement;
+                    group.classList.add('error');
+                    const err = document.createElement('div');
+                    err.className = 'error-message';
+                    err.innerText = 'Kolom data ini tidak boleh dikosongkan!';
+                    group.appendChild(err);
+                }
+            });
+
+            // Validasi File Bukti Dokumen (Maksimal 2MB)
+            const fileInput = document.getElementById('bukti');
+            if(fileInput.files.length === 0) {
+                isValid = false;
+                const group = fileInput.parentElement;
+                group.classList.add('error');
+                const err = document.createElement('div');
+                err.className = 'error-message';
+                err.innerText = 'Berkas unggahan lampiran wajib disematkan!';
+                group.appendChild(err);
+            } else {
+                const fileSize = fileInput.files[0].size / 1024 / 1024;
+                if(fileSize > 2) {
+                    isValid = false;
+                    const group = fileInput.parentElement;
+                    group.classList.add('error');
+                    const err = document.createElement('div');
+                    err.className = 'error-message';
+                    err.innerText = 'Ukuran berkas melebihi batas maksimal 2MB!';
+                    group.appendChild(err);
+                }
+            }
+
+            if(isValid) {
+                const btn = document.querySelector('.btn-submit-form');
+                btn.innerText = 'Mengirim Berkas Laporan...🚀';
+                btn.disabled = true;
+                
+                setTimeout(() => {
+                    window.location.href = 'success.html?type=presensi';
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
