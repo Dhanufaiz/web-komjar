@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Situs Sedang Dalam Perbaikan — Segera Kembali!</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ─── TOKENS & VARIABEL KITA ─── */
+    :root {
+      --bg-color:   #FFF4E6;       /* Latar hangat nyaman */
+      --navy:       #1F2A44;       /* Warna garis & teks utama */
+      --gold:       #F4B942;       /* Warna aksen kuning-emas */
+      --orange:     #E88A1A;       /* Aksentuasi oranye cerah */
+      --white:      #FFFFFF;
+      
+      --border-4:   4px solid var(--navy);
+      --shadow-md:  8px 8px 0px var(--navy);
+    }
+
+    /* ─── RESET DASAR ─── */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--navy);
+      font-family: 'PT Serif', serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ─── DEKORASI LATAR BELAKANG (PLAYFUL) ─── */
+    .shape {
+      position: absolute;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 900;
+      font-size: 3rem;
+      color: rgba(31, 42, 68, 0.08);
+      user-select: none;
+      z-index: 1;
+    }
+    .shape-1 { top: 10%; left: 10%; transform: rotate(-15deg); }
+    .shape-2 { bottom: 15%; right: 12%; transform: rotate(25deg); }
+    .shape-3 { top: 20%; right: 15%; font-size: 5rem; }
+
+    /* ─── KARTU UTAMA (NEO-BRUTALISM) ─── */
+    .maintenance-container {
+      background: var(--white);
+      border: var(--border-4);
+      box-shadow: var(--shadow-md);
+      padding: 3.5rem 2.5rem;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Lapisan efek bayangan dekoratif di belakang kartu */
+    .maintenance-container::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      background: var(--gold);
+      z-index: -1;
+      transform: translate(12px, 12px);
+      border: var(--border-4);
+    }
+
+    /* ─── KONTEN ELEMEN ─── */
+    .badge {
+      display: inline-block;
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--orange);
+      color: var(--white);
+      padding: 6px 16px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border: var(--border-4);
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 900;
+      font-size: 2.5rem;
+      line-height: 1.2;
+      color: var(--navy);
+      margin-bottom: 1.5rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: rgba(31, 42, 68, 0.85);
+      margin-bottom: 2rem;
+    }
+
+    /* ─── TOMBOL INTERAKTIF ─── */
+    .btn-action {
+      display: inline-block;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--navy);
+      background-color: var(--gold);
+      padding: 12px 28px;
+      text-decoration: none;
+      border: var(--border-4);
+      box-shadow: 4px 4px 0px var(--navy);
+      transition: all 0.1s ease;
+      cursor: pointer;
+    }
+
+    .btn-action:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--navy);
+    }
+
+    .btn-action:active {
+      transform: translate(4px, 4px);
+      box-shadow: 0px 0px 0px var(--navy);
+    }
+
+    /* ─── FOOTER JURUSAN / KELOMPOK ─── */
+    footer {
+      margin-top: 3rem;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: rgba(31, 42, 68, 0.6);
+      text-align: center;
+      z-index: 2;
+    }
+
+    /* Responsif untuk perangkat mobile */
+    @media (max-width: 576px) {
+      h1 { font-size: 2rem; }
+      .maintenance-container { padding: 2.5rem 1.5rem; }
+      .shape { display: none; } /* Sembunyikan dekorasi di layar kecil */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="shape shape-1">✦</div>
+  <div class="shape shape-2">★</div>
+  <div class="shape shape-3">⚙</div>
+
+  <main class="maintenance-container">
+    <div class="badge">Situs Sedang Diperbarui</div>
+    <h1>Kita Akan Segera Kembali!</h1>
+    
+    <p>
+      Saat ini kita sedang melakukan pemeliharaan rutin dan menambahkan beberapa fitur baru yang keren untuk meningkatkan performa sistem. Proses ini tidak akan memakan waktu lama.
+    </p>
+
+    <a href="https://wa.me/6281227569523" target="_blank" class="btn-action">
+      Hubungi Admin Via WhatsApp 💬
+    </a>
+  </main>
+
+  <footer>
+    <p>© 2026 Komadiksi Smart — Universitas Sebelas Maret</p>
+  </footer>
+
+</body>
+</html>
