@@ -1,324 +1,38 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pendaftaran Volunteer — KOMJAR 2026</title>
-  <link rel="stylesheet" href="css/style2.css" />
-  <link rel="stylesheet" href="css/forms.css" />
-  <style>
-    .page-header {
-      background: var(--navy);
-      padding: 3.5rem 0 2.5rem;
-      border-bottom: var(--border-4);
-      border-bottom-color: var(--gold);
-      position: relative;
-      overflow: hidden;
-    }
-    .page-header::after {
-      content: '★';
-      position: absolute;
-      right: 6%;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 6rem;
-      color: rgba(244,185,66,0.12);
-      font-family: var(--ff-head);
-      pointer-events: none;
-    }
-    .page-header h1 { color: var(--gold); }
-    .page-header p  {
-      color: rgba(255,255,255,0.75);
-      font-size: 1.05rem;
-      margin-top: 0.5rem;
-      max-width: 560px;
-    }
-    .page-header .badge { margin-bottom: 1rem; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulir Pendaftaran - Komadiksi Mengajar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/global.css">
 
-    .daftar-layout {
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 3rem;
-      align-items: start;
-      padding: 4rem 0;
-    }
-
-    /* Quota Sidebar */
-    .sidebar-block {
-      position: sticky;
-      top: 80px;
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-    .sidebar-card {
-      background: var(--white);
-      border: var(--border-4);
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-    }
-    .sidebar-card h3 {
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 1.2rem;
-      color: var(--navy);
-    }
-
-    .quota-card {
-      border: 2px solid var(--navy);
-      padding: 0.8rem;
-      margin-bottom: 0.7rem;
-      background: var(--bg);
-    }
-    .quota-card--full { background: #fff3f0; }
-    .quota-card-label {
-      font-family: var(--ff-head);
-      font-size: 0.78rem;
-      font-weight: 700;
-      margin-bottom: 0.4rem;
-      color: var(--navy);
-    }
-    .quota-card-count {
-      font-family: var(--ff-head);
-      font-size: 0.72rem;
-      margin-top: 0.3rem;
-      color: var(--brown);
-    }
-    .quota-card--full .quota-card-count { color: var(--orange); }
-
-    .info-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    .info-list li {
-      display: flex;
-      gap: 0.5rem;
-      font-family: var(--ff-body);
-      font-size: 0.88rem;
-      align-items: flex-start;
-    }
-    .info-list li::before {
-      content: '✦';
-      color: var(--gold);
-      font-size: 0.7rem;
-      margin-top: 0.2rem;
-      flex-shrink: 0;
-    }
-
-    @media (max-width: 900px) {
-      .daftar-layout { grid-template-columns: 1fr; }
-      .sidebar-block  { position: static; }
-    }
-  </style>
 </head>
 <body>
-
-<!-- NAVBAR -->
-<nav class="navbar" aria-label="Navigasi utama">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-brand">
-      KOMJAR
-      <span>2026 · Komadiksi UNS</span>
-    </a>
-    <button class="hamburger" id="hamburger" aria-label="Buka menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="index.html">Beranda</a></li>
-      <li><a href="index.html#gambaran">Program</a></li>
-      <li><a href="index.html#timeline">Timeline</a></li>
-      <li><a href="presensi.html">Presensi</a></li>
-      <li><a href="daftar.html" class="btn-nav">Daftar</a></li>
-    </ul>
-  </div>
-</nav>
-
-<!-- PAGE HEADER -->
-<header class="page-header">
-  <div class="container">
-    <span class="badge">Open Recruitment</span>
-    <h1>Pendaftaran Volunteer</h1>
-    <p>Bergabunglah sebagai volunteer KOMJAR 2026. Isi formulir di bawah ini dengan lengkap dan benar.</p>
-  </div>
-</header>
-<hr class="divider" />
-
-<!-- MAIN CONTENT -->
-<main>
-  <div class="container">
-    <div class="daftar-layout">
-
-      <!-- FORM COLUMN -->
-      <div>
-        <form data-komjar="true" id="form-daftar" novalidate>
-          <div class="form-wrap">
-
-            <div class="form-group">
-              <label for="nama">Nama Lengkap <span class="required">*</span></label>
-              <input
-                type="text"
-                id="nama"
-                name="nama"
-                placeholder="Masukkan nama lengkap sesuai KTM"
-                required
-                autocomplete="name"
-              />
+      <nav>
+        <div class="logo">
+            <img src="img/Group 22.png" alt="Logo KOMJAR">
+            <div class="logo-text">
+                <div class="logo-title">
+                    <h2>Komadiksi</h2>
+                    <h3>Mengajar</h3>
+                </div>
             </div>
-
-            <div class="form-group">
-              <label for="nim">NIM <span class="required">*</span></label>
-              <input
-                type="text"
-                id="nim"
-                name="nim"
-                placeholder="Contoh: H0122001"
-                required
-                pattern="[A-Za-z0-9]+"
-              />
+            <div class="year">
+                <p>2026</p>
             </div>
-
-            <div class="form-group">
-              <label for="whatsapp">Nomor WhatsApp Aktif <span class="required">*</span></label>
-              <input
-                type="tel"
-                id="whatsapp"
-                name="whatsapp"
-                placeholder="Contoh: 08123456789"
-                required
-                autocomplete="tel"
-              />
-              <p class="form-hint">Gunakan nomor yang terdaftar di WhatsApp. Konfirmasi program akan dikirim ke nomor ini.</p>
-            </div>
-
-            <div class="form-group">
-              <label for="twibbon">Link Twibbon <span class="required">*</span></label>
-              <input
-                type="url"
-                id="twibbon"
-                name="twibbon"
-                placeholder="https://www.instagram.com/p/..."
-                required
-              />
-              <p class="form-hint">Unggah Twibbon terlebih dahulu, lalu tempel link postingan di sini.</p>
-            </div>
-
-            <div class="form-divider"></div>
-
-            <div class="form-group">
-              <label for="departemen">Pilihan Departemen <span class="required">*</span></label>
-              <div class="select-wrap">
-                <select id="departemen" name="departemen" required>
-                  <option value="" disabled selected>— Pilih departemen —</option>
-                  <option value="Pendidikan Dasar (SD)">Pendidikan Dasar (SD)</option>
-                  <option value="Pendidikan Menengah (SMP)">Pendidikan Menengah (SMP)</option>
-                  <option value="Sains &amp; Matematika">Sains &amp; Matematika</option>
-                  <option value="Bahasa &amp; Literasi">Bahasa &amp; Literasi</option>
-                  <option value="Seni &amp; Kreativitas">Seni &amp; Kreativitas</option>
-                </select>
-              </div>
-              <div id="quota-selected-info"></div>
-              <p class="form-hint">Setiap departemen dibatasi maksimal 4 volunteer. Departemen penuh tidak dapat dipilih.</p>
-            </div>
-
-            <div class="form-group">
-              <label for="motivasi">Motivasi Bergabung <span class="required">*</span></label>
-              <textarea
-                id="motivasi"
-                name="motivasi"
-                placeholder="Ceritakan mengapa kamu ingin bergabung sebagai volunteer KOMJAR 2026..."
-                required
-                minlength="50"
-              ></textarea>
-              <p class="form-hint">Minimal 50 karakter.</p>
-            </div>
-
-            <div class="form-divider"></div>
-
-            <div class="check-group">
-              <input type="checkbox" id="persetujuan" name="persetujuan" required />
-              <label for="persetujuan" style="text-transform:none;font-weight:400;font-size:0.88rem;font-family:var(--ff-body);">
-                Saya menyatakan bahwa data yang saya isi adalah benar, dan saya bersedia
-                mengikuti seluruh ketentuan program <strong>KOMJAR 2026</strong>.
-              </label>
-            </div>
-
-            <div class="form-submit">
-              <button type="submit" class="btn btn-lg">Kirim Pendaftaran →</button>
-              <a href="index.html#ketentuan" style="font-family:var(--ff-head);font-size:0.8rem;font-weight:600;color:var(--brown);text-decoration:underline;">Baca Ketentuan</a>
-            </div>
-
-          </div><!-- .form-wrap -->
-        </form>
-      </div>
-
-      <!-- SIDEBAR -->
-      <aside class="sidebar-block" aria-label="Informasi kuota">
-        <div class="sidebar-card">
-          <h3>📊 Status Kuota Departemen</h3>
-          <div id="quota-summary">
-            <p style="font-size:0.85rem;color:var(--brown);">Memuat data kuota...</p>
-          </div>
         </div>
-
-        <div class="sidebar-card" style="background:var(--gold);">
-          <h3>ℹ️ Informasi Penting</h3>
-          <ul class="info-list">
-            <li>Setiap departemen maks. <strong>4 volunteer</strong></li>
-            <li>Pendaftaran ditutup saat semua kuota penuh</li>
-            <li>Konfirmasi dikirim via WhatsApp</li>
-            <li>Siapkan link Twibbon sebelum mengisi form</li>
-            <li>Data yang dikirim tidak dapat diubah</li>
-          </ul>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
         </div>
-
-        <div class="sidebar-card" style="background:var(--navy);">
-          <h3 style="color:var(--gold);">📥 Unduhan</h3>
-          <a href="downloads/panduan-komjar.pdf" class="download-link" download style="width:100%;justify-content:center;margin-bottom:0.6rem;display:flex;">
-            📄 Panduan KOMJAR
-          </a>
-          <a href="downloads/logbook-template.xlsx" class="download-link" download style="width:100%;justify-content:center;display:flex;">
-            📊 Template Logbook
-          </a>
-        </div>
-      </aside>
-
-    </div>
-  </div>
-</main>
-
-<!-- FOOTER -->
-<footer>
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <p class="footer-brand">KOMJAR 2026</p>
-        <p>Program Pengabdian Masyarakat<br>Komadiksi Smart — Universitas Sebelas Maret</p>
-      </div>
-      <div>
-        <h4>Navigasi</h4>
-        <ul>
-          <li><a href="index.html">Beranda</a></li>
-          <li><a href="daftar.html">Pendaftaran</a></li>
-          <li><a href="presensi.html">Presensi</a></li>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          
         </ul>
-      </div>
-      <div>
-        <h4>Bantuan</h4>
-        <ul>
-          <li><a href="index.html#contact">Hubungi CP</a></li>
-          <li><a href="index.html#ketentuan">Ketentuan Program</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 Komadiksi Smart UNS — KOMJAR 2026</span>
-    </div>
-  </div>
-</footer>
+    </nav>
 
-<script src="js/main.js"></script>
 </body>
 </html>

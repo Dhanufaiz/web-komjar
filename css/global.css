@@ -1,3 +1,6 @@
+/* ==========================================================================
+   1. VARIABLES & RESET CONFIGURATION
+   ========================================================================== */
 :root {
     --bg-color: #FFF4E6;       /* Soft warm white background */
     --navy: #1F2A44;           /* Strong outline & primary text color */
@@ -5,8 +8,6 @@
     --orange: #E88A1A;         /* Vivid main orange accent */
     --brown: #8B5E34;          /* Secondary earthy accent */
     --white: #FFFFFF;
-    
-    /* Hard Shadow khas desain poster/feed Instagram Neo-Brutalisme */
     --hard-shadow-sm: 4px 4px 0px var(--navy);
     --hard-shadow-md: 8px 8px 0px var(--navy);
     --hard-shadow-lg: 12px 12px 0px var(--navy);
@@ -22,13 +23,13 @@
 body {
     background-color: var(--bg-color);
     color: var(--navy);
-    font-family: 'PT Serif', serif; /* Default font untuk teks narasi/paragraf agar lebih terbaca */
+    font-family: 'PT Serif', serif;
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
 }
 
-/* Dekorasi Elemen Geometris Mengambang */
+/* Decorational Floating Shapes */
 .playful-shape {
     position: absolute;
     z-index: -1;
@@ -39,7 +40,27 @@ body {
 .shape-circle-1 { top: 40%; left: -50px; width: 150px; height: 150px; background-color: var(--gold); border-radius: 50%; opacity: 0.2; }
 .shape-circle-2 { bottom: 15%; left: 5%; width: 100px; height: 100px; background-color: var(--brown); border-radius: 50%; opacity: 0.15; }
 
-/* Navbar (Menggunakan Poppins) */
+/* Global Section Layout */
+section {
+    padding: 140px 5% 60px 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--navy);
+    text-align: center;
+    margin-bottom: 60px;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+}
+
+/* ==========================================================================
+   2. NAVIGATION HEADER (NEOBRUTALISM STYLE)
+   ========================================================================== */
 nav {
     position: fixed;
     top: 20px;
@@ -60,7 +81,7 @@ nav {
 
 .logo {
     font-weight: 900;
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     color: var(--navy);
     display: flex;
     align-items: center;
@@ -72,6 +93,44 @@ nav {
     width: auto;
 }
 
+.logo-text {
+    display: flex;
+    flex-direction: row;
+}
+
+.logo-title {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.logo-title h2 {
+    font-weight: 900;
+    font-size: 0.9rem;
+    color: var(--navy);
+    text-transform: uppercase;
+}
+
+.logo-title h3 {
+    font-weight: 900;
+    font-family: 'PT Serif', serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+}
+
+.year {
+    font-size: 0.9rem;
+    font-weight: 900;
+    background: var(--navy);
+    color: var(--white);
+    padding: 2px 6px;
+    border-radius: 6px;
+    margin-left: 5px;
+}
+
+/* Nav Links Desktop */
 .nav-links {
     display: flex;
     gap: 25px;
@@ -84,7 +143,8 @@ nav {
     color: var(--navy);
     font-weight: 700;
     font-size: 0.9rem;
-    transition: 0.15s ease;
+    transition: transform 0.15s ease, color 0.15s ease;
+    display: inline-block;
 }
 
 .nav-links a:hover {
@@ -104,24 +164,29 @@ nav {
     background: var(--orange);
     color: var(--white) !important;
     box-shadow: 1px 1px 0px var(--navy);
-    transform: translate(1px, 1px);
+    transform: translate(1px, 1px) !important;
 }
 
-/* Menu Toggle Mobile */
+/* Burger Menu Toggle Button */
 .menu-toggle {
     display: none;
     flex-direction: column;
     gap: 5px;
     cursor: pointer;
+    z-index: 1001;
 }
+
 .menu-toggle .bar {
     width: 25px;
     height: 4px;
     background-color: var(--navy);
     border-radius: 2px;
+    transition: all 0.3s ease-in-out;
 }
 
-/* Playful Card Global System */
+/* ==========================================================================
+   3. COMPONENTS & BUTTON SYSTEM
+   ========================================================================== */
 .playful-card {
     background: var(--white);
     border: 4px solid var(--navy);
@@ -136,24 +201,42 @@ nav {
     box-shadow: var(--hard-shadow-lg);
 }
 
-section {
-    padding: 120px 5% 60px 5%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* Title Utama (Menggunakan Poppins Bold) */
-.section-title {
+/* Buttons */
+.cta-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
     font-family: 'Poppins', sans-serif;
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: var(--navy);
-    text-align: center;
-    margin-bottom: 60px;
-    text-transform: uppercase;
-    letter-spacing: -1px;
 }
 
+.btn-playful {
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 15px 35px;
+    border-radius: 14px;
+    border: 3px solid var(--navy);
+    box-shadow: var(--hard-shadow-sm);
+    transition: all 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-playful:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px var(--navy);
+}
+
+.btn-main { background: var(--orange); color: var(--white); }
+.btn-main:hover { background: #d4760e; }
+.btn-sub { background: var(--white); color: var(--navy); }
+.btn-sub:hover { background: #fffaf5; }
+
+/* ==========================================================================
+   4. CONTENT SECTIONS
+   ========================================================================== */
 /* Hero Section */
 #hero {
     min-height: 100vh;
@@ -162,7 +245,7 @@ section {
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding-top: 160px;
+    padding-top: 100px;
 }
 
 .hero-badge {
@@ -201,48 +284,15 @@ section {
 }
 
 .tagline {
-    font-family: 'PT Serif', serif;
     font-size: 1.4rem;
     font-style: italic;
     color: var(--brown);
     max-width: 750px;
     margin-bottom: 45px;
+    line-height: 1.5;
 }
 
-/* Button System Brutalism (Menggunakan Poppins) */
-.cta-container {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-    font-family: 'Poppins', sans-serif;
-}
-
-.btn-playful {
-    font-size: 1rem;
-    font-weight: 700;
-    text-decoration: none;
-    padding: 15px 35px;
-    border-radius: 14px;
-    border: 3px solid var(--navy);
-    box-shadow: var(--hard-shadow-sm);
-    transition: all 0.1s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.btn-playful:active {
-    transform: translate(4px, 4px);
-    box-shadow: 0px 0px 0px var(--navy);
-}
-
-.btn-main { background: var(--orange); color: var(--white); }
-.btn-main:hover { background: #d4760e; }
-.btn-sub { background: var(--white); color: var(--navy); }
-.btn-sub:hover { background: #fffaf5; }
-
-/* Section Latar Belakang */
+/* Latar Belakang */
 .latar-container {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
@@ -254,12 +304,17 @@ section {
     font-size: 1.1rem;
     line-height: 1.8;
 }
-.latar-text-box p { margin-bottom: 20px; text-align: justify; }
+
+.latar-text-box p { 
+    margin-bottom: 20px; 
+    text-align: justify; 
+}
 
 .latar-highlight {
     background-color: var(--navy);
     color: var(--bg-color);
 }
+
 .latar-highlight h3 { 
     font-family: 'Poppins', sans-serif;
     color: var(--gold); 
@@ -267,12 +322,11 @@ section {
     margin-bottom: 15px; 
     font-weight: 700; 
 }
-.latar-highlight p { line-height: 1.7; font-size: 0.95rem; }
 
-/* Grid Gambaran Pelaksanaan */
+/* Gambaran Umum Grid */
 .grid-gambaran {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
 }
 
@@ -293,16 +347,77 @@ section {
 .card-2 .card-icon-wrapper { background: var(--orange); color: var(--white); }
 .card-3 .card-icon-wrapper { background: #bdf2fa; }
 .card-4 .card-icon-wrapper { background: var(--bg-color); }
+.card-5 .card-icon-wrapper { background: #ffd3b6; }
 
 .grid-gambaran h3 { 
     font-family: 'Poppins', sans-serif;
     font-size: 1.2rem; 
     font-weight: 700; 
-    margin-bottom: 10px; 
+    margin-bottom: 12px; 
 }
-.grid-gambaran p { font-size: 0.9rem; line-height: 1.6; }
 
-/* Timeline Papan Pengumuman */
+.grid-gambaran p { 
+    font-size: 0.95rem; 
+    line-height: 1.6; 
+}
+
+.luaran-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.luaran-list p {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.luaran-list i {
+    color: var(--orange);
+    margin-top: 4px;
+}
+
+/* Benefit Cards Layout */
+.benefit-container {
+    display: flex;
+    gap: 30px;
+}
+
+.benefit-item {
+    background: var(--white);
+    border: 3px solid var(--navy);
+    border-radius: 20px;
+    padding: 35px 25px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: var(--hard-shadow-sm);
+}
+
+.benefit-item i {
+    font-size: 2.5rem;
+    color: var(--orange);
+    margin-bottom: 15px;
+}
+
+.benefit-item h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.benefit-item p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   5. TIMELINE BOARD & KETENTUAN
+   ========================================================================== */
 .timeline-board {
     background: var(--white);
     border: 4px solid var(--navy);
@@ -315,10 +430,13 @@ section {
 
 .timeline-row {
     display: grid;
-    grid-template-columns: 250px 1fr;
+    grid-template-columns: 280px 1fr;
     border-bottom: 3px solid var(--navy);
 }
-.timeline-row:last-child { border-bottom: none; }
+
+.timeline-row:last-child { 
+    border-bottom: none; 
+}
 
 .time-tag {
     font-family: 'Poppins', sans-serif;
@@ -328,7 +446,7 @@ section {
     display: flex;
     align-items: center;
     border-right: 3px solid var(--navy);
-    font-size: 1rem;
+    font-size: 0.95rem;
     text-transform: uppercase;
 }
 
@@ -355,7 +473,7 @@ section {
     color: var(--brown); 
 }
 
-/* Ketentuan Grid */
+/* Ketentuan */
 .ketentuan-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -374,7 +492,7 @@ section {
     align-items: flex-start;
 }
 
-/* CP Container */
+/* Contact Person Cards */
 .cp-container {
     display: flex;
     justify-content: center;
@@ -390,106 +508,70 @@ section {
     color: var(--navy);
     min-width: 290px;
 }
-.cp-card i { font-size: 2.5rem; color: #25D366; }
-.cp-card h4 { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.1rem; }
-.cp-card p { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.95rem; opacity: 0.8; }
 
-/* Footer */
-footer {
-    font-family: 'Poppins', sans-serif;
-    background: var(--navy);
-    color: var(--white);
-    text-align: center;
-    padding: 40px 5%;
-    margin-top: 80px;
-    border-top: 4px solid var(--orange);
+.cp-card i { 
+    font-size: 2.5rem; 
+    color: #25D366; 
 }
 
-.footer-brand { font-weight: 900; font-size: 1.2rem; letter-spacing: 1px; margin-bottom: 5px; }
-footer a { color: var(--gold); font-weight: 700; text-decoration: none; }
-footer a:hover { text-decoration: underline; }
-
-/* Desain Responsif Layar Kecil / Mobile */
-@media (max-width: 768px) {
-    #hero h1 { font-size: 2.8rem; }
-    .latar-container { grid-template-columns: 1fr; }
-    .timeline-row { grid-template-columns: 1fr; }
-    .time-tag { border-right: none; border-bottom: 3px solid var(--navy); padding: 12px 20px; }
-    .ketentuan-grid { grid-template-columns: 1fr; }
-    
-    .menu-toggle { display: flex; }
-    .nav-links {
-        position: fixed;
-        top: 90px;
-        right: -100%;
-        width: 75%;
-        height: auto;
-        background: var(--white);
-        border: 3px solid var(--navy);
-        border-radius: 20px;
-        box-shadow: var(--hard-shadow-md);
-        flex-direction: column;
-        padding: 30px;
-        gap: 20px;
-        transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .nav-links.active { right: 5%; }
+.cp-card h4 { 
+    font-family: 'Poppins', sans-serif; 
+    font-weight: 700; 
+    font-size: 1.1rem; 
 }
 
-/* =============================================
-   EXACT MATCH FOOTER STYLE (From image_15eafc.jpg)
-   ============================================= */
+.cp-card p { 
+    font-family: 'Poppins', sans-serif; 
+    font-weight: 600; 
+    font-size: 0.95rem; 
+    opacity: 0.8; 
+}
 
+/* ==========================================================================
+   6. PREMIUM DEEP GREEN FOOTER
+   ========================================================================== */
 .main-footer {
-    background-color: #0E221F; /* Warna hijau sangat gelap sesuai gambar */
+    background-color: #0E221F; 
     color: #FFFFFF;
     padding: 60px 8% 30px 8%;
     font-family: 'Poppins', sans-serif;
-    align-items: left;
+    border-top: 4px solid var(--orange);
 }
 
 .footer-top {
     display: flex;
     justify-content: space-between;
-    align-items: left;
+    align-items: flex-start;
     gap: 40px;
-    flex-wrap: wrap; /* Menjaga responsivitas di layar kecil */
+    flex-wrap: wrap; 
 }
 
-/* Kolom Kiri */
 .footer-info {
     flex: 1;
     min-width: 300px;
-    align-items: left;
 }
 
 .footer-logo {
     display: flex;
     align-items: center;
-    justify-content: left;
-    gap: 15px;
     margin-bottom: 20px;
 }
 
 .footer-logo img {
-    height: 150px; /* Ukuran proporsional logo lingkaran daun */
+    height: 100px; 
     width: auto;
-    margin-bottom: 25px;    
 }
 
 .footer-title {
-    color: #D36B39; /* Warna orange kecoklatan khas */
-    font-size: 1.2rem;
-    font-weight: normal;
+    color: #D36B39; 
+    font-size: 1.4rem;
+    font-weight: 700;
     margin-bottom: 20px;
     letter-spacing: 0.5px;
-    align-items: left;
-    text-align: left;
 }
 
 .info-group {
     margin-bottom: 18px;
-    text-align: left;
 }
 
 .info-label {
@@ -498,7 +580,6 @@ footer a:hover { text-decoration: underline; }
     font-size: 0.85rem;
     font-weight: 600;
     margin-bottom: 5px;
-    text-align: left;
 }
 
 .info-value {
@@ -507,41 +588,34 @@ footer a:hover { text-decoration: underline; }
     font-size: 0.95rem;
     font-weight: 400;
     transition: color 0.2s ease;
-    text-align: left;
 }
 
 .info-value:hover {
-    color: #F4B942;
-    align-items: left;
+    color: var(--gold);
 }
 
 .info-value-text {
     color: #FFFFFF;
     font-size: 0.95rem;
     font-weight: 400;
-    line-height: 1.5;
-    text-align: left;
+    line-height: 1.6;
     max-width: 450px;
-    
 }
 
-/* Kolom Kanan (Maps) */
 .footer-maps {
     width: 420px;
-    height: 210px;
+    height: 230px;
     border-radius: 14px;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 3px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Pembatas */
 .footer-divider {
     border: 0;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     margin: 40px 0 20px 0;
 }
 
-/* Bagian Bawah */
 .footer-bottom {
     display: flex;
     justify-content: space-between;
@@ -551,9 +625,8 @@ footer a:hover { text-decoration: underline; }
 }
 
 .copyright {
-    color: #A0AAB2; /* Abu-abu muted ringan */
+    color: #A0AAB2; 
     font-size: 0.85rem;
-    font-weight: 400;
 }
 
 .footer-socials {
@@ -572,17 +645,130 @@ footer a:hover { text-decoration: underline; }
     transform: translateY(-2px);
 }
 
-/* Pengaturan Responsif Layar Handphone */
+/* ==========================================================================
+   7. MAXIMUM MOBILE RESPONSIVE OPTIMIZATION (< 768px)
+   ========================================================================== */
 @media (max-width: 768px) {
+    section {
+        padding: 100px 5% 40px 5%;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        margin-bottom: 40px;
+    }
+
+    /* Hero Optimization */
+    #hero {
+        padding-top: 130px;
+    }
+
+    #hero h1 { 
+        font-size: 2.6rem; 
+    }
+
+    .tagline {
+        font-size: 1.1rem;
+    }
+
+    /* Layout Stack Adjustment */
+    .latar-container,
+    .ketentuan-grid,
+    .benefit-container { 
+        grid-template-columns: 1fr; 
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Timeline Linear Layout */
+    .timeline-row { 
+        grid-template-columns: 1fr; 
+    }
+    
+    .time-tag { 
+        border-right: none; 
+        border-bottom: 3px solid var(--navy); 
+        padding: 12px 20px; 
+    }
+
+    /* Burger Navigation Script Integration CSS */
+    .menu-toggle { 
+        display: flex; 
+    }
+
+    /* Active Burger Animation Effects */
+    .menu-toggle.toggle-active .bar:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+    }
+    
+    .menu-toggle.toggle-active .bar:nth-child(2) {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    
+    .menu-toggle.toggle-active .bar:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+    }
+    
+    /* Sliding Mobile Drawer Nav */
+    .nav-links {
+        position: fixed;
+        top: 95px; 
+        right: -110%; 
+        left: 5%;
+        width: 90%;
+        background: var(--white);
+        border: 3px solid var(--navy);
+        border-radius: 20px;
+        box-shadow: var(--hard-shadow-md);
+        flex-direction: column;
+        padding: 30px 20px;
+        gap: 15px;
+        text-align: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+    }
+    
+    /* Triggered via JS class active */
+    .nav-links.active { 
+        right: 5%; 
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .nav-links li {
+        width: 100%;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 10px 0;
+        font-size: 1.05rem;
+    }
+
+    .btn-nav-daftar {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 12px 20px !important;
+        margin-top: 5px;
+    }
+
+    /* Footer Responsive Area */
     .footer-top {
         flex-direction: column;
+        gap: 30px;
     }
+
     .footer-maps {
         width: 100%;
         height: 200px;
     }
+
     .footer-bottom {
         flex-direction: column;
         align-items: flex-start;
+        gap: 15px;
     }
 }
