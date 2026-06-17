@@ -68,6 +68,27 @@
       z-index: 2;
     }
 
+    .nav-back {
+      background: var(--orange);
+      border: var(--border-4);
+      position: center;
+      text-align: center;
+      text-decoration: none;
+      top: 20px;
+      padding: 8px 16px;
+      left: 20px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--navy);
+      text-decoration: none;
+      z-index: 3;
+    }
+    
+    .nav-back a {
+      text-decoration: none;
+      color: var(--white);
+    }
     /* Lapisan efek bayangan dekoratif di belakang kartu */
     .maintenance-container::before {
       content: '';
@@ -156,11 +177,10 @@
   </style>
 </head>
 <body>
-
   <div class="shape shape-1">✦</div>
   <div class="shape shape-2">★</div>
   <div class="shape shape-3">⚙</div>
-
+  
   <main class="maintenance-container">
     <div class="badge">Situs Sedang Diperbarui</div>
     <h1>Kita Akan Segera Kembali!</h1>
@@ -173,6 +193,9 @@
       Hubungi Admin Via WhatsApp 💬
     </a>
   </main>
+  <div class ="nav-back">
+    <a href="index.html"> kembali ke halaman utama</a>
+  </div>
 
   <footer>
     <p>© 2026 Komadiksi Smart — Universitas Sebelas Maret</p>

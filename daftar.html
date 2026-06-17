@@ -1,38 +1,557 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulir Pendaftaran - Komadiksi Mengajar</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="css/global.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran Komadiksi Mengajar 2026</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
 
+    <style>
+        /* --- DESIGN TOKENS & VARIABLES (NEO-BRUTALISM) --- */
+        :root {
+            --bg-main: #FFF4E6;
+            --outline-text: #1F2A44;
+            --primary-accent: #F4B942;
+            --secondary-accent: #E88A1A;
+            --container-bg: #FFFFFF;
+            
+            --font-headings: 'Poppins', sans-serif;
+            --font-body: 'PT Serif', serif;
+            
+            --border-thick: 4px solid var(--outline-text);
+            --border-thin: 3px solid var(--outline-text);
+            --radius-sharp: 0px;
+            
+            --hard-shadow-large: 8px 8px 0px var(--outline-text);
+            --hard-shadow-small: 4px 4px 0px var(--outline-text);
+        }
+
+        /* --- GLOBAL STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            font-family: var(--font-body);
+            color: var(--outline-text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* --- DECORATIVE FLOATING SHAPES --- */
+        .shape {
+            position: absolute;
+            font-family: var(--font-headings);
+            font-size: 6rem;
+            color: var(--outline-text);
+            opacity: 0.10;
+            z-index: 1;
+            pointer-events: none;
+            user-select: none;
+        }
+        .shape-1 { top: 5%; left: 3%; transform: rotate(15deg); }
+        .shape-2 { top: 85%; left: 5%; transform: rotate(-25deg); font-size: 8rem; }
+        .shape-3 { top: 12%; right: 4%; transform: rotate(45deg); }
+        .shape-4 { top: 70%; right: 3%; transform: rotate(-10deg); }
+
+        /* --- MAIN CONTAINER --- */
+        .form-container {
+            background-color: var(--container-bg);
+            border: var(--border-thick);
+            border-radius: var(--radius-sharp);
+            box-shadow: var(--hard-shadow-large);
+            width: 100%;
+            max-width: 750px;
+            padding: 40px;
+            z-index: 2;
+            position: relative;
+        }
+
+        /* --- HEADER STYLES --- */
+        .form-header {
+            margin-bottom: 35px;
+            border-bottom: var(--border-thin);
+            padding-bottom: 25px;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: var(--secondary-accent);
+            color: var(--container-bg);
+            font-family: var(--font-headings);
+            font-weight: 700;
+            padding: 6px 16px;
+            border: var(--border-thin);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transform: rotate(-1deg);
+        }
+
+        h1 {
+            font-family: var(--font-headings);
+            font-weight: 900;
+            font-size: 2.3rem;
+            line-height: 1.1;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+        /* --- SECTION DIVISION --- */
+        .form-section-title {
+            font-family: var(--font-headings);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            background-color: var(--primary-accent);
+            padding: 6px 12px;
+            border: var(--border-thin);
+            display: inline-block;
+            margin: 20px 0;
+        }
+
+        /* --- FORM ELEMENTS --- */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .grid-2-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            font-family: var(--font-headings);
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .optional-text {
+            font-size: 0.8rem;
+            color: var(--secondary-accent);
+            font-style: italic;
+            text-transform: lowercase;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--outline-text);
+            background-color: var(--container-bg);
+            border: var(--border-thin);
+            border-radius: var(--radius-sharp);
+            outline: none;
+            transition: all 0.1s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            background-color: var(--bg-main);
+            box-shadow: var(--hard-shadow-small);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231F2A44' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            background: var(--bg-main);
+            border: var(--border-thin);
+        }
+
+        input[type="file"]::file-selector-button {
+            background-color: var(--primary-accent);
+            border: none;
+            border-right: var(--border-thin);
+            padding: 8px 16px;
+            font-family: var(--font-headings);
+            font-weight: 700;
+            color: var(--outline-text);
+            cursor: pointer;
+            margin-right: 15px;
+            text-transform: uppercase;
+        }
+
+        /* --- DINAMIS PANEL OPSI KELOMPOK --- */
+        #panel-opsi-kelompok {
+            display: none;
+            background-color: #fffdf9;
+            border: var(--border-thin);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--hard-shadow-small);
+        }
+
+        /* --- SUBMIT BUTTON --- */
+        .btn-submit {
+            display: block;
+            width: 100%;
+            background-color: var(--primary-accent);
+            color: var(--outline-text);
+            font-family: var(--font-headings);
+            font-weight: 900;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            padding: 16px;
+            border: var(--border-thick);
+            box-shadow: var(--hard-shadow-small);
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            margin-top: 40px;
+        }
+
+        .btn-submit:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--outline-text);
+        }
+
+        .btn-submit:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px var(--outline-text);
+        }
+
+        @media (max-width: 600px) {
+            .grid-2-col { grid-template-columns: 1fr; gap: 0; }
+            .form-container { padding: 25px 15px; }
+            h1 { font-size: 1.8rem; }
+        }
+    </style>
 </head>
 <body>
-      <nav>
-        <div class="logo">
-            <img src="img/Group 22.png" alt="Logo KOMJAR">
-            <div class="logo-text">
-                <div class="logo-title">
-                    <h2>Komadiksi</h2>
-                    <h3>Mengajar</h3>
+
+    <div class="shape shape-1">✦</div><div class="shape shape-2">★</div>
+    <div class="shape shape-3">⚙</div><div class="shape shape-4">●</div>
+
+    <div class="form-container">
+        <header class="form-header">
+            <div class="badge">KOMJAR 2026 // FORM REGISTRASI RELASIONAL</div>
+            <h1>KOMADIKSI MENGAJAR</h1>
+            <p class="subtitle">Isi data pendaftaran individu atau kelompokmu secara mandiri.</p>
+        </header>
+
+        <form id="form-pendaftaran" action="https://script.google.com/macros/s/AKfycbz6rNZWSbx6A2k4UjFqhxO1nr3F-D5JXz4vN7ZwmoYgpomjThBBL6uCXQCgJkGSBprLCw/exec" method="POST">
+            
+            <div class="form-section-title">01 / Kategori Pendaftaran</div>
+            
+            <div class="form-group">
+                <label for="tipe_pendaftaran">Kategori Keikutsertaan</label>
+                <select id="tipe_pendaftaran" name="tipe_pendaftaran" required>
+                    <option value="Individu" selected>Individu (1 Orang)</option>
+                    <option value="Kelompok">Kelompok (Maksimal 5 Orang)</option>
+                </select>
+            </div>
+
+            <div id="panel-opsi-kelompok">
+                <div class="form-group">
+                    <label for="status_kelompok">Status dalam Kelompok</label>
+                    <select id="status_kelompok" name="status_kelompok">
+                        <option value="" disabled selected hidden>Pilih Status Kelompok</option>
+                        <option value="Buat Baru">Saya Perwakilan / Ingin Buat Kelompok Baru</option>
+                        <option value="Gabung">Saya Anggota / Ingin Gabung Kelompok yang Ada</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="blok-buat-baru" style="display: none;">
+                    <label for="nama_kelompok_baru">Ketik Nama Kelompok Baru Kamu</label>
+                    <input type="text" id="nama_kelompok_baru" name="nama_kelompok_baru" placeholder="Contoh: Kelompok Ganesha">
+                </div>
+
+                <div class="form-group" id="blok-gabung" style="display: none;">
+                    <label for="pilih_kelompok_ada">Pilih Nama Kelompokmu</label>
+                    <select id="pilih_kelompok_ada" name="pilih_kelompok_ada">
+                        <option value="" disabled selected hidden>Memuat daftar kelompok...</option>
+                    </select>
                 </div>
             </div>
-            <div class="year">
-                <p>2026</p>
-            </div>
-        </div>
-        <div class="menu-toggle" id="mobile-menu">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </div>
-        <ul class="nav-links">
-          <li><a href="index.html">Home</a></li>
-          
-        </ul>
-    </nav>
 
+            <div class="form-section-title">02 / Identitas Diri</div>
+
+            <div class="grid-2-col">
+                <div class="form-group">
+                    <label for="nama">Nama Lengkap</label>
+                    <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required>
+                </div>
+                <div class="form-group">
+                    <label for="nim">NIM</label>
+                    <input type="text" id="nim" name="nim" placeholder="Masukkan NIM" required>
+                </div>
+            </div>
+
+            <div class="grid-2-col">
+                <div class="form-group">
+                    <label for="email">Email SSO</label>
+                    <input type="email" id="email" name="email" placeholder="contoh@student.uns.ac.id" required>
+                </div>
+                <div class="form-group">
+                    <label for="wa">Nomor WhatsApp Aktif</label>
+                    <input type="tel" id="wa" name="wa" placeholder="081234567xxx" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="prodi">Program Studi</label>
+                <input type="text" id="prodi" name="prodi" placeholder="S1 Informatika" required>
+            </div>
+
+            <div class="grid-2-col">
+                <div class="form-group">
+                    <label for="angkatan">Angkatan</label>
+                    <select id="angkatan" name="angkatan" required>
+                        <option value="" disabled selected hidden>Pilih Angkatan</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fakultas">Fakultas</label>
+                    <select id="fakultas" name="fakultas" required>
+                        <option value="" disabled selected hidden>Pilih Fakultas</option>
+                        <option value="Teknik">Teknik</option><option value="FEB">FEB</option>
+                        <option value="FSRD">FSRD</option><option value="FIB">FIB</option>
+                        <option value="FATISDA">FATISDA</option><option value="Psikologi">Psikologi</option>
+                        <option value="Kedokteran">Kedokteran</option><option value="MIPA">MIPA</option>
+                        <option value="Pertanian">Pertanian</option><option value="FKOR">FKOR</option>
+                        <option value="FKIP">FKIP</option><option value="Peternakan">Peternakan</option>
+                        <option value="Sekolah Vokasi">Sekolah Vokasi</option><option value="FH">FH</option>
+                        <option value="FISIP">FISIP</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="alamat">Alamat Tinggal Sekarang</label>
+                <textarea id="alamat" name="alamat" placeholder="Contoh : Karangturi, RT 04/RW 07, Pajang, Surakarta" required></textarea>
+            </div>
+
+            <div class="form-section-title">03 / Minat & Sasaran</div>
+
+            <div class="form-group">
+                <label for="alasan">Alasan mengikuti Komadiksi Mengajar</label>
+                <textarea id="alasan" name="alasan" placeholder="Tuliskan motivasi pribadimu secara detail..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Sekolah Sasaran (Minimal 2 Opsi Utama)</label>
+                <div class="grid-2-col" style="margin-bottom: 15px;">
+                    <input type="text" id="sekolah_1" name="sekolah_1" placeholder="Pilihan Sekolah 1 (Wajib)" required>
+                    <input type="text" id="sekolah_2" name="sekolah_2" placeholder="Pilihan Sekolah 2 (Wajib)" required>
+                </div>
+                <label for="sekolah_3">Pilihan Sekolah Lainnya <span class="optional-text">(Opsional / Alternatif 3)</span></label>
+                <input type="text" id="sekolah_3" name="sekolah_3" placeholder="Masukkan alternatif sekolah ketiga jika ada">
+            </div>
+
+            <div class="form-section-title">04 / Berkas Persyaratan (Perorangan)</div>
+
+            <div class="form-group">
+                <label for="bukti_twibbon">Bukti Upload Twibbon</label>
+                <input type="file" id="bukti_twibbon" name="bukti_twibbon" required>
+            </div>
+            <div class="form-group">
+                <label for="follow_komadiksi">Bukti Follow @komadiksismart</label>
+                <input type="file" id="follow_komadiksi" name="follow_komadiksi" required>
+            </div>
+            <div class="form-group">
+                <label for="follow_pengmas">Bukti Follow @pengmas.komadiksiuns</label>
+                <input type="file" id="follow_pengmas" name="follow_pengmas" required>
+            </div>
+            <div class="form-group">
+                <label for="follow_komjar">Bukti Follow @komjar2025</label>
+                <input type="file" id="follow_komjar" name="follow_komjar" required>
+            </div>
+
+            <button type="submit" class="btn-submit">SUBMIT DATA REGISTRASI ✦</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('form-pendaftaran');
+        const btnSubmit = document.querySelector('.btn-submit');
+        const tipePendaftaran = document.getElementById('tipe_pendaftaran');
+        const panelOpsiKelompok = document.getElementById('panel-opsi-kelompok');
+        const statusKelompok = document.getElementById('status_kelompok');
+        const blokBuatBaru = document.getElementById('blok-buat-baru');
+        const blokGabung = document.getElementById('blok-gabung');
+        const selectKelompokAda = document.getElementById('pilih_kelompok_ada');
+
+        // Menampilkan/menyembunyikan panel kelompok
+        tipePendaftaran.addEventListener('change', function() {
+            if (this.value === 'Kelompok') {
+                panelOpsiKelompok.style.display = 'block';
+                statusKelompok.setAttribute('required', 'required');
+                muatDaftarKelompok();
+            } else {
+                panelOpsiKelompok.style.display = 'none';
+                statusKelompok.removeAttribute('required');
+                resetOpsiKelompok();
+            }
+        });
+
+        // Menampilkan sub-kondisi buat baru atau gabung kelompok
+        statusKelompok.addEventListener('change', function() {
+            if (this.value === 'Buat Baru') {
+                blokBuatBaru.style.display = 'block';
+                document.getElementById('nama_kelompok_baru').setAttribute('required', 'required');
+                blokGabung.style.display = 'none';
+                selectKelompokAda.removeAttribute('required');
+            } else if (this.value === 'Gabung') {
+                blokBuatBaru.style.display = 'none';
+                document.getElementById('nama_kelompok_baru').removeAttribute('required');
+                blokGabung.style.display = 'block';
+                selectKelompokAda.setAttribute('required', 'required');
+                muatDaftarKelompok();
+            }
+        });
+
+        function resetOpsiKelompok() {
+            statusKelompok.value = '';
+            blokBuatBaru.style.display = 'none';
+            blokGabung.style.display = 'none';
+            document.getElementById('nama_kelompok_baru').removeAttribute('required');
+            selectKelompokAda.removeAttribute('required');
+            document.getElementById('nama_kelompok_baru').value = '';
+            selectKelompokAda.value = '';
+        }
+
+        // Ambil data kelompok yang valid (<5 orang) dari database melalui metode GET
+        async function muatDaftarKelompok() {
+            if(form.action.includes("PASTE_URL_WEB_APP")) return;
+            try {
+                selectKelompokAda.innerHTML = '<option value="" disabled selected hidden>Memuat daftar kelompok...</option>';
+                const response = await fetch(form.action);
+                const data = await response.json();
+                
+                selectKelompokAda.innerHTML = '<option value="" disabled selected hidden>Pilih Kelompok</option>';
+                
+                if(!data.kelompok || data.kelompok.length === 0) {
+                    const opt = document.createElement('option');
+                    opt.value = "";
+                    opt.innerText = "Belum ada kelompok tersedia. Silakan buat baru!";
+                    opt.disabled = true;
+                    selectKelompokAda.appendChild(opt);
+                } else {
+                    data.kelompok.forEach(nama => {
+                        const opt = document.createElement('option');
+                        opt.value = nama;
+                        opt.innerText = nama;
+                        selectKelompokAda.appendChild(opt);
+                    });
+                }
+            } catch (err) {
+                console.error("Gagal sinkronisasi data kelompok:", err);
+                selectKelompokAda.innerHTML = '<option value="" disabled>Gagal memuat list kelompok.</option>';
+            }
+        }
+
+        // Konversi File ke sandi teks Base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                if (!file) resolve("");
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // Pengiriman Formulir via POST
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (form.action.includes("PASTE_URL_WEB_APP")) {
+                alert("⚠️ Harap konfigurasi URL Web App Apps Script kamu terlebih dahulu di kode HTML!");
+                return;
+            }
+
+            btnSubmit.innerText = "PROSES VALIDASI & UNGGAL FILE... ⏳";
+            btnSubmit.disabled = true;
+
+            try {
+                const fileTwibbon = document.getElementById('bukti_twibbon').files[0];
+                const fileIGKomadiksi = document.getElementById('follow_komadiksi').files[0];
+                const fileIGPengmas = document.getElementById('follow_pengmas').files[0];
+                const fileIGKomjar = document.getElementById('follow_komjar').files[0];
+
+                const [base64Twibbon, base64IGKomadiksi, base64IGPengmas, base64IGKomjar] = await Promise.all([
+                    fileToBase64(fileTwibbon),
+                    fileToBase64(fileIGKomadiksi),
+                    fileToBase64(fileIGPengmas),
+                    fileToBase64(fileIGKomjar)
+                ]);
+
+                const formData = new URLSearchParams();
+                
+                new FormData(form).forEach((value, key) => {
+                    if(!["bukti_twibbon", "follow_komadiksi", "follow_pengmas", "follow_komjar"].includes(key)) {
+                        formData.append(key, value);
+                    }
+                });
+
+                formData.append("file_twibbon_base64", base64Twibbon);
+                formData.append("file_ig_komadiksi_base64", base64IGKomadiksi);
+                formData.append("file_ig_pengmas_base64", base64IGPengmas);
+                formData.append("file_ig_komjar_base64", base64IGKomjar);
+
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                });
+
+                const result = await response.json();
+
+                if(result.result === "success") {
+                    alert('✦ REGISTRASI SUKSES! Data pribadimu berhasil disimpan ke database kelompok ✦');
+                    panelOpsiKelompok.style.display = 'none';
+                    form.reset();
+                } else {
+                    alert('⚠️ PENDAFTARAN DITOLAK: ' + result.error);
+                }
+
+            } catch (error) {
+                alert('Terjadi kesalahan koneksi atau ukuran berkas melampaui batas 2MB.');
+                console.error('Error:', error);
+            } finally {
+                btnSubmit.innerText = "SUBMIT DATA REGISTRASI ✦";
+                btnSubmit.disabled = false;
+            }
+        });
+    </script>
 </body>
 </html>

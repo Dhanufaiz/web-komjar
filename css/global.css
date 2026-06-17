@@ -70,7 +70,7 @@ nav {
     background: var(--white);
     border: 3px solid var(--navy);
     border-radius: 16px;
-    padding: 12px 30px;
+    padding: 5px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -85,7 +85,7 @@ nav {
     color: var(--navy);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 4px;
 }
 
 .logo img {
