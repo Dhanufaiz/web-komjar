@@ -719,6 +719,171 @@ nav {
     box-shadow: 0px 4px 0px rgba(0, 0, 0, 0.4);
 }
 
+/* ==========================================================================
+   NEO-BRUTALISM BENEFIT & PERSYARATAN SECTION STYLING
+   ========================================================================== */
+
+.recruitment-info-section {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.info-container {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr; /* Membagi area kiri sedikit lebih lebar */
+    gap: 40px;
+    align-items: start;
+}
+
+/* Judul Gaya Badge Neo-Brutalisme */
+.section-badge-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 1.6rem;
+    color: var(--navy);
+    background-color: var(--white);
+    border: 4px solid var(--navy);
+    padding: 10px 20px;
+    display: inline-block;
+    text-transform: uppercase;
+    box-shadow: 4px 4px 0px var(--navy);
+    margin-bottom: 30px;
+    letter-spacing: -0.5px;
+}
+
+/* --- A. STYLING SECTION BENEFIT --- */
+.benefit-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.benefit-card {
+    border: 4px solid var(--navy);
+    padding: 24px;
+    box-shadow: var(--hard-shadow-md);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.benefit-card h3 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 1.25rem;
+    margin: 15px 0 8px 0;
+    text-transform: uppercase;
+}
+
+.benefit-card p {
+    font-family: 'PT Serif', serif;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.benefit-icon {
+    font-size: 2rem;
+    color: var(--navy);
+    display: inline-block;
+}
+
+/* Variasi Warna Blok Kartu Benefit */
+.card-gold { background-color: var(--gold); }
+.card-orange { background-color: var(--orange); color: var(--white); }
+.card-white { background-color: var(--white); }
+
+/* Hover Efek Kartu */
+.benefit-card:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: var(--hard-shadow-lg);
+}
+
+/* --- B. STYLING SECTION PERSYARATAN --- */
+.requirements-list-container {
+    background-color: var(--white);
+    border: 4px solid var(--navy);
+    padding: 30px;
+    box-shadow: var(--hard-shadow-md);
+}
+
+/* Badge Peringatan Angkatan UNS */
+.req-alert-badge {
+    background-color: var(--orange);
+    color: var(--white);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    border: 3px solid var(--navy);
+    box-shadow: 3px 3px 0px var(--navy);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 25px;
+}
+
+/* List Angka Vertikal */
+.req-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.req-list li {
+    display: flex;
+    gap: 20px;
+    align-items: start;
+}
+
+.req-num {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 1.2rem;
+    background-color: var(--gold);
+    color: var(--navy);
+    border: 3px solid var(--navy);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 3px 3px 0px var(--navy);
+    flex-shrink: 0;
+}
+
+.req-text strong {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.req-text p {
+    font-family: 'PT Serif', serif;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--navy);
+}
+
+/* --- C. RESPONSIVE OPTIMIZATION (BREAKPOINTS) --- */
+@media (max-width: 992px) {
+    .info-container {
+        grid-template-columns: 1fr; /* Stack vertikal pada tablet/HP */
+        gap: 50px;
+    }
+}
+
+@media (max-width: 576px) {
+    .benefit-grid {
+        grid-template-columns: 1fr; /* Kartu benefit berbaris satu-satu di layar HP */
+    }
+    .section-badge-title {
+        font-size: 1.3rem;
+    }
+}
 
 /* ==========================================================================
    6. PREMIUM DEEP GREEN FOOTER
