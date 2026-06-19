@@ -393,7 +393,7 @@
                 <input type="file" id="follow_pengmas" name="follow_pengmas" required>
             </div>
             <div class="form-group">
-                <label for="follow_komjar">Bukti Follow @komjar2026</label>
+                <label for="follow_komjar">Bukti Follow @komadiksi.mengajar</label>
                 <input type="file" id="follow_komjar" name="follow_komjar" required>
             </div>
 
@@ -537,13 +537,10 @@
 
                 const result = await response.json();
 
-                if(result.result === "success") {
-                    alert('✦ REGISTRASI SUKSES! Data pribadimu berhasil disimpan ke database kelompok ✦');
-                    panelOpsiKelompok.style.display = 'none';
-                    form.reset();
-                } else {
-                    alert('⚠️ PENDAFTARAN DITOLAK: ' + result.error);
-                }
+            if(result.result === "success") {
+                // GANTI URL di bawah ini dengan alamat website konfirmasi milik panitia
+                window.location.href = "success.html";
+            }
 
             } catch (error) {
                 alert('Terjadi kesalahan koneksi atau ukuran berkas melampaui batas 2MB.');

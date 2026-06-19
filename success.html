@@ -3,87 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aksi Sukses! - KOMJAR 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style2.css">
+    <title>Registrasi Berhasil // KOMJAR 2026</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
+
     <style>
-        .center-box { 
-            min-height: 75vh; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            padding: 40px 6%; 
+        /* --- DESIGN TOKENS (NEO-BRUTALISM COHESIVE) --- */
+        :root {
+            --bg-main: #FFF4E6;
+            --outline-text: #1F2A44;
+            --primary-accent: #F4B942;
+            --secondary-accent: #E88A1A;
+            --container-bg: #FFFFFF;
+            --success-green: #2ECC71;
+            
+            --font-headings: 'Poppins', sans-serif;
+            --font-body: 'PT Serif', serif;
+            
+            --border-thick: 4px solid var(--outline-text);
+            --border-thin: 3px solid var(--outline-text);
+            
+            --hard-shadow-large: 8px 8px 0px var(--outline-text);
+            --hard-shadow-small: 4px 4px 0px var(--outline-text);
         }
-        .card-pop { 
-            text-align: center; 
-            max-width: 580px; 
-            background: white; 
-            width: 100%;
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        .success-actions {
+
+        body {
+            background-color: var(--bg-main);
+            font-family: var(--font-body);
+            color: var(--outline-text);
+            min-height: 100vh;
             display: flex;
-            gap: 15px;
             justify-content: center;
-            margin-top: 25px;
-            flex-wrap: wrap;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
         }
-        .countdown-text {
-            margin-top: 20px;
+
+        /* --- CONTAINER --- */
+        .success-container {
+            background-color: var(--container-bg);
+            border: var(--border-thick);
+            box-shadow: var(--hard-shadow-large);
+            width: 100%;
+            max-width: 600px;
+            padding: 50px 40px;
+            text-align: center;
+            z-index: 10;
+            position: relative;
+            animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* --- VISUAL DECORATION --- */
+        .success-icon {
+            display: inline-block;
+            background-color: var(--success-green);
+            color: var(--container-bg);
+            font-size: 3.5rem;
+            width: 90px;
+            height: 90px;
+            line-height: 82px;
+            border: var(--border-thick);
+            box-shadow: var(--hard-shadow-small);
+            margin-bottom: 30px;
+            transform: rotate(-3deg);
+        }
+
+        .badge-success {
+            display: inline-block;
+            background-color: var(--outline-text);
+            color: var(--bg-main);
+            font-family: var(--font-headings);
+            font-weight: 700;
             font-size: 0.9rem;
-            font-family: var(--ff-head);
-            color: #666;
-            font-style: italic;
+            padding: 4px 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
         }
-        #seconds {
-            font-weight: bold;
-            color: var(--orange);
+
+        h1 {
+            font-family: var(--font-headings);
+            font-weight: 900;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.15rem;
+            line-height: 1.5;
+            margin-bottom: 35px;
+            color: #334155;
+        }
+
+        /* --- ACTION BUTTONS --- */
+        .btn-wa {
+            display: inline-block;
+            width: 100%;
+            background-color: var(--primary-accent);
+            color: var(--outline-text);
+            font-family: var(--font-headings);
+            font-weight: 900;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            padding: 16px 24px;
+            border: var(--border-thick);
+            box-shadow: var(--hard-shadow-small);
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn-wa:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 7px 7px 0px var(--outline-text);
+            background-color: #f7ca66;
+        }
+
+        .btn-wa:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px var(--outline-text);
+        }
+
+        .notice-text {
+            font-size: 0.85rem;
+            font-style: italic;
+            color: var(--secondary-accent);
+            margin-top: 5px;
+        }
+
+        /* --- ANIMATIONS & CONFETTI --- */
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            z-index: 1;
+            top: -10px;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(105vh) rotate(360deg);
+            }
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">
-            <img src="img/SAKHYA PNG.png" alt="Logo Sakhya Abhipraya">
-            <span>KOMJAR 2026</span>
-        </div>
-    </nav>
-
-    <main class="center-box">
-        <div class="playful-card card-pop">
-            <h1 style="font-family: 'Poppins'; font-weight: 900; margin-bottom: 15px; color: var(--orange); font-size: 2.2rem;">MANTAP, DATA TERKIRIM! 🎉</h1>
-            <p style="margin-bottom: 15px; line-height: 1.6; font-size: 1.05rem;">
-                Berkas laporan pelaporan atau pendaftaran Anda telah tersimpan secara aman dalam pangkalan database panitia internal Komadiksi Mengajar 2026.
-            </p>
-            <p style="font-size: 0.95rem; color: #444;"> Terima kasih atas partisipasi dan kontribusi aktif Anda!</p>
-            
-            <div class="success-actions">
-                <a href="index.html" class="btn-playful" style="background-color: var(--navy); color: white;">Kembali ke Beranda</a>
-                <a href="presensi.html" class="btn-playful">Isi Presensi Lagi</a>
-            </div>
-
-            <p class="countdown-text">Halaman akan otomatis diarahkan kembali ke beranda dalam <span id="seconds">10</span> detik...</p>
-        </div>
-    </main>
-
-    <footer class="main-footer">
-        <div class="footer-bottom" style="justify-content: center;">
-            <p class="copyright">Copyright © 2026 - KOMADIKSI SMART UNS</p>
-        </div>
-    </footer>
+    <div class="success-container">
+        <div class="success-icon">✓</div>
+        <br>
+        <div class="badge-success">Status: Data Tersimpan</div>
+        <h1>Selamat!<br>Registrasi Sukses</h1>
+        <p>Data administrasi pendaftaran kamu telah aman diverifikasi oleh panitia <b>KOMJAR 2026</b>. Langkah terakhir, kamu wajib bergabung ke grup koordinasi di bawah ini.</p>
+        
+        <a href="https://chat.whatsapp.com/GantiDenganTokenGrupKamu" class="btn-wa">
+            ✦ MASUK GRUP WHATSAPP ✦
+        </a>
+        
+        <div class="notice-text">*Harap segera bergabung karena seluruh infomasi pembagian sekolah dan jadwal pembekalan akan dibagikan di dalam grup tersebut.</div>
+    </div>
 
     <script>
-        let timeLeft = 10;
-        const countdownElement = document.getElementById('seconds');
-        
-        const interval = setInterval(() => {
-            timeLeft--;
-            countdownElement.innerText = timeLeft;
-            if(timeLeft <= 0) {
-                clearInterval(interval);
-                window.location.href = 'index.html';
+        function createConfetti() {
+            const colors = ['#F4B942', '#E88A1A', '#1F2A44', '#2ECC71', '#3498DB'];
+            const shapes = ['0px', '50%']; // Kotak & Lingkaran
+            
+            for (let i = 0; i < 60; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                
+                // Set parameter acak
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)];
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's'; 
+                confetti.style.animationDelay = (Math.random() * 2) + 's';
+                confetti.style.opacity = Math.random();
+                
+                document.body.appendChild(confetti);
+                
+                // Bersihkan elemen setelah animasi selesai agar memori hemat
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
             }
-        }, 1000);
+        }
+        
+        // Jalankan efek saat halaman dimuat
+        window.onload = createConfetti;
     </script>
 </body>
 </html>

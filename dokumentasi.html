@@ -1,186 +1,169 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Memori KOMJAR 2025 - Kapsul Waktu</title>
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'komjar-bg': '#FFF4E6',
-            'komjar-navy': '#1F2A44',
-            'komjar-gold': '#F4B942',
-            'komjar-orange': '#E88A1A',
-            'komjar-card': '#FFFFFF',
-          },
-          fontFamily: {
-            heading: ['Poppins', 'sans-serif'],
-            body: ['PT Serif', 'serif'],
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dokumentasi KOMJAR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&family=PT+Serif&display=swap" rel="stylesheet">
+    
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-      }
-    }
-  </script>
 
-  <style>
-    /* UTILITY STYLES BERDASARKAN TOKEN VISUAL */
-    .brutal-border {
-      border: 4px solid #1F2A44;
-    }
-    .brutal-shadow-md {
-      box-shadow: 8px 8px 0px 0px #1F2A44;
-    }
-    .brutal-shadow-sm {
-      box-shadow: 4px 4px 0px 0px #1F2A44;
-    }
-    
-    /* MICRO-INTERACTIONS (TRANSFORM & SHADOW STATES) */
-    .brutal-btn {
-      transition: transform 0.1s ease, box-shadow 0.1s ease;
-      transform: translate(0, 0);
-      box-shadow: 4px 4px 0px 0px #1F2A44;
-    }
-    .brutal-btn:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px 0px #1F2A44;
-    }
-    .brutal-btn:active {
-      transform: translate(4px, 4px);
-      box-shadow: 0px 0px 0px 0px #1F2A44;
-    }
-  </style>
+        body {
+            background-color: #FFF4E6;
+            color: #1F2A44;
+            font-family: 'PT Serif', serif;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 40px;
+            border-bottom: 4px solid #1F2A44;
+            padding-bottom: 25px;
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 900;
+            font-size: 3rem;
+            text-transform: uppercase;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 0px #F4B942;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        /* Komponen Data Statistik Atas */
+        .stats-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .stat-badge {
+            background-color: #F4B942;
+            border: 3px solid #1F2A44;
+            padding: 8px 16px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 900;
+            font-size: 1.1rem;
+            box-shadow: 4px 4px 0px #1F2A44;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-badge.secondary {
+            background-color: #E88A1A;
+            color: #FFFFFF;
+        }
+
+        .stat-badge span {
+            font-family: 'PT Serif', serif;
+            font-weight: normal;
+            font-size: 1rem;
+        }
+
+        /* Grid 30 Foto Berjejer */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .photo-card {
+            background-color: #FFFFFF;
+            border: 4px solid #1F2A44;
+            padding: 10px;
+            box-shadow: 6px 6px 0px #1F2A44;
+        }
+
+        /* Pengaturan Ukuran & Dimensi Gambar */
+        .photo-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover; /* Memastikan foto terpotong rapi secara proporsional tanpa terlihat gepeng */
+            border: 3px solid #1F2A44;
+            border-radius: 12px; /* Batas kelengkungan sudut sesuai token aturan visual */
+            display: block;
+        }
+
+        .photo-caption {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
 </head>
-<body class="bg-komjar-bg text-komjar-navy font-body min-h-screen relative overflow-x-hidden p-6 md:p-12">
+<body>
 
-  <!-- PLAYFUL GEOMETRICAL FLOATING SHAPES (Opacity 0.08 - 0.12) -->
-  <div class="absolute text-komjar-navy opacity-10 text-7xl pointer-events-none select-none top-24 right-10 transform rotate-45 font-heading">✦</div>
-  <div class="absolute text-komjar-navy opacity-12 text-6xl pointer-events-none select-none bottom-20 left-12 transform -rotate-12 font-heading">⚙</div>
-  <div class="absolute text-komjar-navy opacity-8 text-8xl pointer-events-none select-none top-1/3 left-8 transform rotate-90 font-heading">●</div>
-  <div class="absolute text-komjar-navy opacity-10 text-5xl pointer-events-none select-none bottom-1/2 right-12 transform -rotate-6 font-heading">★</div>
+    <div class="container">
+        <!-- Judul, Keterangan Atas, & Data Statistik -->
+        <header>
+            <h1>Dokumentasi KOMJAR 2025</h1>
+            <p class="description">Kumpulan hasil dokumentasi rangkaian kegiatan Komadiksi Mengajar tahun lalu.</p>
+            
+            <!-- Tempat Data Statistik -->
+            <div class="stats-container">
+                <div class="stat-badge">
+                    75 <span>Volunteer</span>
+                </div>
+                <div class="stat-badge secondary">
+                    23 <span>Sekolah</span>
+                </div>
+            </div>
+        </header>
 
-  <!-- NAVIGATION BAR -->
-  <nav class="max-w-5xl mx-auto mb-16 bg-komjar-card brutal-border brutal-shadow-sm p-4 flex justify-between items-center">
-    <div class="font-heading font-black text-xl md:text-2xl tracking-tight uppercase">
-      KOMJAR <span class="text-komjar-orange">2025</span>
-    </div>
-    <!-- Navigasi kembali ke halaman list dokumentasi utama -->
-    <a href="../dokumentasi.html" class="brutal-btn bg-komjar-gold px-4 py-2 font-heading font-bold text-sm uppercase brutal-border">
-      ⬅ Kembali ke Arsip
-    </a>
-  </nav>
-
-  <!-- HERO DETAIL SECTION -->
-  <header class="max-w-5xl mx-auto mb-16">
-    <div class="inline-flex gap-2 mb-4 flex-wrap">
-      <span class="bg-komjar-navy text-komjar-bg font-heading font-bold px-3 py-1 brutal-border text-xs uppercase tracking-wider">
-        Arsip Terbuka
-      </span>
-      <span class="bg-komjar-orange text-white font-heading font-bold px-3 py-1 brutal-border text-xs uppercase tracking-wider">
-        Tahun Pelaksanaan: 2025
-      </span>
-    </div>
-    <h1 class="font-heading font-black text-4xl md:text-6xl uppercase tracking-tighter leading-none mb-6">
-      MERAJUT ASA DI <br><span class="text-komjar-orange">UJUNG DESA</span>
-    </h1>
-    
-    <!-- STATISTIK SINGKAT (Brutalist Grid Layout) -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
-      <div class="bg-komjar-card p-4 brutal-border brutal-shadow-sm text-center">
-        <div class="font-heading font-black text-3xl text-komjar-orange">12</div>
-        <div class="text-sm font-bold uppercase mt-1">Desa Binaan</div>
-      </div>
-      <div class="bg-komjar-card p-4 brutal-border brutal-shadow-sm text-center">
-        <div class="font-heading font-black text-3xl text-komjar-gold">45+</div>
-        <div class="text-sm font-bold uppercase mt-1">Relawan Mengajar</div>
-      </div>
-      <div class="bg-komjar-card p-4 brutal-border brutal-shadow-sm text-center">
-        <div class="font-heading font-black text-3xl text-komjar-orange">300+</div>
-        <div class="text-sm font-bold uppercase mt-1">Anak Didik</div>
-      </div>
-      <div class="bg-komjar-card p-4 brutal-border brutal-shadow-sm text-center">
-        <div class="font-heading font-black text-3xl text-komjar-navy">1.000+</div>
-        <div class="text-sm font-bold uppercase mt-1">Buku Donasi</div>
-      </div>
-    </div>
-  </header>
-
-  <!-- KONTEN UTAMA & MATRIKS DOKUMENTASI -->
-  <main class="max-w-5xl mx-auto space-y-12">
-    
-    <!-- ARTIKEL / NARASI PANJANG -->
-    <section class="bg-komjar-card brutal-border brutal-shadow-md p-6 md:p-10 leading-relaxed text-lg">
-      <h2 class="font-heading font-black text-2xl md:text-3xl uppercase tracking-tight mb-6 border-b-4 border-komjar-navy pb-2">
-        Catatan Perjalanan & Dampak Sosial
-      </h2>
-      <div class="space-y-4">
-        <p>
-          Pelaksanaan Komadiksi Mengajar (KOMJAR) pada tahun 2025 menjadi salah satu tonggak sejarah pergerakan pengabdian mahasiswa yang paling masif. Berfokus pada penguatan fondasi literasi dasar dan pengenalan dunia digital secara sehat, seluruh relawan disebar ke beberapa klaster desa binaan yang memiliki keterbatasan akses transportasi dan jaringan informasi.
-        </p>
-        <p>
-          Selama kurun waktu pelaksanaan, fokus utama gerakan tidak hanya mengajar di dalam ruang kelas formal, melainkan menghidupkan ruang-ruang publik alternatif. Salah satu capaian terbesarnya adalah keberhasilan relawan dalam <strong>mengaktifkan kembali 3 sanggar belajar (Rumah Baca)</strong> yang sempat mati suri, serta menyusun kurikulum <i>fun-learning</i> mandiri yang relevan dengan kearifan lokal setempat.
-        </p>
-        <p>
-          Melalui pendekatan eksperimen sains sederhana, permainan matematika kreatif, serta kelas seni ekspresif, antusiasme anak-anak didik meningkat tajam dari minggu ke minggu. Program ini diakhiri dengan festival literasi anak, sebuah perayaan kecil tempat anak-anak desa binaan menampilkan karya kreativitas mereka di depan orang tua dan masyarakat setempat.
-        </p>
-      </div>
-    </section>
-
-    <!-- GALERI FOTO (Asymmetric Brutalist Grid) -->
-    <section>
-      <h2 class="font-heading font-black text-2xl md:text-3xl uppercase tracking-tight mb-6 inline-block bg-komjar-orange text-white px-4 py-1 brutal-border brutal-shadow-sm">
-        Galeri Jejak Langkah
-      </h2>
-      
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <!-- Foto 1 -->
-        <div class="bg-komjar-card brutal-border brutal-shadow-sm p-3">
-          <div class="w-full h-48 bg-komjar-gold brutal-border mb-3 relative overflow-hidden flex items-center justify-center font-heading font-bold text-sm text-komjar-navy">
-            [ Foto: Pembukaan di Balai Desa ]
-            <!-- <img src="../img/2025/foto1.jpg" alt="Dokumentasi 2025" class="w-full h-full object-cover"> -->
-          </div>
-          <p class="text-sm font-bold uppercase tracking-tight">01. Penyambutan Relawan</p>
-          <p class="text-xs text-gray-600 mt-1">Sinergi awal bersama jajaran perangkat desa binaan.</p>
+        <!-- Tempat Foto Berjejer (1-30) -->
+        <div class="gallery-grid">
+            <div class="photo-card"><img src="img/foto1.jpg" alt="Dokumentasi 01" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 01</div></div>
+            <div class="photo-card"><img src="img/foto2.jpg" alt="Dokumentasi 02" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 02</div></div>
+            <div class="photo-card"><img src="img/foto3.jpg" alt="Dokumentasi 03" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 03</div></div>
+            <div class="photo-card"><img src="img/foto4.jpg" alt="Dokumentasi 04" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 04</div></div>
+            <div class="photo-card"><img src="img/foto5.jpg" alt="Dokumentasi 05" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 05</div></div>
+            <div class="photo-card"><img src="img/foto6.jpg" alt="Dokumentasi 06" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 06</div></div>
+            <div class="photo-card"><img src="img/foto7.jpg" alt="Dokumentasi 07" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 07</div></div>
+            <div class="photo-card"><img src="img/foto8.jpg" alt="Dokumentasi 08" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 08</div></div>
+            <div class="photo-card"><img src="img/foto9.jpg" alt="Dokumentasi 09" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 09</div></div>
+            <div class="photo-card"><img src="img/foto10.jpg" alt="Dokumentasi 10" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 10</div></div>
+            <div class="photo-card"><img src="img/foto11.jpg" alt="Dokumentasi 11" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 11</div></div>
+            <div class="photo-card"><img src="img/foto12.jpg" alt="Dokumentasi 12" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 12</div></div>
+            <div class="photo-card"><img src="img/foto13.jpg" alt="Dokumentasi 13" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 13</div></div>
+            <div class="photo-card"><img src="img/foto14.jpg" alt="Dokumentasi 14" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 14</div></div>
+            <div class="photo-card"><img src="img/foto15.jpg" alt="Dokumentasi 15" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 15</div></div>
+            <div class="photo-card"><img src="img/foto16.jpg" alt="Dokumentasi 16" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 16</div></div>
+            <div class="photo-card"><img src="img/foto17.jpg" alt="Dokumentasi 17" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 17</div></div>
+            <div class="photo-card"><img src="img/foto18.jpg" alt="Dokumentasi 18" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 18</div></div>
+            <div class="photo-card"><img src="img/foto19.jpg" alt="Dokumentasi 19" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 19</div></div>
+            <div class="photo-card"><img src="img/foto20.jpg" alt="Dokumentasi 20" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 20</div></div>
+            <div class="photo-card"><img src="img/foto21.jpg" alt="Dokumentasi 21" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 21</div></div>
+            <div class="photo-card"><img src="img/foto22.jpg" alt="Dokumentasi 22" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 22</div></div>
+            <div class="photo-card"><img src="img/foto23.jpg" alt="Dokumentasi 23" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 23</div></div>
+            <div class="photo-card"><img src="img/foto24.jpg" alt="Dokumentasi 24" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 24</div></div>
+            <div class="photo-card"><img src="img/foto25.jpg" alt="Dokumentasi 25" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 25</div></div>
+            <div class="photo-card"><img src="img/foto26.jpg" alt="Dokumentasi 26" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 26</div></div>
+            <div class="photo-card"><img src="img/foto27.jpg" alt="Dokumentasi 27" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 27</div></div>
+            <div class="photo-card"><img src="img/foto28.jpg" alt="Dokumentasi 28" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 28</div></div>
+            <div class="photo-card"><img src="img/foto29.jpg" alt="Dokumentasi 29" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 29</div></div>
+            <div class="photo-card"><img src="img/foto30.jpg" alt="Dokumentasi 30" class="photo-img"><div class="photo-caption">Dokumentasi Kegiatan 30</div></div>
         </div>
-
-        <!-- Foto 2 -->
-        <div class="bg-komjar-card brutal-border brutal-shadow-sm p-3 transform md:translate-y-4">
-          <div class="w-full h-48 bg-komjar-orange brutal-border mb-3 relative overflow-hidden flex items-center justify-center font-heading font-bold text-sm text-white">
-            [ Foto: Kelas Kreatif Terbuka ]
-            <!-- <img src="../img/2025/foto2.jpg" alt="Dokumentasi 2025" class="w-full h-full object-cover"> -->
-          </div>
-          <p class="text-sm font-bold uppercase tracking-tight">02. Metode Fun Learning</p>
-          <p class="text-xs text-gray-600 mt-1">Belajar berhitung lewat media permainan interaktif.</p>
-        </div>
-
-        <!-- Foto 3 -->
-        <div class="bg-komjar-card brutal-border brutal-shadow-sm p-3">
-          <div class="w-full h-48 bg-komjar-navy brutal-border mb-3 relative overflow-hidden flex items-center justify-center font-heading font-bold text-sm text-komjar-bg">
-            [ Foto: Peresmian Sanggar Baca ]
-            <!-- <img src="../img/2025/foto3.jpg" alt="Dokumentasi 2025" class="w-full h-full object-cover"> -->
-          </div>
-          <p class="text-sm font-bold uppercase tracking-tight">03. Ruang Baca Baru</p>
-          <p class="text-xs text-gray-600 mt-1">Penataan rak buku donasi untuk pojok literasi desa.</p>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="max-w-5xl mx-auto mt-24 border-t-4 border-komjar-navy pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 font-heading font-bold text-sm">
-    <div>© 2026 KOMADIKSI MENGAJAR • PROJECT ASSOCIATION KOMJAR 2026</div>
-    <div class="bg-komjar-navy text-komjar-bg px-3 py-1 brutal-border text-xs uppercase tracking-widest">Kapsul Waktu v1.0.0</div>
-  </footer>
+    </div>
 
 </body>
 </html>
