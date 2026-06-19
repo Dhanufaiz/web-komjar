@@ -529,6 +529,198 @@ nav {
 }
 
 /* ==========================================================================
+   NEO-BRUTALISM GREENBOARD SECTION (OPTIMIZED PENDULUM EFFECT)
+   ========================================================================== */
+
+/* 1. Pengaturan Papan Tulis Kain Hijau */
+.greenboard-section {
+    position: relative;
+    background-color: #1E4636; /* Warna Hijau Mading Tua */
+    
+    /* Pola Grid Mikro untuk Mensimulasikan Tekstur Serat Kain Flannel */
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 4px 4px; 
+    
+    /* Bingkai Kayu Solid Khas Neo-Brutalisme */
+    border: 12px solid #1F2A44; 
+    outline: 4px solid #F4B942; /* Garis aksen luar kuning pop */
+    
+    padding: 60px 20px;
+    text-align: center;
+    margin: 50px auto;
+    max-width: 100%;
+    box-shadow: 12px 12px 0px #1F2A44; /* Hard Shadow */
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* 2. Efek Tulisan Kapur (Chalk Header) */
+.board-header {
+    margin-bottom: 45px;
+}
+
+.chalk-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 2.5rem;
+    color: #FFF4E6; /* Putih Gading Kontras */
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    text-shadow: 3px 3px 0px #1F2A44;
+}
+
+.chalk-desc {
+    font-family: 'PT Serif', serif;
+    font-size: 1.1rem;
+    color: #F4B942; /* Aksentuasi Warna Emas */
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+/* 3. Kontainer Pembungkus Mading & Pin */
+.board-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-top: 20px;
+    z-index: 5;
+    backface-visibility: hidden; /* Mencegah pixel bergetar saat animasi di browser */
+}
+
+/* Paku Payung Bundar (Push Pin) */
+.push-pin {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 24px;
+    background-color: #E88A1A; /* Warna Oranye-Merah Pekat */
+    border: 3px solid #1F2A44;
+    border-radius: 50%;
+    box-shadow: 0px 4px 0px #1F2A44;
+    z-index: 20; /* Mengunci di tumpukan paling atas */
+}
+
+/* Jarum Logam Paku Payung */
+.push-pin::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 8px;
+    background-color: #1F2A44;
+}
+
+/* 4. Ornamen Stiker & Badge Tempel */
+.board-sticker {
+    position: absolute;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    border: 3px solid #1F2A44;
+    box-shadow: 3px 3px 0px #1F2A44;
+    z-index: 10;
+}
+
+.sticker-left {
+    background-color: #FFF4E6;
+    color: #1F2A44;
+    top: 25px;
+    left: -50px;
+    transform: rotate(-15deg);
+}
+
+.board-badge {
+    position: absolute;
+    background-color: #F4B942;
+    color: #1F2A44;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border: 3px solid #1F2A44;
+    box-shadow: 4px 4px 0px #1F2A44;
+    bottom: 35px;
+    right: -55px;
+    transform: rotate(10deg);
+    z-index: 10;
+}
+
+/* 5. Bingkai Kertas Polaroid */
+.polaroid-board-link {
+    text-decoration: none;
+    color: #1F2A44;
+    display: inline-block;
+}
+
+.polaroid-board-frame {
+    background-color: #FFFFFF;
+    border: 4px solid #1F2A44;
+    padding: 12px 12px 24px 12px;
+    width: 270px;
+    
+    /* Bayangan default jatuh ke mading */
+    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.35); 
+    
+    /* OPTIMASI UTAMA: Mengunci poros rotasi tepat di titik tengah atas (posisi pin) */
+    transform-origin: top center; 
+    transform: rotate(-3deg); /* Posisi default menggantung miring */
+    
+    /* Efek transisi membal (snappy) khas Y2K Retro Pop */
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                box-shadow 0.3s ease;
+}
+
+.polaroid-board-photo {
+    width: 100%;
+    height: 210px;
+    border: 3px solid #1F2A44;
+    overflow: hidden;
+    background-color: #FFF4E6;
+}
+
+.polaroid-board-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.polaroid-board-caption {
+    margin-top: 14px;
+}
+
+.board-caption-text {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: #1F2A44;
+    letter-spacing: -0.5px;
+}
+
+/* 6. Mikro Interaksi Hover & Active States */
+.polaroid-board-link:hover .polaroid-board-frame {
+    /* Berayun ke kanan secara alami karena bagian atasnya terpatok pin */
+    transform: rotate(3deg); 
+    
+    /* Bayangan bergeser melebar ke bawah, mensimulasikan kertas yang terangkat menjauhi papan */
+    box-shadow: -6px 12px 0px rgba(0, 0, 0, 0.25); 
+}
+
+.polaroid-board-link:active .polaroid-board-frame {
+    /* Saat diklik, polaroid kembali tegak lurus seolah ditekan ke papan mading */
+    transform: rotate(0deg) scale(0.98);
+    box-shadow: 0px 4px 0px rgba(0, 0, 0, 0.4);
+}
+
+
+/* ==========================================================================
    6. PREMIUM DEEP GREEN FOOTER
    ========================================================================== */
 .main-footer {
