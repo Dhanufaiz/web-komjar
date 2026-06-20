@@ -6,147 +6,8 @@
     <title>Galeri Dokumentasi - KOMADIKSI MENGAJAR 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/global.css">
-
-    <style>
-        /* Gaya Khusus Modul Galeri Dokumentasi (Neo-Brutalisme) */
-        .gallery-container {
-            padding-top: 140px; /* Memberi ruang agar tidak tertutup Fixed Nav */
-        }
-
-        .gallery-header {
-            margin-bottom: 40px;
-            border-bottom: 4px solid var(--navy);
-            padding-bottom: 25px;
-            position: relative;
-        }
-
-        .gallery-header h1 {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 900;
-            font-size: 3rem;
-            text-transform: uppercase;
-            line-height: 1.1;
-            margin-bottom: 15px;
-            text-shadow: 3px 3px 0px var(--gold);
-        }
-
-        .gallery-description {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            max-width: 800px;
-            margin-bottom: 25px;
-        }
-
-        /* Komponen Data Statistik Utama */
-        .stats-container {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .stat-badge {
-            background-color: var(--gold);
-            border: 3px solid var(--navy);
-            padding: 8px 16px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 900;
-            font-size: 1.1rem;
-            box-shadow: 4px 4px 0px var(--navy);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .stat-badge.secondary {
-            background-color: var(--orange);
-            color: var(--white);
-        }
-
-        .stat-badge span {
-            font-family: 'PT Serif', serif;
-            font-weight: normal;
-            font-size: 1rem;
-        }
-
-        /* Grid Sistem Album Foto (Responsive) */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 25px;
-            margin-top: 40px;
-        }
-
-        .photo-card {
-            background-color: var(--white);
-            border: 4px solid var(--navy);
-            padding: 12px;
-            box-shadow: 6px 6px 0px var(--navy);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .photo-card:hover {
-            transform: translate(-4px, -4px);
-            box-shadow: 10px 10px 0px var(--navy);
-        }
-
-        /* Pengukuran Gambar agar Presisi dan Tidak Gepeng */
-        .photo-img {
-            width: 100%;
-            height: 190px;
-            object-fit: cover; 
-            border: 3px solid var(--navy);
-            border-radius: 12px; 
-            display: block;
-        }
-
-        .photo-caption {
-            margin-top: 12px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-align: center;
-            text-transform: uppercase;
-            color: var(--navy);
-        }
-
-        /* Tombol Kembali (Back Button) */
-        .back-nav {
-            margin-bottom: 20px;
-        }
-        .btn-back {
-            text-decoration: none;
-            color: var(--navy);
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 14px;
-            border: 2px solid var(--navy);
-            background: var(--white);
-            border-radius: 8px;
-            box-shadow: 2px 2px 0px var(--navy);
-            transition: all 0.1s ease;
-        }
-        .btn-back:hover {
-            background: var(--bg-color);
-            transform: translate(-1px, -1px);
-            box-shadow: 3px 3px 0px var(--navy);
-        }
-
-        /* Optimasi Layar Responsif Seluler */
-        @media (max-width: 768px) {
-            .gallery-header h1 {
-                font-size: 2.2rem;
-            }
-            .gallery-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 15px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/dokumentasi.css">
 </head>
 <body>
 
@@ -204,36 +65,36 @@
         </header>
 
         <div class="gallery-grid">
-            <div class="photo-card"><img src="img/foto1.jpg" alt="Dokumentasi 01" class="photo-img"><div class="photo-caption">Dokumentasi 01</div></div>
-            <div class="photo-card"><img src="img/foto2.jpg" alt="Dokumentasi 02" class="photo-img"><div class="photo-caption">Dokumentasi 02</div></div>
-            <div class="photo-card"><img src="img/foto3.jpg" alt="Dokumentasi 03" class="photo-img"><div class="photo-caption">Dokumentasi 03</div></div>
-            <div class="photo-card"><img src="img/foto4.jpg" alt="Dokumentasi 04" class="photo-img"><div class="photo-caption">Dokumentasi 04</div></div>
-            <div class="photo-card"><img src="img/foto5.jpg" alt="Dokumentasi 05" class="photo-img"><div class="photo-caption">Dokumentasi 05</div></div>
-            <div class="photo-card"><img src="img/foto6.jpg" alt="Dokumentasi 06" class="photo-img"><div class="photo-caption">Dokumentasi 06</div></div>
-            <div class="photo-card"><img src="img/foto7.jpg" alt="Dokumentasi 07" class="photo-img"><div class="photo-caption">Dokumentasi 07</div></div>
-            <div class="photo-card"><img src="img/foto8.jpg" alt="Dokumentasi 08" class="photo-img"><div class="photo-caption">Dokumentasi 08</div></div>
-            <div class="photo-card"><img src="img/foto9.jpg" alt="Dokumentasi 09" class="photo-img"><div class="photo-caption">Dokumentasi 09</div></div>
-            <div class="photo-card"><img src="img/foto10.jpg" alt="Dokumentasi 10" class="photo-img"><div class="photo-caption">Dokumentasi 10</div></div>
-            <div class="photo-card"><img src="img/foto11.jpg" alt="Dokumentasi 11" class="photo-img"><div class="photo-caption">Dokumentasi 11</div></div>
-            <div class="photo-card"><img src="img/foto12.jpg" alt="Dokumentasi 12" class="photo-img"><div class="photo-caption">Dokumentasi 12</div></div>
-            <div class="photo-card"><img src="img/foto13.jpg" alt="Dokumentasi 13" class="photo-img"><div class="photo-caption">Dokumentasi 13</div></div>
-            <div class="photo-card"><img src="img/foto14.jpg" alt="Dokumentasi 14" class="photo-img"><div class="photo-caption">Dokumentasi 14</div></div>
-            <div class="photo-card"><img src="img/foto15.jpg" alt="Dokumentasi 15" class="photo-img"><div class="photo-caption">Dokumentasi 15</div></div>
-            <div class="photo-card"><img src="img/foto16.jpg" alt="Dokumentasi 16" class="photo-img"><div class="photo-caption">Dokumentasi 16</div></div>
-            <div class="photo-card"><img src="img/foto17.jpg" alt="Dokumentasi 17" class="photo-img"><div class="photo-caption">Dokumentasi 17</div></div>
-            <div class="photo-card"><img src="img/foto18.jpg" alt="Dokumentasi 18" class="photo-img"><div class="photo-caption">Dokumentasi 18</div></div>
-            <div class="photo-card"><img src="img/foto19.jpg" alt="Dokumentasi 19" class="photo-img"><div class="photo-caption">Dokumentasi 19</div></div>
-            <div class="photo-card"><img src="img/foto20.jpg" alt="Dokumentasi 20" class="photo-img"><div class="photo-caption">Dokumentasi 20</div></div>
-            <div class="photo-card"><img src="img/foto21.jpg" alt="Dokumentasi 21" class="photo-img"><div class="photo-caption">Dokumentasi 21</div></div>
-            <div class="photo-card"><img src="img/foto22.jpg" alt="Dokumentasi 22" class="photo-img"><div class="photo-caption">Dokumentasi 22</div></div>
-            <div class="photo-card"><img src="img/foto23.jpg" alt="Dokumentasi 23" class="photo-img"><div class="photo-caption">Dokumentasi 23</div></div>
-            <div class="photo-card"><img src="img/foto24.jpg" alt="Dokumentasi 24" class="photo-img"><div class="photo-caption">Dokumentasi 24</div></div>
-            <div class="photo-card"><img src="img/foto25.jpg" alt="Dokumentasi 25" class="photo-img"><div class="photo-caption">Dokumentasi 25</div></div>
-            <div class="photo-card"><img src="img/foto26.jpg" alt="Dokumentasi 26" class="photo-img"><div class="photo-caption">Dokumentasi 26</div></div>
-            <div class="photo-card"><img src="img/foto27.jpg" alt="Dokumentasi 27" class="photo-img"><div class="photo-caption">Dokumentasi 27</div></div>
-            <div class="photo-card"><img src="img/foto28.jpg" alt="Dokumentasi 28" class="photo-img"><div class="photo-caption">Dokumentasi 28</div></div>
-            <div class="photo-card"><img src="img/foto29.jpg" alt="Dokumentasi 29" class="photo-img"><div class="photo-caption">Dokumentasi 29</div></div>
-            <div class="photo-card"><img src="img/foto30.jpg" alt="Dokumentasi 30" class="photo-img"><div class="photo-caption">Dokumentasi 30</div></div>
+            <div class="photo-card"><img src="../index.html" alt="Dokumentasi 01" class="photo-img"><div class="photo-caption">Dokumentasi 01</div></div>
+            <div class="photo-card"><img src="../img/foto2.jpg" alt="Dokumentasi 02" class="photo-img"><div class="photo-caption">Dokumentasi 02</div></div>
+            <div class="photo-card"><img src="../img/foto3.jpg" alt="Dokumentasi 03" class="photo-img"><div class="photo-caption">Dokumentasi 03</div></div>
+            <div class="photo-card"><img src="../img/foto4.jpg" alt="Dokumentasi 04" class="photo-img"><div class="photo-caption">Dokumentasi 04</div></div>
+            <div class="photo-card"><img src="../img/foto5.jpg" alt="Dokumentasi 05" class="photo-img"><div class="photo-caption">Dokumentasi 05</div></div>
+            <div class="photo-card"><img src="../img/foto6.jpg" alt="Dokumentasi 06" class="photo-img"><div class="photo-caption">Dokumentasi 06</div></div>
+            <div class="photo-card"><img src="../img/foto7.jpg" alt="Dokumentasi 07" class="photo-img"><div class="photo-caption">Dokumentasi 07</div></div>
+            <div class="photo-card"><img src="../img/foto8.jpg" alt="Dokumentasi 08" class="photo-img"><div class="photo-caption">Dokumentasi 08</div></div>
+            <div class="photo-card"><img src="../img/foto9.jpg" alt="Dokumentasi 09" class="photo-img"><div class="photo-caption">Dokumentasi 09</div></div>
+            <div class="photo-card"><img src="../img/foto10.jpg" alt="Dokumentasi 10" class="photo-img"><div class="photo-caption">Dokumentasi 10</div></div>
+            <div class="photo-card"><img src="../img/foto11.jpg" alt="Dokumentasi 11" class="photo-img"><div class="photo-caption">Dokumentasi 11</div></div>
+            <div class="photo-card"><img src="../img/foto12.jpg" alt="Dokumentasi 12" class="photo-img"><div class="photo-caption">Dokumentasi 12</div></div>
+            <div class="photo-card"><img src="../img/foto13.jpg" alt="Dokumentasi 13" class="photo-img"><div class="photo-caption">Dokumentasi 13</div></div>
+            <div class="photo-card"><img src="../img/foto14.jpg" alt="Dokumentasi 14" class="photo-img"><div class="photo-caption">Dokumentasi 14</div></div>
+            <div class="photo-card"><img src="../img/foto15.jpg" alt="Dokumentasi 15" class="photo-img"><div class="photo-caption">Dokumentasi 15</div></div>
+            <div class="photo-card"><img src="../img/foto16.jpg" alt="Dokumentasi 16" class="photo-img"><div class="photo-caption">Dokumentasi 16</div></div>
+            <div class="photo-card"><img src="../img/foto17.jpg" alt="Dokumentasi 17" class="photo-img"><div class="photo-caption">Dokumentasi 17</div></div>
+            <div class="photo-card"><img src="../img/foto18.jpg" alt="Dokumentasi 18" class="photo-img"><div class="photo-caption">Dokumentasi 18</div></div>
+            <div class="photo-card"><img src="../img/foto19.jpg" alt="Dokumentasi 19" class="photo-img"><div class="photo-caption">Dokumentasi 19</div></div>
+            <div class="photo-card"><img src="../img/foto20.jpg" alt="Dokumentasi 20" class="photo-img"><div class="photo-caption">Dokumentasi 20</div></div>
+            <div class="photo-card"><img src="../img/foto21.jpg" alt="Dokumentasi 21" class="photo-img"><div class="photo-caption">Dokumentasi 21</div></div>
+            <div class="photo-card"><img src="../img/foto22.jpg" alt="Dokumentasi 22" class="photo-img"><div class="photo-caption">Dokumentasi 22</div></div>
+            <div class="photo-card"><img src="../img/foto23.jpg" alt="Dokumentasi 23" class="photo-img"><div class="photo-caption">Dokumentasi 23</div></div>
+            <div class="photo-card"><img src="../img/foto24.jpg" alt="Dokumentasi 24" class="photo-img"><div class="photo-caption">Dokumentasi 24</div></div>
+            <div class="photo-card"><img src="../img/foto25.jpg" alt="Dokumentasi 25" class="photo-img"><div class="photo-caption">Dokumentasi 25</div></div>
+            <div class="photo-card"><img src="../img/foto26.jpg" alt="Dokumentasi 26" class="photo-img"><div class="photo-caption">Dokumentasi 26</div></div>
+            <div class="photo-card"><img src="../img/foto27.jpg" alt="Dokumentasi 27" class="photo-img"><div class="photo-caption">Dokumentasi 27</div></div>
+            <div class="photo-card"><img src="../img/foto28.jpg" alt="Dokumentasi 28" class="photo-img"><div class="photo-caption">Dokumentasi 28</div></div>
+            <div class="photo-card"><img src="../img/foto29.jpg" alt="Dokumentasi 29" class="photo-img"><div class="photo-caption">Dokumentasi 29</div></div>
+            <div class="photo-card"><img src="../img/foto30.jpg" alt="Dokumentasi 30" class="photo-img"><div class="photo-caption">Dokumentasi 30</div></div>
         </div>
     </section>
 
