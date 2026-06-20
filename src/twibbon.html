@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twibbon Generator - KOMJAR 2026</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght=700;900&family=PT+Serif:ital,wght=0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- DESIGN TOKENS INTEGRATION --- */
+        :root {
+            --bg-main: #FFF4E6;
+            --outline-text: #1F2A44;
+            --primary-accent: #F4B942;
+            --secondary-accent: #E88A1A;
+            --container-bg: #FFFFFF;
+            
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'PT Serif', serif;
+            
+            --border-main: 4px solid var(--outline-text);
+            --shadow-large: 8px 8px 0px var(--outline-text);
+            --shadow-small: 4px 4px 0px var(--outline-text);
+            --shadow-hover: 6px 6px 0px var(--outline-text);
+        }
+
+        /* --- GLOBAL STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            font-family: var(--font-body);
+            color: var(--outline-text);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Background Decorations */
+        .decor-shape {
+            position: absolute;
+            font-size: 5rem;
+            color: var(--outline-text);
+            opacity: 0.10;
+            user-select: none;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* --- LAYOUT CONTAINER --- */
+        .main-container {
+            width: 100%;
+            max-width: 1000px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-zone {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .badge {
+            background-color: var(--outline-text);
+            color: #FFF;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-weight: 900;
+            font-size: 3.5rem;
+            line-height: 0.95;
+            text-transform: uppercase;
+        }
+
+        h1 .highlight {
+            background-color: var(--primary-accent);
+            padding: 0 10px;
+            border: var(--border-main);
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        h3 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .workspace {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+            h1 { font-size: 2.5rem; }
+        }
+
+        /* --- NEO-BRUTALISM CARDS --- */
+        .card {
+            background-color: var(--container-bg);
+            border: var(--border-main);
+            box-shadow: var(--shadow-large);
+            padding: 2rem;
+            border-radius: 0px;
+        }
+
+        /* --- TWIBBON CANVAS PREVIEW & WORKSPACE --- */
+        .preview-wrapper {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border: var(--border-main);
+            background-color: #EEE;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none; /* Mencegah seleksi gambar saat di-drag */
+        }
+
+        .placeholder-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            color: var(--outline-text);
+        }
+
+        .placeholder-text span {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .frame-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none; /* Klik tembus ke container foto di bawahnya */
+            object-fit: cover;
+        }
+
+        .user-preview-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            display: none;
+            overflow: hidden;
+            justify-content: center;
+            align-items: center;
+            cursor: move; /* Mengubah kursor jadi bentuk panah geser */
+        }
+
+        .user-preview-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transform-origin: center center;
+            position: relative;
+            pointer-events: none; /* Mencegah drag bawaan browser mengacaukan skrip */
+        }
+
+        /* --- INTERACTIVE COMPONENTS / BUTTONS --- */
+        input[type="file"] {
+            display: none;
+        }
+
+        .control-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .resize-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border: var(--border-main);
+            border-radius: 0px;
+            transition: transform 0.1s, box-shadow 0.1s;
+            transform: translate(0, 0);
+            box-shadow: var(--shadow-small);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-accent);
+            color: var(--outline-text);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-accent);
+            color: var(--outline-text);
+        }
+
+        .btn-resize {
+            background-color: #EEE;
+            color: var(--outline-text);
+            font-size: 1.2rem;
+            padding: 8px 16px;
+        }
+
+        .btn-block {
+            display: flex;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translate(-2px, -2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px;
+        }
+
+        .btn:disabled {
+            background-color: #E0E0E0;
+            color: #A0A0A0;
+            border-color: #A0A0A0;
+            cursor: not-allowed;
+            box-shadow: 0px 0px 0px;
+            transform: none;
+        }
+
+        /* --- CAPTION ELEMENT STYLES --- */
+        .caption-card {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .caption-desc {
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        textarea {
+            width: 100%;
+            height: 180px;
+            padding: 12px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--outline-text);
+            background-color: var(--bg-main);
+            border: var(--border-main);
+            resize: none;
+            outline: none;
+            margin-bottom: 1rem;
+        }
+
+        .divider {
+            border: none;
+            border-top: var(--border-main);
+            margin: 1.5rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="decor-shape" style="top: 10%; left: 5%; transform: rotate(15deg);">✦</div>
+    <div class="decor-shape" style="top: 75%; left: 8%; transform: rotate(-20deg);">★</div>
+    <div class="decor-shape" style="top: 20%; right: 8%; transform: rotate(45deg);">⚙</div>
+    <div class="decor-shape" style="top: 80%; right: 5%; transform: rotate(10deg);">●</div>
+
+    <main class="main-container">
+        <header class="header-zone">
+            <span class="badge">PROJECT ASSOCIATION: KOMJAR 2026</span>
+            <h1>TWIBBON<br><span class="highlight">GENERATOR</span></h1>
+        </header>
+
+        <section class="workspace">
+            <div class="card canvas-card">
+                <canvas id="twibbonCanvas" style="display: none;"></canvas>
+                
+                <div class="preview-wrapper" id="previewWrapper">
+                    <div class="placeholder-text" id="placeholderText">
+                        <span>✦</span>
+                        <p>Belum ada foto yang dimasukkan</p>
+                    </div>
+                    <img id="frameOverlay" src="img/mpofa.png" alt="Twibbon Frame" class="frame-overlay">
+                    
+                    <div class="user-preview-container" id="userPreviewContainer">
+                        <img id="userPreviewImg" alt="User Photo" class="user-preview-img">
+                    </div>
+                </div>
+
+                <div class="resize-controls">
+                    <button id="zoomOutBtn" class="btn btn-resize" disabled>➖ Perkecil Foto</button>
+                    <button id="zoomInBtn" class="btn btn-resize" disabled>➕ Perbesar Foto</button>
+                </div>
+
+                <div class="control-group">
+                    <label for="uploadImg" class="btn btn-primary btn-block">pilih foto kamu</label>
+                    <input type="file" id="uploadImg" accept="image/*">
+                    
+                    <button id="downloadBtn" class="btn btn-secondary btn-block" disabled>unduh gambar</button>
+                </div>
+            </div>
+
+            <div class="card caption-card">
+                <h3>✦ TEMPLATE CAPTION</h3>
+                <p class="caption-desc">Salin teks di bawah ini untuk meramaikan feed media sosial kamu!</p>
+                
+                <textarea id="captionTextArea" readonly>🚀 Halo Dunia! Saya siap menjadi bagian dari keseruan KOMJAR 2026! Mari bersama-sama menciptakan inovasi baru tanpa batas di era transformasi digital ini.
+
+Yuk, pasang twibbon kamu sekarang dan bagikan momen serumu di sini! 
+  
+#KOMJAR2026 #NeoBrutalisme #Y2KRetro #TechForFuture</textarea>
+
+                <button id="copyCaptionBtn" class="btn btn-primary">salin teks</button>
+                
+                <hr class="divider">
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const uploadImgInput = document.getElementById('uploadImg');
+        const userPreviewContainer = document.getElementById('userPreviewContainer');
+        const userPreviewImg = document.getElementById('userPreviewImg');
+        const placeholderText = document.getElementById('placeholderText');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const canvas = document.getElementById('twibbonCanvas');
+        const frameOverlay = document.getElementById('frameOverlay');
+        const captionTextArea = document.getElementById('captionTextArea');
+        const copyCaptionBtn = document.getElementById('copyCaptionBtn');
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+
+        const ctx = canvas.getContext('2d');
+
+        // State Variabel
+        let userUploadedImage = new Image();
+        let isImageLoaded = false;
+        let frameImg = new Image();
+        
+        let scale = 1.0;
+        const scaleStep = 0.1;
+        
+        // Posisi koordinat pergeseran (Offset)
+        let offsetX = 0;
+        let offsetY = 0;
+        let isDragging = false;
+        let startX, startY;
+
+        const TWIBBON_FRAME_URL = frameOverlay.getAttribute('src');
+
+        // Memuat bingkai utama
+        frameImg.crossOrigin = "anonymous";
+        frameImg.onload = function() {
+            canvas.width = frameImg.width;
+            canvas.height = frameImg.height;
+        };
+        frameImg.src = TWIBBON_FRAME_URL;
+
+        // 1. EVENT UPLOAD IMAGE
+        uploadImgInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    userUploadedImage.onload = function() {
+                        userPreviewImg.src = userUploadedImage.src;
+                        userPreviewContainer.style.display = 'flex';
+                        placeholderText.style.display = 'none';
+                        
+                        // Reset transformasi saat ganti foto baru
+                        scale = 1.0;
+                        offsetX = 0;
+                        offsetY = 0;
+                        updatePreviewTransform();
+                        
+                        downloadBtn.disabled = false;
+                        zoomInBtn.disabled = false;
+                        zoomOutBtn.disabled = false;
+                        isImageLoaded = true;
+                    };
+                    userUploadedImage.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 2. FITUR RESIZE (ZOOM)
+        zoomInBtn.addEventListener('click', function() {
+            scale += scaleStep;
+            updatePreviewTransform();
+        });
+
+        zoomOutBtn.addEventListener('click', function() {
+            scale = Math.max(0.1, scale - scaleStep);
+            updatePreviewTransform();
+        });
+
+        // 3. FITUR GESER (DRAG & DROP) LOGIC
+        userPreviewContainer.addEventListener('mousedown', (e) => {
+            if (!isImageLoaded) return;
+            isDragging = true;
+            startX = e.clientX - offsetX;
+            startY = e.clientY - offsetY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            offsetX = e.clientX - startX;
+            offsetY = e.clientY - startY;
+            updatePreviewTransform();
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        // Dukungan layar sentuh HP (Touch Events)
+        userPreviewContainer.addEventListener('touchstart', (e) => {
+            if (!isImageLoaded) return;
+            isDragging = true;
+            startX = e.touches[0].clientX - offsetX;
+            startY = e.touches[0].clientY - offsetY;
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            offsetX = e.touches[0].clientX - startX;
+            offsetY = e.touches[0].clientY - startY;
+            updatePreviewTransform();
+        });
+
+        window.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+
+        // Fungsi memperbarui tampilan visual di halaman Web (UI)
+        function updatePreviewTransform() {
+            userPreviewImg.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+        }
+
+        // 4. PROSES RENDER CANVAS AKHIR & DOWNLOAD
+        downloadBtn.addEventListener('click', function() {
+            if (!isImageLoaded) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Perhitungan rasio kontainer preview asli dibanding resolusi asli canvas template
+            const previewRect = userPreviewContainer.getBoundingClientRect();
+            const conversionFactor = canvas.width / previewRect.width;
+
+            // Skala gambar dasar (Cover style)
+            const canvasRatio = canvas.width / canvas.height;
+            const imgRatio = userUploadedImage.width / userUploadedImage.height;
+            let drawWidth, drawHeight, drawX, drawY;
+
+            if (imgRatio > canvasRatio) {
+                drawHeight = canvas.height;
+                drawWidth = canvas.height * imgRatio;
+                drawX = (canvas.width - drawWidth) / 2;
+                drawY = 0;
+            } else {
+                drawWidth = canvas.width;
+                drawHeight = canvas.width / imgRatio;
+                drawX = 0;
+                drawY = (canvas.height - drawHeight) / 2;
+            }
+
+            // Integrasi hasil resize dan pergeseran koordinat (dikali dengan rasio konversi canvas)
+            const scaledWidth = drawWidth * scale;
+            const scaledHeight = drawHeight * scale;
+            
+            const finalX = (drawX + (drawWidth - scaledWidth) / 2) + (offsetX * conversionFactor);
+            const finalY = (drawY + (drawHeight - scaledHeight) / 2) + (offsetY * conversionFactor);
+
+            // Layer 1: Gambar foto pengguna hasil penyesuaian posisi
+            ctx.drawImage(userUploadedImage, finalX, finalY, scaledWidth, scaledHeight);
+
+            // Layer 2: Gambar bingkai di bagian paling atas
+            ctx.drawImage(frameImg, 0, 0, canvas.width, canvas.height);
+
+            // Eksekusi download file final .png
+            const finalDataUrl = canvas.toDataURL("image/png");
+            const createDownloadLink = document.createElement('a');
+            createDownloadLink.download = 'Twibbon_KOMJAR_2026.png';
+            createDownloadLink.href = finalDataUrl;
+            createDownloadLink.click();
+        });
+
+        // 5. COPY CAPTION TEMPLATE
+        copyCaptionBtn.addEventListener('click', function() {
+            captionTextArea.select();
+            captionTextArea.setSelectionRange(0, 99999);
+
+            navigator.clipboard.writeText(captionTextArea.value)
+                .then(() => {
+                    const originalText = copyCaptionBtn.innerText;
+                    copyCaptionBtn.innerText = 'BERHASIL DISALIN! ✦';
+                    copyCaptionBtn.style.backgroundColor = '#2ECC71';
+                    
+                    setTimeout(() => {
+                        copyCaptionBtn.innerText = originalText;
+                        copyCaptionBtn.style.backgroundColor = '';
+                    }, 2000);
+                })
+                .catch(err => {
+                    alert('Gagal menyalin teks, silakan salin manual.');
+                });
+        });
+    </script>
+</body>
+</html>
