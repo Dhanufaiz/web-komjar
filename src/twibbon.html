@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght=700;900&family=PT+Serif:ital,wght=0,400;0,700;1,400&display=swap" rel="stylesheet">
     
     <style>
-        /* --- DESIGN TOKENS INTEGRATION --- */
+/* --- DESIGN TOKENS INTEGRATION --- */
         :root {
             --bg-main: #FFF4E6;
             --outline-text: #1F2A44;
@@ -39,15 +39,15 @@
             font-family: var(--font-body);
             color: var(--outline-text);
             min-height: 100vh;
-            padding: 2rem 1rem;
+            padding: 1.5rem 1rem; /* Dikurangi sedikit agar lebih pas di HP */
             position: relative;
-            overflow-x: hidden;
+            overflow-x: hidden; /* Mengunci agar tidak bisa digeser ke kanan-kiri */
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Background Decorations */
+        /* Background Decorations - Disembunyikan di HP agar tidak merusak layout */
         .decor-shape {
             position: absolute;
             font-size: 5rem;
@@ -58,17 +58,25 @@
             z-index: 0;
         }
 
+        @media (max-width: 768px) {
+            .decor-shape {
+                display: none; /* Menghindari elemen dekoratif mendorong lebar layar */
+            }
+        }
+
         /* --- LAYOUT CONTAINER --- */
         .main-container {
             width: 100%;
             max-width: 1000px;
             position: relative;
             z-index: 10;
+            overflow: hidden; /* Mengamankan konten di dalam kontainer */
         }
 
         .header-zone {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
+            padding: 0 0.5rem;
         }
 
         .badge {
@@ -76,11 +84,15 @@
             color: #FFF;
             font-family: var(--font-heading);
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             padding: 6px 12px;
             letter-spacing: 1px;
             display: inline-block;
             margin-bottom: 10px;
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         h1 {
@@ -89,6 +101,7 @@
             font-size: 3.5rem;
             line-height: 0.95;
             text-transform: uppercase;
+            word-wrap: break-word;
         }
 
         h1 .highlight {
@@ -97,6 +110,7 @@
             border: var(--border-main);
             display: inline-block;
             margin-top: 5px;
+            max-width: 100%;
         }
 
         h3 {
@@ -110,13 +124,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
-        }
-
-        @media (max-width: 768px) {
-            .workspace {
-                grid-template-columns: 1fr;
-            }
-            h1 { font-size: 2.5rem; }
+            width: 100%;
         }
 
         /* --- NEO-BRUTALISM CARDS --- */
@@ -126,9 +134,10 @@
             box-shadow: var(--shadow-large);
             padding: 2rem;
             border-radius: 0px;
+            width: 100%;
         }
 
-        /* --- TWIBBON CANVAS PREVIEW & WORKSPACE --- */
+        /* --- TWIBBON CANVAS PREVIEW --- */
         .preview-wrapper {
             width: 100%;
             aspect-ratio: 1 / 1;
@@ -140,7 +149,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            user-select: none; /* Mencegah seleksi gambar saat di-drag */
+            user-select: none;
         }
 
         .placeholder-text {
@@ -153,6 +162,7 @@
             font-family: var(--font-heading);
             font-weight: 700;
             color: var(--outline-text);
+            width: 90%;
         }
 
         .placeholder-text span {
@@ -168,7 +178,7 @@
             width: 100%;
             height: 100%;
             z-index: 3;
-            pointer-events: none; /* Klik tembus ke container foto di bawahnya */
+            pointer-events: none;
             object-fit: cover;
         }
 
@@ -183,7 +193,7 @@
             overflow: hidden;
             justify-content: center;
             align-items: center;
-            cursor: move; /* Mengubah kursor jadi bentuk panah geser */
+            cursor: move;
         }
 
         .user-preview-img {
@@ -192,7 +202,7 @@
             object-fit: contain;
             transform-origin: center center;
             position: relative;
-            pointer-events: none; /* Mencegah drag bawaan browser mengacaukan skrip */
+            pointer-events: none;
         }
 
         /* --- INTERACTIVE COMPONENTS / BUTTONS --- */
@@ -223,13 +233,14 @@
             font-size: 1rem;
             text-transform: uppercase;
             text-decoration: none;
-            padding: 12px 20px;
+            padding: 12px 10px; /* Dikurangi dikit agar teks tombol panjang tidak overflow */
             cursor: pointer;
             border: var(--border-main);
             border-radius: 0px;
             transition: transform 0.1s, box-shadow 0.1s;
             transform: translate(0, 0);
             box-shadow: var(--shadow-small);
+            text-align: center;
         }
 
         .btn-primary {
@@ -245,14 +256,13 @@
         .btn-resize {
             background-color: #EEE;
             color: var(--outline-text);
-            font-size: 1.2rem;
-            padding: 8px 16px;
+            font-size: 1rem; /* Disesuaikan untuk mobile */
+            padding: 8px 10px;
         }
 
         .btn-block {
             display: flex;
             width: 100%;
-            text-align: center;
         }
 
         .btn:hover:not(:disabled) {
@@ -304,6 +314,37 @@
             border: none;
             border-top: var(--border-main);
             margin: 1.5rem 0;
+        }
+
+        /* --- RESPONSIVE MEDIA QUERIES (PERBAIKAN UTAMA) --- */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0.5rem; /* Ruang tepi layar HP lebih rapat */
+            }
+
+            h1 { 
+                font-size: 2.3rem; /* Memperkecil judul agar tidak memotong layar */
+            }
+
+            .workspace {
+                grid-template-columns: 1fr; /* Menjadikan satu kolom vertikal */
+                gap: 1.5rem;
+            }
+
+            .card {
+                padding: 1.25rem; /* Mengurangi padding card agar area preview gambar bisa lebih besar */
+                /* Mengurangi bayangan keras di mobile agar tidak memakan ruang viewport */
+                box-shadow: 5px 5px 0px var(--outline-text); 
+            }
+
+            .control-group, .resize-controls {
+                gap: 0.5rem; /* Merapatkan tombol agar pas berdampingan */
+            }
+
+            .btn {
+                font-size: 0.9rem; /* Mengecilkan teks tombol di HP */
+                padding: 10px 5px;
+            }
         }
     </style>
 </head>
