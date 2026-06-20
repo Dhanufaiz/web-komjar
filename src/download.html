@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unduhan - KOMADIKSI MENGAJAR 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="../css/global.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+
+    <div class="playful-shape shape-star-1"><i class="fa-solid fa-star"></i></div>
+    <div class="playful-shape shape-star-2"><i class="fa-solid fa-star"></i></div>
+    <div class="playful-shape shape-circle-1"></div>
+    <div class="playful-shape shape-circle-2"></div>
+
+    <nav>
+        <div class="logo">
+            <img src="../img/Group 22.png" alt="Logo KOMJAR">
+            <div class="logo-text">
+                <div class="logo-title">
+                    <h2>Komadiksi</h2>
+                    <h3>Mengajar</h3>
+                </div>
+            </div>
+            <div class="year">
+                <p>2026</p>
+            </div>
+        </div>
+        
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="dalamPerbaikan.html">Presensi</a></li>
+            <li><a href="unduhan.html">Unduhan</a></li>
+            <li><a href="daftar.html" class="btn-nav-daftar">Oprec!</a></li>
+        </ul>
+    </nav>
+
+    <section id="download-page" style="padding-top: 140px; min-height: 80vh;">
+        <h2 class="section-title">Pusat Unduhan Berkas</h2>
+        
+        <div id="status-message" style="text-align: center; padding: 20px; font-family: 'Poppins', sans-serif; font-weight: 700; border: 3px solid #1F2A44; background-color: #F4B942; box-shadow: 4px 4px 0px #1F2A44; max-width: 600px; margin: 0 auto 40px auto; text-transform: uppercase;">
+            ⏳ Sedang memuat daftar berkas dari Google Sheets...
+        </div>
+
+        <div id="download-container" class="grid-gambaran">
+            </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="footer-bottom">
+            <p class="copyright">Copyright © 2026 - KOMADIKSI SMART UNS</p>
+        </div>
+    </footer>
+
+    <script>
+        // Menggunakan URL ekspor CSV langsung agar bypass pembatasan sub-folder lokal
+        // GANTI '123456789' dengan nomor gid asli dari tab UNDUHAN di browser Anda!
+        const NOMOR_GID_UNDUHAN = '302088606'; 
+
+        // URL Pengeksportan resmi Google API murni berdasarkan ID Tab
+        const SPREADSHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/e/2PACX-1vTvD56foWfBun4calQg0ChtHRpHBDCQ7-XJbaaQ9AbpsREUrLf4zlju-WdDhnSE5ihbaSnurCTkqryu/pub?gid=${NOMOR_GID_UNDUHAN}&single=true&output=csv`;
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchDataFromSheets();
+            
+            const mobileMenu = document.getElementById('mobile-menu');
+            const navLinks = document.querySelector('.nav-links');
+            if (mobileMenu && navLinks) {
+                mobileMenu.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                    mobileMenu.classList.toggle('toggle-active');
+                });
+            }
+        });
+
+        function fetchDataFromSheets() {
+            Papa.parse(SPREADSHEET_CSV_URL, {
+                download: true,
+                header: false, // Membaca array indeks mentah agar tidak terpengaruh oleh anomali browser di dalam sub-folder
+                skipEmptyLines: true,
+                complete: (results) => {
+                    const barisData = results.data;
+                    
+                    // MEMBANTU DIAGNOSIS: Ini akan mencetak isi data Sheets Anda di Console F12
+                    console.log("=== DATA SPREADSHEET YANG MASUK ===", barisData);
+                    
+                    if (!barisData || barisData.length <= 1) {
+                        tampilkanPesanStatus("📂 Belum ada baris berkas yang tersedia di sheet ini.");
+                        return;
+                    }
+
+                    // Buang baris index ke-0 (Header tabel)
+                    const dataTanpaHeader = barisData.slice(1);
+                    renderDownloadCards(dataTanpaHeader);
+                },
+                error: (error) => {
+                    console.error("Gagal menarik data CSV:", error);
+                    tampilkanPesanStatus("❌ Terjadi kendala saat menghubungkan ke basis data.");
+                }
+            });
+        }
+
+        function renderDownloadCards(rows) {
+            const container = document.getElementById('download-container');
+            const statusMessage = document.getElementById('status-message');
+            
+            if (!container) return;
+            container.innerHTML = ''; 
+
+            let kartuTerbuat = 0;
+
+            rows.forEach((kolom) => {
+                const namaBerkas = kolom[0] ? kolom[0].trim() : '';
+                const kategori = kolom[1] ? kolom[1].trim() : 'UMUM';
+                const keterangan = kolom[2] ? kolom[2].trim() : 'Tidak ada deskripsi berkas.';
+                const tanggalRilis = kolom[3] ? kolom[3].trim() : '-';
+                
+                // PENGAMAN LINK JIKALAU DI SHEET MASIH BERUPA TEKS BIASA 'LinkUnduhan'
+                let linkUnduhan = kolom[4] ? kolom[4].trim() : '#';
+                if (linkUnduhan.toLowerCase() === 'linkunduhan' || !linkUnduhan.startsWith('http')) {
+                    linkUnduhan = '#'; 
+                }
+
+                // Logika Toleransi Tinggi: Asalkan kolom Nama Berkas terisi, kartu WAJIB muncul!
+                if (namaBerkas !== '') {
+                    kartuTerbuat++;
+                    
+                    const card = document.createElement('div');
+                    // Memakai class Neobrutalisme bawaan dari global.css Anda
+                    card.className = 'playful-card'; 
+                    card.style.display = 'flex';
+                    card.style.flexDirection = 'column';
+                    card.style.justifyContent = 'space-between';
+                    
+                    card.innerHTML = `
+                        <div>
+                            <div class="card-icon-wrapper" style="background: #E88A1A; color: #FFFFFF; font-size: 1.3rem; font-family: 'Poppins', sans-serif; font-weight: 700; width: auto; height: auto; padding: 5px 12px; display: inline-block; border-radius: 8px; margin-bottom: 15px; border: 2px solid #1F2A44; box-shadow: 2px 2px 0px #1F2A44;">
+                                ${kategori.toUpperCase()}
+                            </div>
+                            <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 900; margin-bottom: 10px; text-transform: uppercase;">${namaBerkas}</h3>
+                            <p style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; color: #1F2A44; font-family: 'PT Serif', serif;">${keterangan}</p>
+                        </div>
+                        <div style="border-top: 2px dashed #1F2A44; padding-top: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                            <span style="font-size: 0.85rem; font-weight: bold; color: #8B5E34; font-family: 'Poppins', sans-serif;">
+                                <i class="fa-regular fa-calendar-days"></i> Rilis: ${tanggalRilis}
+                            </span>
+                            <a href="${linkUnduhan}" ${linkUnduhan.startsWith('http') ? 'target="_blank"' : ''} class="btn-playful btn-main" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; text-decoration: none;">
+                                <i class="fa-solid fa-cloud-arrow-down"></i> Unduh
+                            </a>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                }
+            });
+
+            if (kartuTerbuat === 0) {
+                tampilkanPesanStatus("📂 Lembar kerja terbaca, namun kolom NamaBerkas kosong.");
+            } else {
+                if (statusMessage) statusMessage.style.display = 'none'; // Sembunyikan status loading jika sukses
+            }
+        }
+
+        function tampilkanPesanStatus(teks) {
+            const msg = document.getElementById('status-message');
+            if (msg) {
+                msg.style.display = 'block';
+                msg.innerText = teks;
+                msg.style.backgroundColor = "#E88A1A";
+                msg.style.color = "#FFFFFF";
+            }
+        }
+    </script>
+</body>
+</html>
