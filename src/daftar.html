@@ -335,7 +335,6 @@
                     <label for="angkatan">Angkatan</label>
                     <select id="angkatan" name="angkatan" required>
                         <option value="" disabled selected hidden>Pilih Angkatan</option>
-                        <option value="2023">2023</option>
                         <option value="2024">2024</option>
                         <option value="2025">2025</option>
                     </select>
@@ -395,6 +394,10 @@
             <div class="form-group">
                 <label for="follow_komjar">Bukti Follow <a href="https://www.instagram.com/komadiksi.mengajar/" target="_blank">@komadiksi.mengajar</a></label>
                 <input type="file" id="follow_komjar" name="follow_komjar" required>
+            </div>
+            <div class="form-group">
+                <label for="bukti_ktm">Bukti Scan Kartu Tanda Mahasiswa (KTM)</label>
+                <input type="file" id="bukti_ktm" name="bukti_ktm" accept="image/*,application/pdf" required>
             </div>
 
             <button type="submit" class="btn-submit">SUBMIT DATA REGISTRASI ✦</button>
@@ -492,6 +495,7 @@
         }
 
         // Pengiriman Formulir via POST
+// Pengiriman Formulir via POST
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -504,12 +508,16 @@
             btnSubmit.disabled = true;
 
             try {
+                // 1. TAMBAHKAN: Ambil objek file fisik KTM dari input HTML
+                const fileKTM = document.getElementById('bukti_ktm').files[0];
                 const fileTwibbon = document.getElementById('bukti_twibbon').files[0];
                 const fileIGKomadiksi = document.getElementById('follow_komadiksi').files[0];
                 const fileIGPengmas = document.getElementById('follow_pengmas').files[0];
                 const fileIGKomjar = document.getElementById('follow_komjar').files[0];
 
-                const [base64Twibbon, base64IGKomadiksi, base64IGPengmas, base64IGKomjar] = await Promise.all([
+                // 2. TAMBAHKAN: Masukkan fileKTM ke dalam proses konversi Base64
+                const [base64KTM, base64Twibbon, base64IGKomadiksi, base64IGPengmas, base64IGKomjar] = await Promise.all([
+                    fileToBase64(fileKTM), // <-- Konversi file KTM
                     fileToBase64(fileTwibbon),
                     fileToBase64(fileIGKomadiksi),
                     fileToBase64(fileIGPengmas),
@@ -518,12 +526,15 @@
 
                 const formData = new URLSearchParams();
                 
+                // 3. PERBAIKAN: Masukkan "bukti_ktm" ke daftar pengecualian perulangan agar tidak terkirim dua kali sebagai teks rusak
                 new FormData(form).forEach((value, key) => {
-                    if(!["bukti_twibbon", "follow_komadiksi", "follow_pengmas", "follow_komjar"].includes(key)) {
+                    if(!["bukti_ktm", "bukti_twibbon", "follow_komadiksi", "follow_pengmas", "follow_komjar"].includes(key)) {
                         formData.append(key, value);
                     }
                 });
 
+                // 4. TAMBAHKAN: Tembakkan parameter file_ktm_base64 hasil konversi ke Apps Script
+                formData.append("file_ktm_base64", base64KTM); // <-- Kirim data biner KTM ke server
                 formData.append("file_twibbon_base64", base64Twibbon);
                 formData.append("file_ig_komadiksi_base64", base64IGKomadiksi);
                 formData.append("file_ig_pengmas_base64", base64IGPengmas);
@@ -537,10 +548,11 @@
 
                 const result = await response.json();
 
-            if(result.result === "success") {
-                // GANTI URL di bawah ini dengan alamat website konfirmasi milik panitia
-                window.location.href = "../src/success.html";
-            }
+                if(result.result === "success") {
+                    window.location.href = "../src/success.html";
+                } else if(result.result === "error") {
+                    alert("Gagal mendaftar: " + result.error);
+                }
 
             } catch (error) {
                 alert('Terjadi kesalahan koneksi atau ukuran berkas melampaui batas 2MB.');
@@ -549,7 +561,7 @@
                 btnSubmit.innerText = "SUBMIT DATA REGISTRASI ✦";
                 btnSubmit.disabled = false;
             }
-        });
+        });    
     </script>
 </body>
 </html>
