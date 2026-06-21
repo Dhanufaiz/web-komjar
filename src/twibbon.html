@@ -183,7 +183,7 @@
         .user-preview-img {
             max-width: 100%;
             max-height: 100%;
-            object-fit: contain;
+            object-fit: contain; /* Menggunakan contain agar seluruh foto terlihat utuh */
             transform-origin: center center;
             position: relative;
             pointer-events: none;
@@ -397,7 +397,7 @@ Berprestasi, Mengabdi Untuk Negeri
 #KomadiksiMengajar2026
 #KomadiksiSmartUNS2026
 #KabinetSakhyaAbhipraya
-➖➖➖➖➖➖➖➖➖➖➖
+➖➖➖➖➖➖➖➖➖➖
 IG : @komadiksismart
 FB : Komadiksi Smart UNS
 Tiktok : @komadiksiuns
@@ -531,52 +531,56 @@ Youtube : KOMADIKSI SMART UNS</textarea>
             userPreviewImg.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
         }
 
-        // 4. PROSES RENDER CANVAS AKHIR & DOWNLOAD (PERBAIKAN UTAMA)
+        // 4. PROSES RENDER CANVAS AKHIR & DOWNLOAD (SINKRONISASI 100% PRESTIS)
         downloadBtn.addEventListener('click', function() {
             if (!isImageLoaded) return;
 
-            // Reset dan bersihkan canvas
+            // Bersihkan isi canvas sebelum render ulang
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Hitung faktor rasio konversi dari ukuran container layar ke resolusi asli canvas template
+            // Ambil dimensi riil container preview saat ini di layar (responsif terhadap ukuran HP/PC)
             const previewRect = userPreviewContainer.getBoundingClientRect();
+            
+            // Hitung faktor skala konversi ukuran tampilan layar ke resolusi asli canvas template
             const conversionFactor = canvas.width / previewRect.width;
 
-            // Amankan keadaan canvas dasar sebelum transformasi dilakukan
+            // Simpan state dasar canvas
             ctx.save();
 
-            // Pindahkan poros origin (pusat koordinat) ke tengah canvas demi meniru behavior CSS `transform-origin: center center`
+            // Pindahkan pusat koordinat (Origin) ke tengah canvas agar sinkron dengan `transform-origin: center center` milik CSS
             ctx.translate(canvas.width / 2, canvas.height / 2);
 
-            // Masukkan pergeseran posisi (offset) yang dikalikan dengan conversion factor resolusi
+            // Geser koordinat berdasarkan drag user dikalikan faktor konversi resolusi canvas
             ctx.translate(offsetX * conversionFactor, offsetY * conversionFactor);
 
-            // Terapkan skala zoom native canvas
+            // Terapkan pembesaran skala zoom native
             ctx.scale(scale, scale);
 
-            // Hitung kalkulasi aspek ratio dasar gambar pembungkus
+            // KALKULASI ASPEK RASIO UNTUK LOGIKA MURNI "object-fit: contain"
             const canvasRatio = canvas.width / canvas.height;
             const imgRatio = userUploadedImage.width / userUploadedImage.height;
             let drawWidth, drawHeight;
 
             if (imgRatio > canvasRatio) {
-                drawHeight = canvas.height;
-                drawWidth = canvas.height * imgRatio;
-            } else {
+                // Jika gambar lebih melebar secara horizontal dibandingkan canvas kotak
                 drawWidth = canvas.width;
                 drawHeight = canvas.width / imgRatio;
+            } else {
+                // Jika gambar lebih memanjang secara vertikal dibandingkan canvas kotak
+                drawHeight = canvas.height;
+                drawWidth = canvas.height * imgRatio;
             }
 
-            // Gambar foto user dengan posisi ditarik setengah lebar & panjang ke belakang agar sentralisasinya akurat
+            // Gambar foto user tepat di tengah poros koordinat ter-translasi baru (minus setengah lebar/tinggi)
             ctx.drawImage(userUploadedImage, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight);
 
-            // Kembalikan transformasi canvas ke keadaan normal sebelum menggambar bingkai di atasnya
+            // Kembalikan state canvas ke normal agar bingkai twibbon tidak ikut tergeser atau ter-scale
             ctx.restore();
 
-            // Layer Atas: Gambar bingkai twibbon utama
+            // Layer Atas: Gambar bingkai template utama twibbon secara statis pas memenuhi canvas
             ctx.drawImage(frameImg, 0, 0, canvas.width, canvas.height);
 
-            // Eksekusi download file final .png
+            // Eksekusi download file hasil kombinasi akhir menjadi sebuah berkas gambar .png
             const finalDataUrl = canvas.toDataURL("image/png");
             const createDownloadLink = document.createElement('a');
             createDownloadLink.download = 'Twibbon_KOMJAR_2026.png';
