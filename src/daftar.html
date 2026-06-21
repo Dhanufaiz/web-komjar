@@ -282,7 +282,7 @@
             <div id="panel-opsi-kelompok">
                 <div class="form-group">
                     <label for="status_kelompok">Status dalam Kelompok</label>
-                    <select id="status_kelompok" name="status_kelompok">
+                    <select id="status_kelompok" name="status_kelompok" required>
                         <option value="" disabled selected hidden>Pilih Status Kelompok</option>
                         <option value="Buat Baru">Saya Perwakilan / Ingin Buat Kelompok Baru</option>
                         <option value="Gabung">Saya Anggota / Ingin Gabung Kelompok yang Ada</option>
@@ -291,12 +291,12 @@
 
                 <div class="form-group" id="blok-buat-baru" style="display: none;">
                     <label for="nama_kelompok_baru">Ketik Nama Kelompok Baru Kamu</label>
-                    <input type="text" id="nama_kelompok_baru" name="nama_kelompok_baru" placeholder="Contoh: Kelompok Ganesha">
+                    <input type="text" id="nama_kelompok_baru" name="nama_kelompok_baru" placeholder="Contoh: Kelompok Ganesha" required>
                 </div>
 
                 <div class="form-group" id="blok-gabung" style="display: none;">
                     <label for="pilih_kelompok_ada">Pilih Nama Kelompokmu</label>
-                    <select id="pilih_kelompok_ada" name="pilih_kelompok_ada">
+                    <select id="pilih_kelompok_ada" name="pilih_kelompok_ada" required>
                         <option value="" disabled selected hidden>Memuat daftar kelompok...</option>
                     </select>
                 </div>
