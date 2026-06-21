@@ -7,10 +7,10 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght=700;900&family=PT+Serif:ital,wght=0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&family=PT+Serif:ital,wght=0,400;0,700;1,400&display=swap" rel="stylesheet">
     
     <style>
-/* --- DESIGN TOKENS INTEGRATION --- */
+        /* --- DESIGN TOKENS INTEGRATION --- */
         :root {
             --bg-main: #FFF4E6;
             --outline-text: #1F2A44;
@@ -39,15 +39,15 @@
             font-family: var(--font-body);
             color: var(--outline-text);
             min-height: 100vh;
-            padding: 1.5rem 1rem; /* Dikurangi sedikit agar lebih pas di HP */
+            padding: 1.5rem 1rem;
             position: relative;
-            overflow-x: hidden; /* Mengunci agar tidak bisa digeser ke kanan-kiri */
+            overflow-x: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Background Decorations - Disembunyikan di HP agar tidak merusak layout */
+        /* Background Decorations */
         .decor-shape {
             position: absolute;
             font-size: 5rem;
@@ -60,7 +60,7 @@
 
         @media (max-width: 768px) {
             .decor-shape {
-                display: none; /* Menghindari elemen dekoratif mendorong lebar layar */
+                display: none;
             }
         }
 
@@ -70,29 +70,13 @@
             max-width: 1000px;
             position: relative;
             z-index: 10;
-            overflow: hidden; /* Mengamankan konten di dalam kontainer */
+            overflow: hidden;
         }
 
         .header-zone {
             text-align: center;
             margin-bottom: 2rem;
             padding: 0 0.5rem;
-        }
-
-        .badge {
-            background-color: var(--outline-text);
-            color: #FFF;
-            font-family: var(--font-heading);
-            font-weight: 700;
-            font-size: 0.8rem;
-            padding: 6px 12px;
-            letter-spacing: 1px;
-            display: inline-block;
-            margin-bottom: 10px;
-            max-width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         h1 {
@@ -233,7 +217,7 @@
             font-size: 1rem;
             text-transform: uppercase;
             text-decoration: none;
-            padding: 12px 10px; /* Dikurangi dikit agar teks tombol panjang tidak overflow */
+            padding: 12px 10px;
             cursor: pointer;
             border: var(--border-main);
             border-radius: 0px;
@@ -256,7 +240,6 @@
         .btn-resize {
             background-color: #EEE;
             color: var(--outline-text);
-            font-size: 1rem; /* Disesuaikan untuk mobile */
             padding: 8px 10px;
         }
 
@@ -316,33 +299,32 @@
             margin: 1.5rem 0;
         }
 
-        /* --- RESPONSIVE MEDIA QUERIES (PERBAIKAN UTAMA) --- */
+        /* --- RESPONSIVE MEDIA QUERIES --- */
         @media (max-width: 768px) {
             body {
-                padding: 1rem 0.5rem; /* Ruang tepi layar HP lebih rapat */
+                padding: 1rem 0.5rem;
             }
 
             h1 { 
-                font-size: 2.3rem; /* Memperkecil judul agar tidak memotong layar */
+                font-size: 2.3rem;
             }
 
             .workspace {
-                grid-template-columns: 1fr; /* Menjadikan satu kolom vertikal */
+                grid-template-columns: 1fr;
                 gap: 1.5rem;
             }
 
             .card {
-                padding: 1.25rem; /* Mengurangi padding card agar area preview gambar bisa lebih besar */
-                /* Mengurangi bayangan keras di mobile agar tidak memakan ruang viewport */
+                padding: 1.25rem;
                 box-shadow: 5px 5px 0px var(--outline-text); 
             }
 
             .control-group, .resize-controls {
-                gap: 0.5rem; /* Merapatkan tombol agar pas berdampingan */
+                gap: 0.5rem;
             }
 
             .btn {
-                font-size: 0.9rem; /* Mengecilkan teks tombol di HP */
+                font-size: 0.9rem;
                 padding: 10px 5px;
             }
         }
@@ -394,7 +376,7 @@
                 <p class="caption-desc">Salin teks di bawah ini untuk meramaikan feed media sosial kamu!</p>
                 
                 <textarea id="captionTextArea" readonly>
-                    [KOMADIKSI MENGAJAR 2026]
+[KOMADIKSI MENGAJAR 2026]
 
 “𝓓𝓪𝓻𝓮 𝓽𝓸 𝓽𝓮𝓪𝓬𝓱, 𝓽𝓪𝓴𝓮 𝓪𝓷 𝓪𝓬𝓽𝓲𝓸𝓷, 𝓚𝓸𝓶𝓪𝓭𝓲𝓴𝓼𝓲 𝓼𝓹𝓻𝓮𝓪𝓭 𝓲𝓷𝓼𝓹𝓲𝓻𝓪𝓽𝓲𝓸𝓷.”
 
@@ -419,8 +401,7 @@ Berprestasi, Mengabdi Untuk Negeri
 IG : @komadiksismart
 FB : Komadiksi Smart UNS
 Tiktok : @komadiksiuns
-Youtube : KOMADIKSI SMART UNS
-                </textarea>
+Youtube : KOMADIKSI SMART UNS</textarea>
 
                 <button id="copyCaptionBtn" class="btn btn-primary">salin teks</button>
                 
@@ -550,44 +531,49 @@ Youtube : KOMADIKSI SMART UNS
             userPreviewImg.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
         }
 
-        // 4. PROSES RENDER CANVAS AKHIR & DOWNLOAD
+        // 4. PROSES RENDER CANVAS AKHIR & DOWNLOAD (PERBAIKAN UTAMA)
         downloadBtn.addEventListener('click', function() {
             if (!isImageLoaded) return;
 
+            // Reset dan bersihkan canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Perhitungan rasio kontainer preview asli dibanding resolusi asli canvas template
+            // Hitung faktor rasio konversi dari ukuran container layar ke resolusi asli canvas template
             const previewRect = userPreviewContainer.getBoundingClientRect();
             const conversionFactor = canvas.width / previewRect.width;
 
-            // Skala gambar dasar (Cover style)
+            // Amankan keadaan canvas dasar sebelum transformasi dilakukan
+            ctx.save();
+
+            // Pindahkan poros origin (pusat koordinat) ke tengah canvas demi meniru behavior CSS `transform-origin: center center`
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+
+            // Masukkan pergeseran posisi (offset) yang dikalikan dengan conversion factor resolusi
+            ctx.translate(offsetX * conversionFactor, offsetY * conversionFactor);
+
+            // Terapkan skala zoom native canvas
+            ctx.scale(scale, scale);
+
+            // Hitung kalkulasi aspek ratio dasar gambar pembungkus
             const canvasRatio = canvas.width / canvas.height;
             const imgRatio = userUploadedImage.width / userUploadedImage.height;
-            let drawWidth, drawHeight, drawX, drawY;
+            let drawWidth, drawHeight;
 
             if (imgRatio > canvasRatio) {
                 drawHeight = canvas.height;
                 drawWidth = canvas.height * imgRatio;
-                drawX = (canvas.width - drawWidth) / 2;
-                drawY = 0;
             } else {
                 drawWidth = canvas.width;
                 drawHeight = canvas.width / imgRatio;
-                drawX = 0;
-                drawY = (canvas.height - drawHeight) / 2;
             }
 
-            // Integrasi hasil resize dan pergeseran koordinat (dikali dengan rasio konversi canvas)
-            const scaledWidth = drawWidth * scale;
-            const scaledHeight = drawHeight * scale;
-            
-            const finalX = (drawX + (drawWidth - scaledWidth) / 2) + (offsetX * conversionFactor);
-            const finalY = (drawY + (drawHeight - scaledHeight) / 2) + (offsetY * conversionFactor);
+            // Gambar foto user dengan posisi ditarik setengah lebar & panjang ke belakang agar sentralisasinya akurat
+            ctx.drawImage(userUploadedImage, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight);
 
-            // Layer 1: Gambar foto pengguna hasil penyesuaian posisi
-            ctx.drawImage(userUploadedImage, finalX, finalY, scaledWidth, scaledHeight);
+            // Kembalikan transformasi canvas ke keadaan normal sebelum menggambar bingkai di atasnya
+            ctx.restore();
 
-            // Layer 2: Gambar bingkai di bagian paling atas
+            // Layer Atas: Gambar bingkai twibbon utama
             ctx.drawImage(frameImg, 0, 0, canvas.width, canvas.height);
 
             // Eksekusi download file final .png
