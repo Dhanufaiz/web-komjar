@@ -410,159 +410,122 @@
 <script>
     const form = document.getElementById('form-pendaftaran');
     const btnSubmit = document.querySelector('.btn-submit');
-    const tipePendaftaran = document.getElementById('tipe_pendaftaran');
-    const panelOpsiKelompok = document.getElementById('panel-opsi-kelompok');
-    const statusKelompok = document.getElementById('status_kelompok');
-    const blokBuatBaru = document.getElementById('blok-buat-baru');
-    const blokGabung = document.getElementById('blok-gabung');
-    const selectKelompokAda = document.getElementById('pilih_kelompok_ada');
 
-    // Jalankan reset opsi kelompok di awal agar input tersembunyi tidak 'required' secara tidak sengaja
-    resetOpsiKelompok();
-
-    // Menampilkan/menyembunyikan panel kelompok
-    tipePendaftaran.addEventListener('change', function() {
-        if (this.value === 'Kelompok') {
-            panelOpsiKelompok.style.display = 'block';
-            statusKelompok.setAttribute('required', 'required');
-            muatDaftarKelompok();
-        } else {
-            panelOpsiKelompok.style.display = 'none';
-            statusKelompok.removeAttribute('required');
-            resetOpsiKelompok();
-        }
-    });
-
-    // Menampilkan sub-kondisi buat baru atau gabung kelompok
-    statusKelompok.addEventListener('change', function() {
-        if (this.value === 'Buat Baru') {
-            blokBuatBaru.style.display = 'block';
-            document.getElementById('nama_kelompok_baru').setAttribute('required', 'required');
-            blokGabung.style.display = 'none';
-            selectKelompokAda.removeAttribute('required');
-            selectKelompokAda.value = '';
-        } else if (this.value === 'Gabung') {
-            blokBuatBaru.style.display = 'none';
-            document.getElementById('nama_kelompok_baru').removeAttribute('required');
-            document.getElementById('nama_kelompok_baru').value = '';
-            blokGabung.style.display = 'block';
-            selectKelompokAda.setAttribute('required', 'required');
-            muatDaftarKelompok();
-        }
-    });
-
-    function resetOpsiKelompok() {
-        statusKelompok.value = '';
-        statusKelompok.removeAttribute('required');
-        blokBuatBaru.style.display = 'none';
-        blokGabung.style.display = 'none';
-        document.getElementById('nama_kelompok_baru').removeAttribute('required');
-        selectKelompokAda.removeAttribute('required');
-        document.getElementById('nama_kelompok_baru').value = '';
-        selectKelompokAda.value = '';
-    }
-
-    // Ambil data kelompok dari Apps Script via GET
-    async function muatDaftarKelompok() {
-        if(form.action.includes("PASTE_URL_WEB_APP")) return;
-        try {
-            selectKelompokAda.innerHTML = '<option value="" disabled selected hidden>Memuat daftar kelompok...</option>';
-            
-            // Menggunakan cache-busting agar data kelompok selalu yang terbaru
-            const response = await fetch(form.action + "?action=getKelompok", { method: 'GET' });
-            const data = await response.json();
-            
-            selectKelompokAda.innerHTML = '<option value="" disabled selected hidden>Pilih Kelompok</option>';
-            
-            if(!data.kelompok || data.kelompok.length === 0) {
-                const opt = document.createElement('option');
-                opt.value = "";
-                opt.innerText = "Belum ada kelompok tersedia. Silakan buat baru!";
-                opt.disabled = true;
-                selectKelompokAda.appendChild(opt);
-            } else {
-                data.kelompok.forEach(nama => {
-                    const opt = document.createElement('option');
-                    opt.value = nama;
-                    opt.innerText = nama;
-                    selectKelompokAda.appendChild(opt);
-                });
-            }
-        } catch (err) {
-            console.error("Gagal sinkronisasi data kelompok:", err);
-            selectKelompokAda.innerHTML = '<option value="" disabled>Gagal memuat list kelompok.</option>';
-        }
-    }
-
-    // Konversi File ke sandi teks Base64
-    function fileToBase64(file) {
+    // Fungsi untuk membaca file dan memotongnya menjadi beberapa bagian (Chunks)
+    function uploadFileInChunks(file, fileNamePrefix, nim, nama) {
         return new Promise((resolve, reject) => {
-            if (!file) resolve("");
+            if (!file) {
+                resolve("Tidak Ada File");
+                return;
+            }
+
             const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
+            const chunkSize = 1024 * 1024; // Ukuran potongan: 1 MB per chunk
+            let offset = 0;
+            
+            // Format Nama Berkas seperti aturan panitia
+            const ext = file.name.substring(file.name.lastIndexOf('.'));
+            const namaPembersih = nama.replace(/[^a-zA-Z0-9]/g, "");
+            const namaFileBaru = `${fileNamePrefix}_${nim}_${namaPembersih}${ext}`;
+
+            reader.onload = async function(e) {
+                const base64Data = e.target.result.split(',')[1];
+                
+                try {
+                    // Kirim potongan ke Google Apps Script
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: new URLSearchParams({
+                            'action': 'upload_chunk',
+                            'filename': namaFileBaru,
+                            'folder_type': fileNamePrefix, // KTM, TWIBBON, dll
+                            'chunk': base64Data,
+                            'is_first': (offset === 0).toString(),
+                            'is_last': (offset + chunkSize >= file.size).toString()
+                        }),
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                    });
+
+                    const res = await response.json();
+                    
+                    if (res.result === 'error') {
+                        reject(res.error);
+                        return;
+                    }
+
+                    offset += chunkSize;
+                    if (offset < file.size) {
+                        readNextChunk(); // Lanjut potong bagian berikutnya
+                    } else {
+                        resolve(res.fileUrl); // Selesai, kembalikan URL Google Drive berkas tersebut
+                    }
+                } catch (err) {
+                    reject("Gagal mengunggah potongan file.");
+                }
+            };
+
+            function readNextChunk() {
+                const slice = file.slice(offset, offset + chunkSize);
+                reader.readAsDataURL(slice);
+            }
+
+            readNextChunk();
         });
     }
 
-    // Pengiriman Formulir via POST
+    // Penanganan Event Submit Form
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         if (form.action.includes("PASTE_URL_WEB_APP")) {
-            alert("⚠️ Harap konfigurasi URL Web App Apps Script kamu terlebih dahulu di kode HTML!");
+            alert("⚠️ Harap konfigurasi URL Web App Apps Script kamu terlebih dahulu!");
             return;
         }
 
-        btnSubmit.innerText = "PROSES VALIDASI & UNGGAH FILE... ⏳";
+        btnSubmit.innerText = "MENGUNGGAH BERKAS SEPERTI GFORM... ⏳";
         btnSubmit.disabled = true;
 
         try {
-            // Ambil objek file fisik dari input HTML
+            const nama = document.getElementById('nama').value;
+            const nim = document.getElementById('nim').value;
+
+            // Ambil objek file dari elemen input HTML
             const fileKTM = document.getElementById('bukti_ktm').files[0];
             const fileTwibbon = document.getElementById('bukti_twibbon').files[0];
             const fileIGKomadiksi = document.getElementById('follow_komadiksi').files[0];
             const fileIGPengmas = document.getElementById('follow_pengmas').files[0];
             const fileIGKomjar = document.getElementById('follow_komjar').files[0];
 
-            // Proteksi Sederhana Ukuran File Gabungan di Sisi Klien (Maksimal Estimasi Total 3.5 MB Base64)
-            const totalSize = (fileKTM?.size || 0) + (fileTwibbon?.size || 0) + (fileIGKomadiksi?.size || 0) + (fileIGPengmas?.size || 0) + (fileIGKomjar?.size || 0);
-            if (totalSize > 3500000) { 
-                alert('⚠️ Total ukuran seluruh berkas terlalu besar (Maksimal gabungan berkas ± 3MB). Silakan kompres gambar bukti Anda terlebih dahulu!');
-                btnSubmit.innerText = "SUBMIT DATA REGISTRASI ✦";
-                btnSubmit.disabled = false;
-                return;
-            }
-
-            // Konversi semua file secara paralel ke Base64
-            const [base64KTM, base64Twibbon, base64IGKomadiksi, base64IGPengmas, base64IGKomjar] = await Promise.all([
-                fileToBase64(fileKTM),
-                fileToBase64(fileTwibbon),
-                fileToBase64(fileIGKomadiksi),
-                fileToBase64(fileIGPengmas),
-                fileToBase64(fileIGKomjar)
+            // 1. Upload semua berkas ukuran besar secara paralel ke foldernya masing-masing
+            const [linkKtm, linkTwibbon, linkIGKomadiksi, linkIGPengmas, linkIGKomjar] = await Promise.all([
+                uploadFileInChunks(fileKTM, "KTM", nim, nama),
+                uploadFileInChunks(fileTwibbon, "TWIBBON", nim, nama),
+                uploadFileInChunks(fileIGKomadiksi, "IG_KOMADIKSI", nim, nama),
+                uploadFileInChunks(fileIGPengmas, "IG_PENGMAS", nim, nama),
+                uploadFileInChunks(fileIGKomjar, "IG_KOMJAR", nim, nama)
             ]);
 
-            const formData = new URLSearchParams();
+            // 2. Setelah berkas sukses terupload dan menjadi URL, kirim data teks identitas pendaftar
+            const formDataText = new URLSearchParams();
+            formDataText.append('action', 'submit_data');
             
-            // Masukkan data teks, coret input file asli agar tidak merusak payload biner
-            const listFileFields = ["bukti_ktm", "bukti_twibbon", "follow_komadiksi", "follow_pengmas", "follow_komjar"];
+            // Masukkan data input teks bawaan form
             new FormData(form).forEach((value, key) => {
-                if(!listFileFields.includes(key)) {
-                    formData.append(key, value);
+                if(!["bukti_ktm", "bukti_twibbon", "follow_komadiksi", "follow_pengmas", "follow_komjar"].includes(key)) {
+                    formDataText.append(key, value);
                 }
             });
 
-            // Tembakkan parameter base64 hasil konversi ke Apps Script
-            formData.append("file_ktm_base64", base64KTM);
-            formData.append("file_twibbon_base64", base64Twibbon);
-            formData.append("file_ig_komadiksi_base64", base64IGKomadiksi);
-            formData.append("file_ig_pengmas_base64", base64IGPengmas);
-            formData.append("file_ig_komjar_base64", base64IGKomjar);
+            // Lampirkan hasil link URL Google Drive tadi ke Google Sheets
+            formDataText.append('link_ktm', linkKtm);
+            formDataText.append('link_twibbon', linkTwibbon);
+            formDataText.append('link_ig_komadiksi', linkIGKomadiksi);
+            formDataText.append('link_ig_pengmas', linkIGPengmas);
+            formDataText.append('link_ig_komjar', linkIGKomjar);
 
             const response = await fetch(form.action, {
                 method: 'POST',
-                body: formData,
+                body: formDataText,
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
 
@@ -570,18 +533,18 @@
 
             if(result.result === "success") {
                 window.location.href = "../src/success.html";
-            } else if(result.result === "error") {
+            } else {
                 alert("Gagal mendaftar: " + result.error);
             }
 
         } catch (error) {
-            alert('Terjadi kesalahan koneksi atau request ditolak oleh server Google (Payload Too Large).');
-            console.error('Error:', error);
+            alert('Terjadi kesalahan pendaftaran: ' + error);
+            console.error(error);
         } finally {
             btnSubmit.innerText = "SUBMIT DATA REGISTRASI ✦";
             btnSubmit.disabled = false;
         }
-    });    
+    });
 </script>
 </body>
 </html>
