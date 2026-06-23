@@ -282,7 +282,7 @@
             <div id="panel-opsi-kelompok">
                 <div class="form-group">
                     <label for="status_kelompok">Status dalam Kelompok</label>
-                    <select id="status_kelompok" name="status_kelompok" required>
+                    <select id="status_kelompok" name="status_kelompok">
                         <option value="" disabled selected hidden>Pilih Status Kelompok</option>
                         <option value="Buat Baru">Saya Perwakilan / Ingin Buat Kelompok Baru</option>
                         <option value="Gabung">Saya Anggota / Ingin Gabung Kelompok yang Ada</option>
@@ -291,12 +291,12 @@
 
                 <div class="form-group" id="blok-buat-baru" style="display: none;">
                     <label for="nama_kelompok_baru">Ketik Nama Kelompok Baru Kamu</label>
-                    <input type="text" id="nama_kelompok_baru" name="nama_kelompok_baru" placeholder="Contoh: Kelompok Ganesha" required>
+                    <input type="text" id="nama_kelompok_baru" name="nama_kelompok_baru" placeholder="Contoh: Kelompok Ganesha">
                 </div>
 
                 <div class="form-group" id="blok-gabung" style="display: none;">
                     <label for="pilih_kelompok_ada">Pilih Nama Kelompokmu</label>
-                    <select id="pilih_kelompok_ada" name="pilih_kelompok_ada" required>
+                    <select id="pilih_kelompok_ada" name="pilih_kelompok_ada">
                         <option value="" disabled selected hidden>Memuat daftar kelompok...</option>
                     </select>
                 </div>
@@ -379,26 +379,27 @@
             </div>
 
             <div class="form-section-title">04 / Berkas Persyaratan (Perorangan)</div>
-            <h4 style="color: #555; font-size: 1rem; text-align: left; margin-bottom: 20px;">Maksimal ukuran keseluruhan berkas: 3 MB</h4>
-            <div class="form-group">
-                <label for="bukti_twibbon">Bukti Upload Twibbon<br>Buat twibbon <a href="../src/twibbon.html" style="background-color: orange; padding: 5px 10px; border-radius: 5px; color: white;" target="_blank">di sini</a></label>
-                <input type="file" id="bukti_twibbon" name="bukti_twibbon" required>
-            </div>
-            <div class="form-group">
-                <label for="follow_komadiksi">Bukti Follow <a href="https://www.instagram.com/komadiksismart/" target="_blank">@komadiksismart</a></label>
-                <input type="file" id="follow_komadiksi" name="follow_komadiksi" required>
-            </div>
-            <div class="form-group">
-                <label for="follow_pengmas">Bukti Follow <a href="https://www.instagram.com/pengmas.komadiksiuns/" target="_blank">@pengmas.komadiksiuns</a></label>
-                <input type="file" id="follow_pengmas" name="follow_pengmas" required>
-            </div>
-            <div class="form-group">
-                <label for="follow_komjar">Bukti Follow <a href="https://www.instagram.com/komadiksi.mengajar/" target="_blank">@komadiksi.mengajar</a></label>
-                <input type="file" id="follow_komjar" name="follow_komjar" required>
-            </div>
+            <h4 style="color: #555; font-size: 1rem; text-align: left; margin-bottom: 20px;">Unggah berkas bukti Anda di bawah ini:</h4>
+            
             <div class="form-group">
                 <label for="bukti_ktm">Bukti Scan Kartu Tanda Mahasiswa (KTM)</label>
                 <input type="file" id="bukti_ktm" name="bukti_ktm" accept="image/*,application/pdf" required>
+            </div>
+            <div class="form-group">
+                <label for="bukti_twibbon">Bukti Upload Twibbon<br>Buat twibbon <a href="../src/twibbon.html" style="background-color: orange; padding: 5px 10px; border-radius: 5px; color: white;" target="_blank">di sini</a></label>
+                <input type="file" id="bukti_twibbon" name="bukti_twibbon" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="follow_komadiksi">Bukti Follow <a href="https://www.instagram.com/komadiksismart/" target="_blank">@komadiksismart</a></label>
+                <input type="file" id="follow_komadiksi" name="follow_komadiksi" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="follow_pengmas">Bukti Follow <a href="https://www.instagram.com/pengmas.komadiksiuns/" target="_blank">@pengmas.komadiksiuns</a></label>
+                <input type="file" id="follow_pengmas" name="follow_pengmas" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="follow_komjar">Bukti Follow <a href="https://www.instagram.com/komadiksi.mengajar/" target="_blank">@komadiksi.mengajar</a></label>
+                <input type="file" id="follow_komjar" name="follow_komjar" accept="image/*" required>
             </div>
 
             <button type="submit" class="btn-submit">SUBMIT DATA REGISTRASI ✦</button>
@@ -417,10 +418,19 @@
     const blokGabung = document.getElementById('blok-gabung');
     const selectKelompokAda = document.getElementById('pilih_kelompok_ada');
 
-    // Jalankan reset opsi kelompok di awal agar input tersembunyi tidak 'required' secara tidak sengaja
+    function resetOpsiKelompok() {
+        statusKelompok.value = '';
+        statusKelompok.removeAttribute('required');
+        blokBuatBaru.style.display = 'none';
+        blokGabung.style.display = 'none';
+        document.getElementById('nama_kelompok_baru').removeAttribute('required');
+        selectKelompokAda.removeAttribute('required');
+        document.getElementById('nama_kelompok_baru').value = '';
+        selectKelompokAda.value = '';
+    }
+
     resetOpsiKelompok();
 
-    // Menampilkan/menyembunyikan panel kelompok
     tipePendaftaran.addEventListener('change', function() {
         if (this.value === 'Kelompok') {
             panelOpsiKelompok.style.display = 'block';
@@ -428,12 +438,10 @@
             muatDaftarKelompok();
         } else {
             panelOpsiKelompok.style.display = 'none';
-            statusKelompok.removeAttribute('required');
             resetOpsiKelompok();
         }
     });
 
-    // Menampilkan sub-kondisi buat baru atau gabung kelompok
     statusKelompok.addEventListener('change', function() {
         if (this.value === 'Buat Baru') {
             blokBuatBaru.style.display = 'block';
@@ -451,29 +459,14 @@
         }
     });
 
-    function resetOpsiKelompok() {
-        statusKelompok.value = '';
-        statusKelompok.removeAttribute('required');
-        blokBuatBaru.style.display = 'none';
-        blokGabung.style.display = 'none';
-        document.getElementById('nama_kelompok_baru').removeAttribute('required');
-        selectKelompokAda.removeAttribute('required');
-        document.getElementById('nama_kelompok_baru').value = '';
-        selectKelompokAda.value = '';
-    }
-
-    // Ambil data kelompok dari Apps Script via GET
     async function muatDaftarKelompok() {
         if(form.action.includes("PASTE_URL_WEB_APP")) return;
         try {
             selectKelompokAda.innerHTML = '<option value="" disabled selected hidden>Memuat daftar kelompok...</option>';
-            
-            // Menggunakan cache-busting agar data kelompok selalu yang terbaru
-            const response = await fetch(form.action + "?action=getKelompok", { method: 'GET' });
+            const response = await fetch(form.action, { method: 'GET' });
             const data = await response.json();
             
             selectKelompokAda.innerHTML = '<option value="" disabled selected hidden>Pilih Kelompok</option>';
-            
             if(!data.kelompok || data.kelompok.length === 0) {
                 const opt = document.createElement('option');
                 opt.value = "";
@@ -481,88 +474,117 @@
                 opt.disabled = true;
                 selectKelompokAda.appendChild(opt);
             } else {
-                data.kelompok.forEach(nama => {
+                data.kelompok.forEach(namaKelompok => {
                     const opt = document.createElement('option');
-                    opt.value = nama;
-                    opt.innerText = nama;
+                    opt.value = namaKelompok;
+                    opt.innerText = namaKelompok;
                     selectKelompokAda.appendChild(opt);
                 });
             }
         } catch (err) {
-            console.error("Gagal sinkronisasi data kelompok:", err);
             selectKelompokAda.innerHTML = '<option value="" disabled>Gagal memuat list kelompok.</option>';
         }
     }
 
-    // Konversi File ke sandi teks Base64
-    function fileToBase64(file) {
+    // LOGIKA UPLOAD CHUNKING UNTUK FILE BESAR (SAMA SEPERTI GOOGLE FORM)
+    function uploadFileInChunks(file, fileNamePrefix, nim, nama) {
         return new Promise((resolve, reject) => {
-            if (!file) resolve("");
+            if (!file) {
+                resolve("Tidak Ada File");
+                return;
+            }
+
             const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
+            const chunkSize = 1024 * 1024; // Potong per 1 MB
+            let offset = 0;
+            
+            const ext = file.name.substring(file.name.lastIndexOf('.'));
+            const namaPembersih = nama.replace(/[^a-zA-Z0-9]/g, "");
+            const namaFileBaru = `${fileNamePrefix}_${nim}_${namaPembersih}${ext}`;
+
+            reader.onload = async function(e) {
+                const base64Data = encodeURIComponent(e.target.result.split(',')[1]);
+                
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: `action=upload_chunk&filename=${encodeURIComponent(namaFileBaru)}&folder_type=${fileNamePrefix}&chunk=${base64Data}&is_first=${offset === 0}&is_last=${offset + chunkSize >= file.size}`,
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                    });
+
+                    const res = await response.json();
+                    
+                    if (res.result === 'error') {
+                        reject(res.error);
+                        return;
+                    }
+
+                    offset += chunkSize;
+                    if (offset < file.size) {
+                        readNextChunk();
+                    } else {
+                        resolve(res.fileUrl); // Selesai, berikan URL file Drive yang terbentuk
+                    }
+                } catch (err) {
+                    reject("Gagal mengunggah potongan berkas.");
+                }
+            };
+
+            function readNextChunk() {
+                const slice = file.slice(offset, offset + chunkSize);
+                reader.readAsDataURL(slice);
+            }
+
+            readNextChunk();
         });
     }
 
-    // Pengiriman Formulir via POST
+    // EKSEKUSI UTAMA SAAT SUBMIT
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        if (form.action.includes("PASTE_URL_WEB_APP")) {
-            alert("⚠️ Harap konfigurasi URL Web App Apps Script kamu terlebih dahulu di kode HTML!");
-            return;
-        }
-
-        btnSubmit.innerText = "PROSES VALIDASI & UNGGAH FILE... ⏳";
+        btnSubmit.innerText = "MENGUNGGAH BERKAS, MOHON TUNGGU... ⏳";
         btnSubmit.disabled = true;
 
         try {
-            // Ambil objek file fisik dari input HTML
+            const nama = document.getElementById('nama').value;
+            const nim = document.getElementById('nim').value;
+
             const fileKTM = document.getElementById('bukti_ktm').files[0];
             const fileTwibbon = document.getElementById('bukti_twibbon').files[0];
             const fileIGKomadiksi = document.getElementById('follow_komadiksi').files[0];
             const fileIGPengmas = document.getElementById('follow_pengmas').files[0];
             const fileIGKomjar = document.getElementById('follow_komjar').files[0];
 
-            // Proteksi Sederhana Ukuran File Gabungan di Sisi Klien (Maksimal Estimasi Total 3.5 MB Base64)
-            const totalSize = (fileKTM?.size || 0) + (fileTwibbon?.size || 0) + (fileIGKomadiksi?.size || 0) + (fileIGPengmas?.size || 0) + (fileIGKomjar?.size || 0);
-            if (totalSize > 3500000) { 
-                alert('⚠️ Total ukuran seluruh berkas terlalu besar (Maksimal gabungan berkas ± 3MB). Silakan kompres gambar bukti Anda terlebih dahulu!');
-                btnSubmit.innerText = "SUBMIT DATA REGISTRASI ✦";
-                btnSubmit.disabled = false;
-                return;
-            }
-
-            // Konversi semua file secara paralel ke Base64
-            const [base64KTM, base64Twibbon, base64IGKomadiksi, base64IGPengmas, base64IGKomjar] = await Promise.all([
-                fileToBase64(fileKTM),
-                fileToBase64(fileTwibbon),
-                fileToBase64(fileIGKomadiksi),
-                fileToBase64(fileIGPengmas),
-                fileToBase64(fileIGKomjar)
+            // 1. Jalankan upload paralel ke Google Drive secara aman lewat protokol chunking
+            const [linkKtm, linkTwibbon, linkIGKomadiksi, linkIGPengmas, linkIGKomjar] = await Promise.all([
+                uploadFileInChunks(fileKTM, "KTM", nim, nama),
+                uploadFileInChunks(fileTwibbon, "TWIBBON", nim, nama),
+                uploadFileInChunks(fileIGKomadiksi, "IG_KOMADIKSI", nim, nama),
+                uploadFileInChunks(fileIGPengmas, "IG_PENGMAS", nim, nama),
+                uploadFileInChunks(fileIGKomjar, "IG_KOMJAR", nim, nama)
             ]);
 
-            const formData = new URLSearchParams();
+            // 2. Susun parameter data teks sesuai dengan struktur kolom Google Sheets kamu
+            const formDataText = new URLSearchParams();
+            formDataText.append('action', 'submit_data');
             
-            // Masukkan data teks, coret input file asli agar tidak merusak payload biner
-            const listFileFields = ["bukti_ktm", "bukti_twibbon", "follow_komadiksi", "follow_pengmas", "follow_komjar"];
             new FormData(form).forEach((value, key) => {
-                if(!listFileFields.includes(key)) {
-                    formData.append(key, value);
+                if(!["bukti_twibbon", "follow_komadiksi", "follow_pengmas", "follow_komjar", "bukti_ktm"].includes(key)) {
+                    formDataText.append(key, value);
                 }
             });
 
-            // Tembakkan parameter base64 hasil konversi ke Apps Script
-            formData.append("file_ktm_base64", base64KTM);
-            formData.append("file_twibbon_base64", base64Twibbon);
-            formData.append("file_ig_komadiksi_base64", base64IGKomadiksi);
-            formData.append("file_ig_pengmas_base64", base64IGPengmas);
-            formData.append("file_ig_komjar_base64", base64IGKomjar);
+            // SINKRONISASI: Masukkan link URL berkas sesuai urutan kolom tabel Google Sheets
+            formDataText.append('link_ktm', linkKtm);
+            formDataText.append('link_twibbon', linkTwibbon);
+            formDataText.append('link_ig_komadiksi', linkIGKomadiksi);
+            formDataText.append('link_ig_pengmas', linkIGPengmas);
+            formDataText.append('link_ig_komjar', linkIGKomjar);
 
             const response = await fetch(form.action, {
                 method: 'POST',
-                body: formData,
+                body: formDataText,
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
 
@@ -570,18 +592,18 @@
 
             if(result.result === "success") {
                 window.location.href = "../src/success.html";
-            } else if(result.result === "error") {
+            } else {
                 alert("Gagal mendaftar: " + result.error);
             }
 
         } catch (error) {
-            alert('Terjadi kesalahan koneksi atau request ditolak oleh server Google (Payload Too Large).');
-            console.error('Error:', error);
+            alert('Terjadi kesalahan pendaftaran: ' + error);
+            console.error(error);
         } finally {
             btnSubmit.innerText = "SUBMIT DATA REGISTRASI ✦";
             btnSubmit.disabled = false;
         }
-    });    
+    });
 </script>
 </body>
 </html>
