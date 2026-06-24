@@ -49,7 +49,6 @@
             overflow-x: hidden;
         }
 
-        /* --- DECORATIVE FLOATING SHAPES --- */
         .shape {
             position: absolute;
             font-family: var(--font-headings);
@@ -65,7 +64,6 @@
         .shape-3 { top: 12%; right: 4%; transform: rotate(45deg); }
         .shape-4 { top: 70%; right: 3%; transform: rotate(-10deg); }
 
-        /* --- MAIN CONTAINER --- */
         .form-container {
             background-color: var(--container-bg);
             border: var(--border-thick);
@@ -78,7 +76,6 @@
             position: relative;
         }
 
-        /* --- HEADER STYLES --- */
         .form-header {
             margin-bottom: 35px;
             border-bottom: var(--border-thin);
@@ -113,7 +110,6 @@
             font-style: italic;
         }
 
-        /* --- SECTION DIVISION --- */
         .form-section-title {
             font-family: var(--font-headings);
             font-size: 1.2rem;
@@ -125,7 +121,6 @@
             margin: 20px 0;
         }
 
-        /* --- FORM ELEMENTS --- */
         .form-group {
             margin-bottom: 25px;
         }
@@ -142,7 +137,6 @@
             font-weight: 700;
             font-size: 1rem;
             margin-bottom: 8px;
-            text-transform: normal;
         }
 
         .optional-text {
@@ -208,7 +202,6 @@
             text-transform: uppercase;
         }
 
-        /* --- DINAMIS PANEL OPSI KELOMPOK --- */
         #panel-opsi-kelompok {
             display: none;
             background-color: #fffdf9;
@@ -218,7 +211,6 @@
             box-shadow: var(--hard-shadow-small);
         }
 
-        /* --- SUBMIT BUTTON --- */
         .btn-submit {
             display: block;
             width: 100%;
@@ -266,7 +258,7 @@
             <p class="subtitle">Isi data pendaftaran individu atau kelompokmu secara mandiri.</p>
         </header>
 
-        <form id="form-pendaftaran" action="https://script.google.com/macros/s/AKfycbz6rNZWSbx6A2k4UjFqhxO1nr3F-D5JXz4vN7ZwmoYgpomjThBBL6uCXQCgJkGSBprLCw/exec" method="POST">
+        <form id="form-pendaftaran" action="javascript:void(0);" method="POST">
             
             <div class="form-section-title">01 / Kategori Pendaftaran</div>
             
@@ -402,18 +394,19 @@
                 <input type="file" id="follow_komjar" name="follow_komjar" accept="image/*" required>
             </div>
 
-            <button type="submit" class="btn-submit">SUBMIT DATA REGISTRASI ✦</button>
+            <button type="submit" id="btnSubmit" class="btn-submit">SUBMIT DATA REGISTRASI ✦</button>
 
             <h4 style="color: red; font-size: 0.8rem; text-align: center; margin-top: 20px;">jika mendapat bug/ kendala saat pengisian, hubungi <a href="wa.me/6283843582367" target="_blank">Admin (klik aku)</a></h4>
         </form>
     </div>
 
 <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbz6rNZWSbx6A2k4UjFqhxO1nr3F-D5JXz4vN7ZwmoYgpomjThBBL6uCXQCgJkGSBprLCw/exec"; // <-- GANTI DENGAN URL DEPLOYMENT BARU KAMU
-    const form = document.forms['registrationForm'];
+    // Taruh URL Deployment Baru (Web App) dari Apps Script Anda di bawah ini
+    const scriptURL = "https://script.google.com/macros/s/AKfycbz6rNZWSbx6A2k4UjFqhxO1nr3F-D5JXz4vN7ZwmoYgpomjThBBL6uCXQCgJkGSBprLCw/exec"; 
+    
+    const form = document.getElementById('form-pendaftaran');
     const btnSubmit = document.getElementById('btnSubmit');
 
-    // Mengambil daftar kelompok yang valid saat halaman dimuat
     window.addEventListener('load', async () => {
         try {
             const response = await fetch(scriptURL);
@@ -421,6 +414,7 @@
             const selectKelompok = document.getElementById('pilih_kelompok_ada');
             
             if(data.kelompok && data.kelompok.length > 0) {
+                selectKelompok.innerHTML = '<option value="" disabled selected hidden>Pilih Nama Kelompokmu</option>';
                 data.kelompok.forEach(kelompok => {
                     const opt = document.createElement('option');
                     opt.value = kelompok;
@@ -428,18 +422,13 @@
                     selectKelompok.appendChild(opt);
                 });
             } else {
-                const opt = document.createElement('option');
-                opt.value = "";
-                opt.textContent = "-- Belum ada kelompok tersedia, silakan buat baru --";
-                opt.disabled = true;
-                selectKelompok.appendChild(opt);
+                selectKelompok.innerHTML = '<option value="" disabled selected>-- Belum ada kelompok tersedia, silakan buat baru --</option>';
             }
         } catch (err) {
             console.error("Gagal memuat daftar kelompok:", err);
         }
     });
 
-    // RE-ENGINEERING LOGIKA CHUNKING: Ubah ke string utuh dulu baru dipotong teksnya
     function uploadFileInChunks(file, fileNamePrefix, nim, nama) {
         return new Promise((resolve, reject) => {
             if (!file || file.size === 0) {
@@ -447,21 +436,55 @@
                 return;
             }
 
-            const reader = new FileReader();
-            const ext = file.name.substring(file.name.lastIndexOf('.'));
+            const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
             const namaPembersih = nama.replace(/[^a-zA-Z0-9]/g, "");
             const namaFileBaru = `${fileNamePrefix}_${nim}_${namaPembersih}${ext}`;
 
-            reader.onload = async function(e) {
-                // Ambil seluruh data teks base64 bersih dari file fisik secara utuh
-                const fullBase64String = e.target.result.split(',')[1];
-                
-                const chunkSize = 800 * 1024; // Gunakan potongan konstan aman 800 KB per pecahan text
+            // FUNGSI KOMPRESI INTERNAL UNTUK GAMBAR
+            const kompresGambar = (fileGambar) => {
+                return new Promise((resKompres) => {
+                    const readerGambar = new FileReader();
+                    readerGambar.onload = function(event) {
+                        const img = new Image();
+                        img.onload = function() {
+                            const canvas = document.createElement('canvas');
+                            let width = img.width;
+                            let height = img.height;
+
+                            const MAX_WIDTH_HEIGHT = 1200; // Pembatasan resolusi piksel agar tajam tapi ringan
+                            if (width > MAX_WIDTH_HEIGHT || height > MAX_WIDTH_HEIGHT) {
+                                if (width > height) {
+                                    height *= MAX_WIDTH_HEIGHT / width;
+                                    width = MAX_WIDTH_HEIGHT;
+                                } else {
+                                    width *= MAX_WIDTH_HEIGHT / height;
+                                    height = MAX_WIDTH_HEIGHT;
+                                }
+                            }
+
+                            canvas.width = width;
+                            canvas.height = height;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, width, height);
+
+                            // Kompresi kualitas gambar ke tingkat 0.7 (Mengecilkan kapasitas memori hingga 80%+)
+                            const dataUrlBaru = canvas.toDataURL('image/jpeg', 0.7);
+                            resKompres(dataUrlBaru.split(',')[1]);
+                        };
+                        img.src = event.target.result;
+                    };
+                    readerGambar.readAsDataURL(fileGambar);
+                });
+            };
+
+            // FUNGSI TRANSAKSI CHUNKING PROTOCOL KE GOOGLE DRIVE
+            const prosesKirimTeks = async (base64StringUtuh) => {
+                const chunkSize = 2.5 * 1024 * 1024; // Diperbesar menjadi 2.5 MB agar secepat kilat
                 let offset = 0;
-                const totalLength = fullBase64String.length;
+                const totalLength = base64StringUtuh.length;
 
                 async function sendChunk() {
-                    const chunk = fullBase64String.substring(offset, offset + chunkSize);
+                    const chunk = base64StringUtuh.substring(offset, offset + chunkSize);
                     const isFirst = (offset === 0);
                     const isLast = (offset + chunkSize >= totalLength);
 
@@ -488,23 +511,34 @@
 
                         if (!isLast) {
                             offset += chunkSize;
-                            await sendChunk(); // Jalankan rekursif potongan teks berikutnya
+                            await sendChunk();
                         } else {
-                            resolve(res.fileUrl); // Selesai, berikan link Google Drive asli berkas
+                            resolve(res.fileUrl);
                         }
                     } catch (err) {
-                        reject("Gagal mentransfer enkripsi biner berkas persyaratan.");
+                        reject("Gagal mentransfer biner berkas persyaratan.");
                     }
                 }
 
                 await sendChunk();
             };
 
-            reader.readAsDataURL(file);
+            // PERCABANGAN: Jika berkas tipe gambar kompres dulu, jika PDF (KTM) kirim langsung murni
+            if (file.type.startsWith('image/')) {
+                kompresGambar(file).then(base64HasilKompres => {
+                    prosesKirimTeks(base64HasilKompres);
+                }).catch(() => reject("Gagal mengompresi gambar."));
+            } else {
+                const readerNormal = new FileReader();
+                readerNormal.onload = function(e) {
+                    const base64Normal = e.target.result.split(',')[1];
+                    prosesKirimTeks(base64Normal);
+                };
+                readerNormal.readAsDataURL(file);
+            }
         });
     }
 
-    // Event Handler saat Form dikirim
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         btnSubmit.disabled = true;
@@ -514,7 +548,6 @@
         const nama = document.getElementById('nama').value;
 
         try {
-            // 1. Eksekusi Upload File Satu per Satu Secara Berurutan (Aman Antrean)
             const linkKtm = await uploadFileInChunks(document.getElementById('bukti_ktm').files[0], "KTM", nim, nama);
             btnSubmit.innerText = "MENGUNGGAH BUKTI TWIBBON (2/5)...";
             
@@ -529,7 +562,6 @@
             
             const linkIGKomjar = await uploadFileInChunks(document.getElementById('follow_komjar').files[0], "IG_KOMJAR", nim, nama);
 
-            // 2. Kirim Seluruh Data Teks ke Google Sheets
             btnSubmit.innerText = "MENYIMPAN DATA REGISTRASI...";
             const formDataText = new URLSearchParams();
             formDataText.append('action', 'submit_data');
@@ -565,45 +597,40 @@
             console.error(error);
         } finally {
             btnSubmit.disabled = false;
-            btnSubmit.innerText = "SUBMIT DATA REGISTRASI";
+            btnSubmit.innerText = "SUBMIT DATA REGISTRASI ✦";
         }
     });
 
-    // Logika Interaktif Toggling Pilihan Kelompok Form
-    document.querySelectorAll('input[name="tipe_pendaftaran"]').forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            const sectionKelompok = document.getElementById('section_kelompok');
+    document.querySelectorAll('input[name="tipe_pendaftaran"] , select#tipe_pendaftaran').forEach(select => {
+        select.addEventListener('change', (e) => {
+            const sectionKelompok = document.getElementById('panel-opsi-kelompok');
             if(e.target.value === 'Kelompok') {
                 sectionKelompok.style.display = 'block';
-                document.querySelectorAll('input[name="status_kelompok"]').forEach(r => r.required = true);
+                document.getElementById('status_kelompok').required = true;
             } else {
                 sectionKelompok.style.display = 'none';
-                document.getElementById('div_buat_baru').style.display = 'none';
-                document.getElementById('div_gabung_kelompok').style.display = 'none';
-                document.querySelectorAll('input[name="status_kelompok"]').forEach(r => {
-                    r.required = false;
-                    r.checked = false;
-                });
+                document.getElementById('blok-buat-baru').style.display = 'none';
+                document.getElementById('blok-gabung').style.display = 'none';
+                document.getElementById('status_kelompok').required = false;
+                document.getElementById('status_kelompok').selectedIndex = 0;
                 document.getElementById('nama_kelompok_baru').required = false;
                 document.getElementById('pilih_kelompok_ada').required = false;
             }
         });
     });
 
-    document.querySelectorAll('input[name="status_kelompok"]').forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            if(e.target.value === 'Buat Baru') {
-                document.getElementById('div_buat_baru').style.display = 'block';
-                document.getElementById('nama_kelompok_baru').required = true;
-                document.getElementById('div_gabung_kelompok').style.display = 'none';
-                document.getElementById('pilih_kelompok_ada').required = false;
-            } else if(e.target.value === 'Gabung') {
-                document.getElementById('div_buat_baru').style.display = 'none';
-                document.getElementById('nama_kelompok_baru').required = false;
-                document.getElementById('div_gabung_kelompok').style.display = 'block';
-                document.getElementById('pilih_kelompok_ada').required = true;
-            }
-        });
+    document.getElementById('status_kelompok').addEventListener('change', (e) => {
+        if(e.target.value === 'Buat Baru') {
+            document.getElementById('blok-buat-baru').style.display = 'block';
+            document.getElementById('nama_kelompok_baru').required = true;
+            document.getElementById('blok-gabung').style.display = 'none';
+            document.getElementById('pilih_kelompok_ada').required = false;
+        } else if(e.target.value === 'Gabung') {
+            document.getElementById('blok-buat-baru').style.display = 'none';
+            document.getElementById('nama_kelompok_baru').required = false;
+            document.getElementById('blok-gabung').style.display = 'block';
+            document.getElementById('pilih_kelompok_ada').required = true;
+        }
     });
 </script>
 </body>
