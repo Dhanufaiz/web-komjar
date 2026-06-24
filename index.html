@@ -3,588 +3,352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pendaftaran Komadiksi Mengajar 2026</title>
+    <title>Buku Panduan - KOMADIKSI MENGAJAR 2026</title>
     <link rel="icon" type="image/png" href="../img/Group 22.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
-
-    <style>
-        /* --- DESIGN TOKENS & VARIABLES (NEO-BRUTALISM) --- */
-        :root {
-            --bg-main: #FFF4E6;
-            --outline-text: #1F2A44;
-            --primary-accent: #F4B942;
-            --secondary-accent: #E88A1A;
-            --container-bg: #FFFFFF;
-            
-            --font-headings: 'Poppins', sans-serif;
-            --font-body: 'PT Serif', serif;
-            
-            --border-thick: 4px solid var(--outline-text);
-            --border-thin: 3px solid var(--outline-text);
-            --radius-sharp: 0px;
-            
-            --hard-shadow-large: 8px 8px 0px var(--outline-text);
-            --hard-shadow-small: 4px 4px 0px var(--outline-text);
-        }
-
-        /* --- GLOBAL STYLES --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: var(--bg-main);
-            font-family: var(--font-body);
-            color: var(--outline-text);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 60px 20px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        .shape {
-            position: absolute;
-            font-family: var(--font-headings);
-            font-size: 6rem;
-            color: var(--outline-text);
-            opacity: 0.10;
-            z-index: 1;
-            pointer-events: none;
-            user-select: none;
-        }
-        .shape-1 { top: 5%; left: 3%; transform: rotate(15deg); }
-        .shape-2 { top: 85%; left: 5%; transform: rotate(-25deg); font-size: 8rem; }
-        .shape-3 { top: 12%; right: 4%; transform: rotate(45deg); }
-        .shape-4 { top: 70%; right: 3%; transform: rotate(-10deg); }
-
-        .form-container {
-            background-color: var(--container-bg);
-            border: var(--border-thick);
-            border-radius: var(--radius-sharp);
-            box-shadow: var(--hard-shadow-large);
-            width: 100%;
-            max-width: 750px;
-            padding: 40px;
-            z-index: 2;
-            position: relative;
-        }
-
-        .form-header {
-            margin-bottom: 35px;
-            border-bottom: var(--border-thin);
-            padding-bottom: 25px;
-        }
-
-        .badge {
-            display: inline-block;
-            background-color: var(--secondary-accent);
-            color: var(--container-bg);
-            font-family: var(--font-headings);
-            font-weight: 700;
-            padding: 6px 16px;
-            border: var(--border-thin);
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transform: rotate(-1deg);
-        }
-
-        h1 {
-            font-family: var(--font-headings);
-            font-weight: 900;
-            font-size: 2.3rem;
-            line-height: 1.1;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            font-style: italic;
-        }
-
-        .form-section-title {
-            font-family: var(--font-headings);
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            background-color: var(--primary-accent);
-            padding: 6px 12px;
-            border: var(--border-thin);
-            display: inline-block;
-            margin: 20px 0;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .grid-2-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        label {
-            display: block;
-            font-family: var(--font-headings);
-            font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: 8px;
-        }
-
-        .optional-text {
-            font-size: 0.8rem;
-            color: var(--secondary-accent);
-            font-style: italic;
-            text-transform: lowercase;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 14px;
-            font-family: var(--font-body);
-            font-size: 1rem;
-            color: var(--outline-text);
-            background-color: var(--container-bg);
-            border: var(--border-thin);
-            border-radius: var(--radius-sharp);
-            outline: none;
-            transition: all 0.1s ease;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            background-color: var(--bg-main);
-            box-shadow: var(--hard-shadow-small);
-        }
-
-        select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231F2A44' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");
-            background-repeat: no-repeat;
-            background-position: right 15px center;
-            background-size: 16px;
-        }
-
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            background: var(--bg-main);
-            border: var(--border-thin);
-        }
-
-        input[type="file"]::file-selector-button {
-            background-color: var(--primary-accent);
-            border: none;
-            border-right: var(--border-thin);
-            padding: 8px 16px;
-            font-family: var(--font-headings);
-            font-weight: 700;
-            color: var(--outline-text);
-            cursor: pointer;
-            margin-right: 15px;
-            text-transform: uppercase;
-        }
-
-        #panel-opsi-kelompok {
-            display: none;
-            background-color: #fffdf9;
-            border: var(--border-thin);
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: var(--hard-shadow-small);
-        }
-
-        .btn-submit {
-            display: block;
-            width: 100%;
-            background-color: var(--primary-accent);
-            color: var(--outline-text);
-            font-family: var(--font-headings);
-            font-weight: 900;
-            font-size: 1.4rem;
-            text-transform: uppercase;
-            padding: 16px;
-            border: var(--border-thick);
-            box-shadow: var(--hard-shadow-small);
-            cursor: pointer;
-            transition: transform 0.1s ease, box-shadow 0.1s ease;
-            margin-top: 40px;
-        }
-
-        .btn-submit:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px var(--outline-text);
-        }
-
-        .btn-submit:active {
-            transform: translate(4px, 4px);
-            box-shadow: 0px 0px 0px var(--outline-text);
-        }
-
-        @media (max-width: 600px) {
-            .badge { font-size: 0.75rem; padding: 4px 12px; }
-            .grid-2-col { grid-template-columns: 1fr; gap: 0; }
-            .form-container { padding: 25px 15px; }
-            h1 { font-size: 1.8rem; }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/global.css">
 </head>
 <body>
 
-    <div class="shape shape-1">✦</div><div class="shape shape-2">★</div>
-    <div class="shape shape-3">⚙</div><div class="shape shape-4">●</div>
+    <div class="playful-shape shape-star-1"><i class="fa-solid fa-star"></i></div>
+    <div class="playful-shape shape-star-2"><i class="fa-solid fa-star"></i></div>
+    <div class="playful-shape shape-circle-1"></div>
+    <div class="playful-shape shape-circle-2"></div>
 
-    <div class="form-container">
-        <header class="form-header">
-            <div class="badge">KOMJAR 2026 // FORM REGISTRASI</div>
-            <h1>KOMADIKSI MENGAJAR</h1>
-            <p class="subtitle">Isi data pendaftaran individu atau kelompokmu secara mandiri.</p>
-        </header>
+    <nav>
+        <div class="logo">
+            <img src="../img/Group 22.png" alt="Logo KOMJAR">
+            <div class="logo-text">
+                <div class="logo-title">
+                    <h2>Komadiksi</h2>
+                    <h3>Mengajar</h3>
+                </div>
+            </div>
+            <div class="year">
+                <p>2026</p>
+            </div>
+        </div>
+        
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="../src/dalamPerbaikan.html">Presensi</a></li>
+            <li><a href="../src/dokumentasi.html">Arsip 2025</a></li>
+            <li><a href="../src/download.html">Unduhan</a></li>
+            <li><a href="../src/twibbon.html" target="_blank">Twibbon</a></li>
+            <li><a href="../src/dalamPerbaikan.html" class="btn-nav-daftar">Oprec!</a></li>
+        </ul>
+    </nav>
 
-        <form id="form-pendaftaran" action="javascript:void(0);" method="POST">
+    <section id="hero">
+        <div class="hero-badge">Official Guidebook</div>
+        <h1>KOMADIKSI <br><span class="highlight-text">MENGAJAR</span> 2026</h1>
+        <p class="tagline">“Dare to teach, take an action, Komadiksi spread inspiration”</p>
+        <div class="cta-container">
+            <a href="../src/dalamPerbaikan.html" class="btn-playful btn-main"><i class="fa-solid fa-paper-plane"></i> Daftar Volunteer</a>
+            <a href="#latar-belakang" class="btn-playful btn-sub">Pelajari Lebih Lanjut</a>
+        </div>
+    </section>
+
+    <section id="latar-belakang">
+        <h2 class="section-title">Latar Belakang</h2>
+        <div class="latar-container">
+            <div class="latar-text-box">
+                <p>Komadiksi Mengajar merupakan salah satu program kerja dari bidang Pengabdian Masyarakat Komadiksi Smart yang terjun langsung ke dunia pendidikan untuk membantu guru dan peserta didik dalam proses pembelajaran. Sebagai seorang mahasiswa kita dituntut melek dengan keadaan pendidikan yang ada di Indonesia.</p>
+                <p>Beberapa sekolah sering kali menghadapi tantangan dalam menyediakan fasilitas yang memadai, Akses pelatihan berkelanjutan, dan bahan ajar yang cukup. Masalah tersebut menjadi sebuah tantangan bagi kita untuk berkontribusi langsung!</p>
+            </div>
+            <div class="playful-card latar-highlight">
+                <h3><i class="fa-solid fa-lightbulb"></i> Solusi Kami ✨</h3>
+                <p>Oleh karena itu, kami Komadiksi Smart UNS mengadakan Program "KOMADIKSI MENGAJAR". Yang bertujuan untuk memberikan wadah pada jenjang Sekolah Dasar dalam mengerjakan tugas, memahami materi, serta kegiatan positif lainnya.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="gambaran-umum">
+        <h2 class="section-title">Gambaran Umum Pelaksanaan</h2>
+        <div class="grid-gambaran">
+            <div class="playful-card card-1">
+                <div class="card-icon-wrapper"><i class="fa-solid fa-calendar-check"></i></div>
+                <h3>Durasi & Pertemuan</h3>
+                <p>Dilaksanakan dalam kurun waktu 1 bulan (minimal 12x pertemuan) dengan durasi 90 menit per pertemuan.</p>
+            </div>
+            <div class="playful-card card-2">
+                <div class="card-icon-wrapper"><i class="fa-solid fa-users"></i></div>
+                <h3>Sistem Volunteer</h3>
+                <p>Terbuka bagi seluruh mahasiswa UNS angkatan 2024 - 2025 penerima KIP-Kuliah maupun non-KIP-Kuliah. Boleh mendaftar secara individu maupun berkelompok hingga 5 orang.</p>
+            </div>
+            <div class="playful-card card-3">
+                <div class="card-icon-wrapper"><i class="fa-solid fa-map-location-dot"></i></div>
+                <h3>Tempat Kondisional</h3>
+                <p>Tempat mengajar bersifat fleksibel. Boleh di kelas sekolah, di rumah peserta didik, atau di rumah volunteer sendiri.</p>
+            </div>
+            <div class="playful-card card-4">
+                <div class="card-icon-wrapper"><i class="fa-solid fa-book-open"></i></div>
+                <h3>Materi & Media</h3>
+                <p>Materi disesuaikan dengan kebutuhan peserta didik dan kurikulum dari sekolah. Volunteer wajib membuat media pembelajaran yang menarik dan efektif.</p>
+            </div>
+            <div class="playful-card card-5">
+                <div class="card-icon-wrapper"><i class="fa-solid fa-award"></i></div>
+                <h3>Luaran Kegiatan</h3>
+                <div class="luaran-list">
+                    <p><i class="fa-solid fa-check"></i> Peningkatan pemahaman materi peserta didik.</p>
+                    <p><i class="fa-solid fa-check"></i> Pengembangan keterampilan mengajar volunteer.</p>
+                    <p><i class="fa-solid fa-check"></i> Modul Pembelajaran bagi kelompok volunteer.</p>
+                    <p><i class="fa-solid fa-check"></i> Media Pembelajaran digital/non-digital bagi individu.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="timeline">
+        <h2 class="section-title">Timeline Kegiatan</h2>
+        <div class="timeline-board">
+            <div class="timeline-row">
+                <div class="time-tag">21 Juni 2026 - 25 Juni 2026</div>
+                <div class="time-event">Open Recruitment Volunteer</div>
+            </div>
+            <div class="timeline-row">
+                <div class="time-tag">30 Juni 2026</div>
+                <div class="time-event">Pengumuman Volunteer</div>
+            </div>
+            <div class="timeline-row">
+                <div class="time-tag">1 Juli 2026 - 12 Juli 2026</div>
+                <div class="time-event">Fiksasi sekolah oleh volunteer</div>
+            </div>
+            <div class="timeline-row">
+                <div class="time-tag">4 Juli 2026</div>
+                <div class="time-event">Grand Opening & Pembekalan / Bimtek</div>
+            </div>
+            <div class="timeline-row">
+                <div class="time-tag">13 Juli 2026 - 7 Agustus 2026</div>
+                <div class="time-event">Pelaksanaan Kegiatan Komadiksi Mengajar</div>
+            </div>
+            <div class="timeline-row">
+                <div class="time-tag">26 Juli 2026</div>
+                <div class="time-event">Evaluasi 1</div>
+            </div>
+            <div class="timeline-row">
+                <div class="time-tag">23 Agustus 2026</div>
+                <div class="time-event">Evaluasi Akhir dan Grand Closing</div>
+            </div>
+        </div>
+        <p class="timeline-note">* Jadwal bersifat kondisional & dapat berubah sewaktu-waktu.</p>
+    </section>
+
+    <section id="ketentuan">
+        <h2 class="section-title">Ketentuan Volunteer</h2>
+        <div class="playful-card">
+            <div class="ketentuan-grid">
+                <div class="rule-item">✍️ <span>Mempersiapkan materi mengajar secara matang sesuai kebutuhan siswa.</span></div>
+                <div class="rule-item">⏱️ <span>Komitmen mengajar minimal 12× pertemuan dengan minimal alokasi waktu 2JP</span></div>
+                <div class="rule-item">📸 <span>Wajib mendokumentasikan aksi & mengisi link logbook monitoring setiap selesai mengajar.</span></div>
+                <div class="rule-item">📝 <span>Mengisi form evaluasi mingguan secara rutin yang disediakan oleh panitia.</span></div>
+                <div class="rule-item">💻 <span>Hadir online di evaluasi berkala & wajib datang offline saat Grand Closing.</span></div>
+                <div class="rule-item">🎓 <span>Sertifikat resmi rilis jika memenuhi kuota mengajar minimal 12x pertemuan.</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="recruitment-info-section">
+        <div class="info-container">
             
-            <div class="form-section-title">01 / Kategori Pendaftaran</div>
-            
-            <div class="form-group">
-                <label for="tipe_pendaftaran">Kategori Keikutsertaan</label>
-                <select id="tipe_pendaftaran" name="tipe_pendaftaran" required>
-                    <option value="Individu" selected>Individu (1 Orang)</option>
-                    <option value="dicarikan">Dicarikan Kelompok per domisili (jika memungkinkan)</option>
-                    <option value="Kelompok">Kelompok (Maksimal 5 Orang)</option>
-                </select>
-            </div>
+            <div class="benefit-block">
+                <h2 class="section-badge-title">✦ BENEFIT VOLUNTEER ✦</h2>
+                <div class="benefit-grid">
+                    
+                    <div class="benefit-card card-gold">
+                        <div class="benefit-icon"><i class="fa-solid fa-users"></i></div>
+                        <h3>Jaringan & Relasi</h3>
+                        <p>Memperluas koneksi dengan sesama mahasiswa inspiratif dan tokoh masyarakat lokal.</p>
+                    </div>
 
-            <div id="panel-opsi-kelompok">
-                <div class="form-group">
-                    <label for="status_kelompok">Status dalam Kelompok</label>
-                    <select id="status_kelompok" name="status_kelompok">
-                        <option value="" disabled selected hidden>Pilih Status Kelompok</option>
-                        <option value="Buat Baru">Saya Perwakilan / Ingin Buat Kelompok Baru</option>
-                        <option value="Gabung">Saya Anggota / Ingin Gabung Kelompok yang Ada</option>
-                    </select>
-                </div>
+                    <div class="benefit-card card-orange">
+                        <div class="benefit-icon"><i class="fa-solid fa-file-signature"></i></div>
+                        <h3>Sertifikat</h3>
+                        <p>Apresiasi resmi berupa sertifikat tingkat universitas atas kontribusi Anda.</p>
+                    </div>
 
-                <div class="form-group" id="blok-buat-baru" style="display: none;">
-                    <label for="nama_kelompok_baru">Ketik Nama Kelompok Baru Kamu</label>
-                    <input type="text" id="nama_kelompok_baru" name="nama_kelompok_baru" placeholder="Contoh: Kelompok Ganesha">
-                </div>
+                    <div class="benefit-card card-white">
+                        <div class="benefit-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                        <h3>Pengalaman Mengajar</h3>
+                        <p>Terjun langsung memberikan dampak pendidikan nyata kepada anak-anak sekolah dasar.</p>
+                    </div>
 
-                <div class="form-group" id="blok-gabung" style="display: none;">
-                    <label for="pilih_kelompok_ada">Pilih Nama Kelompokmu</label>
-                    <select id="pilih_kelompok_ada" name="pilih_kelompok_ada">
-                        <option value="" disabled selected hidden>Memuat daftar kelompok...</option>
-                    </select>
+                    <div class="benefit-card card-gold">
+                        <div class="benefit-icon"><i class="fa-solid fa-brain"></i></div>
+                        <h3>Asah Soft Skill</h3>
+                        <p>Melatih kemampuan komunikasi, kepemimpinan, adaptasi, dan manajemen masalah di lapangan.</p>
+                    </div>
+
                 </div>
             </div>
 
-            <div class="form-section-title">02 / Identitas Diri</div>
-
-            <div class="grid-2-col">
-                <div class="form-group">
-                    <label for="nama">Nama Lengkap</label>
-                    <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required>
-                </div>
-                <div class="form-group">
-                    <label for="nim">NIM</label>
-                    <input type="text" id="nim" name="nim" placeholder="Masukkan NIM" required>
-                </div>
-            </div>
-
-            <div class="grid-2-col">
-                <div class="form-group">
-                    <label for="email">Email SSO</label>
-                    <input type="email" id="email" name="email" placeholder="contoh@student.uns.ac.id" required>
-                </div>
-                <div class="form-group">
-                    <label for="wa">Nomor WhatsApp Aktif</label>
-                    <input type="tel" id="wa" name="wa" placeholder="081234567xxx" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="prodi">Program Studi</label>
-                <input type="text" id="prodi" name="prodi" placeholder="S1 Informatika" required>
-            </div>
-
-            <div class="grid-2-col">
-                <div class="form-group">
-                    <label for="angkatan">Angkatan</label>
-                    <select id="angkatan" name="angkatan" required>
-                        <option value="" disabled selected hidden>Pilih Angkatan</option>
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="fakultas">Fakultas</label>
-                    <select id="fakultas" name="fakultas" required>
-                        <option value="" disabled selected hidden>Pilih Fakultas</option>
-                        <option value="Teknik">Teknik</option><option value="FEB">FEB</option>
-                        <option value="FSRD">FSRD</option><option value="FIB">FIB</option>
-                        <option value="FATISDA">FATISDA</option><option value="Psikologi">Psikologi</option>
-                        <option value="Kedokteran">Kedokteran</option><option value="MIPA">MIPA</option>
-                        <option value="Pertanian">Pertanian</option><option value="FKOR">FKOR</option>
-                        <option value="FKIP">FKIP</option><option value="Peternakan">Peternakan</option>
-                        <option value="Sekolah Vokasi">Sekolah Vokasi</option><option value="FH">FH</option>
-                        <option value="FISIP">FISIP</option>
-                    </select>
+            <div class="requirements-block">
+                <h2 class="section-badge-title">★ PERSYARATAN ★</h2>
+                <div class="requirements-list-container">
+                    <div class="req-alert-badge">
+                        <i class="fa-solid fa-triangle-exclamation"></i> KHUSUS MAHASISWA UNS!
+                    </div>
+                    
+                    <ul class="req-list">
+                        <li>
+                            <span class="req-num">01</span>
+                            <div class="req-text">
+                                <strong>Status Mahasiswa Aktif</strong>
+                                <p>Merupakan mahasiswa aktif Universitas Sebelas Maret angkatan tahun 2024-2025.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="req-num">02</span>
+                            <div class="req-text">
+                                <strong>Kelengkapan Berkas</strong>
+                                <p>Wajib melengkapi dan mengunggah seluruh berkas administrasi pendaftaran secara jujur.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="req-num">03</span>
+                            <div class="req-text">
+                                <strong>Komitmen Penuh</strong>
+                                <p>Berkomitmen kuat untuk mengikuti seluruh rangkaian kegiatan dari awal hingga akhir pelaksanaan.</p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="alamat">Alamat Tinggal Sekarang</label>
-                <textarea id="alamat" name="alamat" placeholder="Contoh : Karangturi, RT 04/RW 07, Pajang, Surakarta" required></textarea>
-            </div>
+        </div>
+    </section>
+        <!-- Section Dokumentasi Papan Tulis Kain/Flannel Hijau (Optimized) -->
+    <section class="greenboard-section">
+        
+        <!-- Judul & Keterangan Efek Tulisan Kapur Mading -->
+        <div class="board-header">
+            <h2 class="chalk-title">Kilas Balik KOMJAR 2025</h2>
+            <p class="chalk-desc">✦ 75 Volunteer & 23 Sekolah ✦</p>
+        </div>
 
-            <div class="form-section-title">03 / Minat & Sasaran</div>
+        <!-- Area Kontainer Mading -->
+        <div class="board-wrapper">
+            <!-- Ornamen Paku Payung Merah (Pin Pengunci) -->
+            <div class="push-pin"></div>
 
-            <div class="form-group">
-                <label for="alasan">Alasan mengikuti Komadiksi Mengajar</label>
-                <textarea id="alasan" name="alasan" placeholder="Tuliskan motivasi pribadimu secara detail..." required></textarea>
-            </div>
+            <!-- Elemen Dekoratif Tambahan yang Ikut Ditempel -->
+            <div class="board-sticker sticker-left">✦ MEMORIES</div>
+            <div class="board-badge badge-right">2025</div>
 
-            <div class="form-group">
-                <label>Sekolah Sasaran (Minimal 2 Opsi Utama)</label>
-                <div class="grid-2-col" style="margin-bottom: 15px;">
-                    <input type="text" id="sekolah_1" name="sekolah_1" placeholder="Pilihan Sekolah 1 (Wajib)" required>
-                    <input type="text" id="sekolah_2" name="sekolah_2" placeholder="Pilihan Sekolah 2 (Wajib)" required>
+            <!-- Tautan Utama Menuju Halaman Dokumentasi -->
+            <a href="../src/dokumentasi.html" class="polaroid-board-link" title="Buka Album Dokumentasi">
+                <div class="polaroid-board-frame">
+                    <!-- Wadah Foto Utama -->
+                    <div class="polaroid-board-photo">
+                        <img src="../img/foto1.jpg" alt="Highlight Dokumentasi KOMJAR">
+                    </div>
+                    <!-- Keterangan Polaroid -->
+                    <div class="polaroid-board-caption">
+                        <span class="board-caption-text">Buka Album Dokumentasi →</span>
+                    </div>
                 </div>
-                <label for="sekolah_3">Pilihan Sekolah Lainnya <span class="optional-text">(Opsional / Alternatif 3)</span></label>
-                <input type="text" id="sekolah_3" name="sekolah_3" placeholder="Masukkan alternatif sekolah ketiga jika ada">
-            </div>
+            </a>
+        </div>
+    </section>
 
-            <div class="form-section-title">04 / Berkas Persyaratan (Perorangan)</div>
-            <h4 style="color: #555; font-size: 1rem; text-align: left; margin-bottom: 20px;">Unggah berkas bukti Anda di bawah ini:</h4>
-            
-            <div class="form-group">
-                <label for="bukti_ktm">Bukti Scan Kartu Tanda Mahasiswa (KTM)</label>
-                <input type="file" id="bukti_ktm" name="bukti_ktm" accept="image/*,application/pdf" required>
-            </div>
-            <div class="form-group">
-                <label for="bukti_twibbon">Bukti Upload Twibbon<br>Buat twibbon <a href="../src/twibbon.html" style="background-color: orange; padding: 5px 10px; border-radius: 5px; color: white;" target="_blank">di sini</a></label>
-                <input type="file" id="bukti_twibbon" name="bukti_twibbon" accept="image/*" required>
-            </div>
-            <div class="form-group">
-                <label for="follow_komadiksi">Bukti Follow <a href="https://www.instagram.com/komadiksismart/" target="_blank">@komadiksismart</a></label>
-                <input type="file" id="follow_komadiksi" name="follow_komadiksi" accept="image/*" required>
-            </div>
-            <div class="form-group">
-                <label for="follow_pengmas">Bukti Follow <a href="https://www.instagram.com/pengmas.komadiksiuns/" target="_blank">@pengmas.komadiksiuns</a></label>
-                <input type="file" id="follow_pengmas" name="follow_pengmas" accept="image/*" required>
-            </div>
-            <div class="form-group">
-                <label for="follow_komjar">Bukti Follow <a href="https://www.instagram.com/komadiksi.mengajar/" target="_blank">@komadiksi.mengajar</a></label>
-                <input type="file" id="follow_komjar" name="follow_komjar" accept="image/*" required>
-            </div>
-
-            <button type="submit" id="btnSubmit" class="btn-submit">SUBMIT DATA REGISTRASI ✦</button>
-
-            <h4 style="color: red; font-size: 0.8rem; text-align: center; margin-top: 20px;">jika mendapat bug/ kendala saat pengisian, hubungi <a href="wa.me/6283843582367" target="_blank">Admin (klik aku)</a></h4>
-        </form>
-    </div>
-
-<script>
-    // Taruh URL Deployment Versi Baru (Web App URL) dari Apps Script Anda di bawah ini
-    const scriptURL = "https://script.google.com/macros/s/AKfycbz6rNZWSbx6A2k4UjFqhxO1nr3F-D5JXz4vN7ZwmoYgpomjThBBL6uCXQCgJkGSBprLCw/exec"; 
+    <section id="contact">
+        <h2 class="section-title">Ada Pertanyaan? Hubungi Kami!</h2>
+        <div class="cp-container">
+            <a href="https://wa.me/6285607790737" target="_blank" class="playful-card cp-card card-1">
+                <i class="fa-brands fa-whatsapp"></i>
+                <div class="cp-info">
+                    <h4>Rosa</h4>
+                    <p>+62 856-0779-0737</p>
+                </div>
+            </a>
+            <a href="https://wa.me/6289684385200" target="_blank" class="playful-card cp-card card-2">
+                <i class="fa-brands fa-whatsapp"></i>
+                <div class="cp-info">
+                    <h4>Nabila</h4>
+                    <p>+62 896-8438-5200</p>
+                </div>
+            </a>
+        </div>
+    </section>
     
-    // FIX: Menggunakan penamaan selektor id yang telah disinkronkan dengan elemen HTML di atas
-    const form = document.getElementById('form-pendaftaran');
-    const btnSubmit = document.getElementById('btnSubmit');
+    <h4 style="font-size: 0.5rem; text-align: center; background-color: #d3ae1b; padding: 7px;">jika menemukan error pada web, hubungi <a href="https://wa.me/6283843582367" target="_blank" style="color: navy; text-decoration: underline;">nomor ini</a></h4>
+    <footer class="main-footer">
+        <div class="footer-top">
+            <div class="footer-info">
+                <div class="footer-logo">
+                    <img src="../img/SAKHYA PNG.png" alt="Logo Sakhya Abhipraya">
+                </div>
+                <h3 class="footer-title">Sakhya Abhipraya</h3>
+                <div class="info-group">
+                    <span class="info-label">Email</span>
+                    <a href="mailto:komadiksismart@uns.ac.id" class="info-value">komadiksismart@uns.ac.id</a>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Alamat</span>
+                    <p class="info-value-text">Jl. Ir. Sutami No. 36 A, Jebres, Kota Surakarta, Jawa Tengah 57126</p>
+                </div>
+            </div>
+            <div class="footer-maps">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3955.122394541785!2d110.85418107589993!3d-7.561657492452296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a16fdfcc443b5%3A0x2da8b51d3d2254e5!2sSebelas%20Maret%20University!5e0!3m2!1sen!2sid!4v1718270000000!5m2!1sen!2sid" 
+                width="100%" 
+                height="100%" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+            </div>
+        </div>
+        <hr class="footer-divider">
+        <div class="footer-bottom">
+            <p class="copyright">Copyright © 2026 - KOMADIKSI SMART UNS</p>
+            <div class="footer-socials">
+                <a href="https://www.instagram.com/komadiksismart/" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@KOMADIKSISMARTUNS" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://www.facebook.com/komadiksiuns/?locale=id_ID" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://www.tiktok.com/@komadiksiuns" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const navLinks = document.querySelector('.nav-links');
+            const navLinksLi = document.querySelectorAll('.nav-links li');
 
-    window.addEventListener('load', async () => {
-        try {
-            const response = await fetch(scriptURL);
-            const data = await response.json();
-            const selectKelompok = document.getElementById('pilih_kelompok_ada');
-            
-            if(data.kelompok && data.kelompok.length > 0) {
-                selectKelompok.innerHTML = '<option value="" disabled selected hidden>Pilih Nama Kelompokmu</option>';
-                data.kelompok.forEach(kelompok => {
-                    const opt = document.createElement('option');
-                    opt.value = kelompok;
-                    opt.textContent = kelompok;
-                    selectKelompok.appendChild(opt);
-                });
-            } else {
-                selectKelompok.innerHTML = '<option value="" disabled selected>-- Belum ada kelompok tersedia, silakan buat baru --</option>';
-            }
-        } catch (err) {
-            console.error("Gagal memuat daftar kelompok:", err);
-        }
-    });
+            // 1. Fungsi Buka/Tutup Menu Burger & Trigger Animasi Bar Saling Menyilang (X)
+            mobileMenu.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                mobileMenu.classList.toggle('toggle-active');
+            });
 
-    function uploadFileInChunks(file, fileNamePrefix, nim, nama) {
-        return new Promise((resolve, reject) => {
-            if (!file || file.size === 0) {
-                resolve("-");
-                return;
-            }
-
-            const reader = new FileReader();
-            const ext = file.name.substring(file.name.lastIndexOf('.'));
-            const namaPembersih = nama.replace(/[^a-zA-Z0-9]/g, "");
-            const namaFileBaru = `${fileNamePrefix}_${nim}_${namaPembersih}${ext}`;
-
-            reader.onload = async function(e) {
-                const fullBase64String = e.target.result.split(',')[1];
-                const chunkSize = 800 * 1024; 
-                let offset = 0;
-                const totalLength = fullBase64String.length;
-
-                async function sendChunk() {
-                    const chunk = fullBase64String.substring(offset, offset + chunkSize);
-                    const isFirst = (offset === 0);
-                    const isLast = (offset + chunkSize >= totalLength);
-
-                    const chunkParams = new URLSearchParams();
-                    chunkParams.append('action', 'upload_chunk');
-                    chunkParams.append('filename', namaFileBaru);
-                    chunkParams.append('folder_type', fileNamePrefix);
-                    chunkParams.append('chunk', chunk);
-                    chunkParams.append('is_first', isFirst.toString());
-                    chunkParams.append('is_last', isLast.toString());
-
-                    try {
-                        const response = await fetch(scriptURL, {
-                            method: 'POST',
-                            body: chunkParams,
-                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-                        });
-
-                        const res = await response.json();
-                        if (res.result === 'error') {
-                            reject(res.error);
-                            return;
-                        }
-
-                        if (!isLast) {
-                            offset += chunkSize;
-                            await sendChunk();
-                        } else {
-                            resolve(res.fileUrl);
-                        }
-                    } catch (err) {
-                        reject("Gagal mentransfer biner berkas persyaratan.");
+            // 2. Menutup menu drawer secara otomatis ketika salah satu tautan menu diklik
+            navLinksLi.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (navLinks.classList.contains('active')) {
+                        navLinks.classList.remove('active');
+                        mobileMenu.classList.remove('toggle-active');
                     }
-                }
-
-                await sendChunk();
-            };
-
-            reader.readAsDataURL(file);
-        });
-    }
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        btnSubmit.disabled = true;
-        btnSubmit.innerText = "MENGUNGGAH BERKAS PERSYARATAN...";
-
-        const nim = document.getElementById('nim').value;
-        const nama = document.getElementById('nama').value;
-
-        try {
-            const linkKtm = await uploadFileInChunks(document.getElementById('bukti_ktm').files[0], "KTM", nim, nama);
-            btnSubmit.innerText = "MENGUNGGAH BUKTI TWIBBON (2/5)...";
-            
-            const linkTwibbon = await uploadFileInChunks(document.getElementById('bukti_twibbon').files[0], "TWIBBON", nim, nama);
-            btnSubmit.innerText = "MENGUNGGAH BUKTI FOLLOW KOMADIKSI (3/5)...";
-            
-            const linkIGKomadiksi = await uploadFileInChunks(document.getElementById('follow_komadiksi').files[0], "IG_KOMADIKSI", nim, nama);
-            btnSubmit.innerText = "MENGUNGGAH BUKTI FOLLOW PENGMAS (4/5)...";
-            
-            const linkIGPengmas = await uploadFileInChunks(document.getElementById('follow_pengmas').files[0], "IG_PENGMAS", nim, nama);
-            btnSubmit.innerText = "MENGUNGGAH BUKTI FOLLOW KOMJAR (5/5)...";
-            
-            const linkIGKomjar = await uploadFileInChunks(document.getElementById('follow_komjar').files[0], "IG_KOMJAR", nim, nama);
-
-            btnSubmit.innerText = "MENYIMPAN DATA REGISTRASI...";
-            const formDataText = new URLSearchParams();
-            formDataText.append('action', 'submit_data');
-
-            new FormData(form).forEach((value, key) => {
-                if(!["bukti_ktm", "bukti_twibbon", "follow_komadiksi", "follow_pengmas", "follow_komjar"].includes(key)) {
-                    formDataText.append(key, value);
-                }
+                });
             });
 
-            formDataText.append('link_ktm', linkKtm);
-            formDataText.append('link_twibbon', linkTwibbon);
-            formDataText.append('link_ig_komadiksi', linkIGKomadiksi);
-            formDataText.append('link_ig_pengmas', linkIGPengmas);
-            formDataText.append('link_ig_komjar', linkIGKomjar);
-
-            const response = await fetch(scriptURL, {
-                method: 'POST',
-                body: formDataText,
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            // 3. Menutup menu jika user tidak sengaja mengklik di area luar menu gantung (Overlay click)
+            document.addEventListener('click', (event) => {
+                const isClickInsideNav = mobileMenu.contains(event.target) || navLinks.contains(event.target);
+                
+                if (!isClickInsideNav && navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    mobileMenu.classList.remove('toggle-active');
+                }
             });
-
-            const result = await response.json();
-
-            if(result.result === "success") {
-                window.location.href = "../src/success.html";
-            } else {
-                alert("Gagal mendaftar: " + result.error);
-            }
-
-        } catch (error) {
-            alert('Terjadi kesalahan pendaftaran: ' + error);
-            console.error(error);
-        } finally {
-            btnSubmit.disabled = false;
-            btnSubmit.innerText = "SUBMIT DATA REGISTRASI ✦";
-        }
-    });
-
-    document.querySelectorAll('input[name="tipe_pendaftaran"] , select#tipe_pendaftaran').forEach(select => {
-        select.addEventListener('change', (e) => {
-            const sectionKelompok = document.getElementById('panel-opsi-kelompok');
-            if(e.target.value === 'Kelompok') {
-                sectionKelompok.style.display = 'block';
-                document.getElementById('status_kelompok').required = true;
-            } else {
-                sectionKelompok.style.display = 'none';
-                document.getElementById('blok-buat-baru').style.display = 'none';
-                document.getElementById('blok-gabung').style.display = 'none';
-                document.getElementById('status_kelompok').required = false;
-                document.getElementById('status_kelompok').selectedIndex = 0;
-                document.getElementById('nama_kelompok_baru').required = false;
-                document.getElementById('pilih_kelompok_ada').required = false;
-            }
         });
-    });
-
-    document.getElementById('status_kelompok').addEventListener('change', (e) => {
-        if(e.target.value === 'Buat Baru') {
-            document.getElementById('blok-buat-baru').style.style.display = 'block';
-            document.getElementById('nama_kelompok_baru').required = true;
-            document.getElementById('blok-gabung').style.display = 'none';
-            document.getElementById('pilih_kelompok_ada').required = false;
-        } else if(e.target.value === 'Gabung') {
-            document.getElementById('blok-buat-baru').style.display = 'none';
-            document.getElementById('nama_kelompok_baru').required = false;
-            document.getElementById('blok-gabung').style.display = 'block';
-            document.getElementById('pilih_kelompok_ada').required = true;
-        }
-    });
-</script>
+    </script>
 </body>
 </html>
