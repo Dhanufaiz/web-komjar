@@ -1,401 +1,85 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Presensi & Logbook — KOMJAR 2026</title>
-  <link rel="icon" type="image/png" href="../img/Group 22.png">
-  <link rel="stylesheet" href="css/style2.css" />
-  <link rel="stylesheet" href="css/forms.css" />
-  <style>
-    .page-header {
-      background: var(--orange);
-      padding: 3.5rem 0 2.5rem;
-      border-bottom: var(--border-4);
-      position: relative;
-      overflow: hidden;
-    }
-    .page-header::after {
-      content: '✦';
-      position: absolute;
-      right: 5%;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 7rem;
-      color: rgba(255,255,255,0.1);
-      pointer-events: none;
-    }
-    .page-header h1 { color: var(--white); }
-    .page-header p  { color: rgba(255,255,255,0.85); font-size: 1.05rem; margin-top: 0.5rem; max-width: 560px; }
-    .page-header .badge { margin-bottom: 1rem; background: var(--navy); }
-
-    .presensi-layout {
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 3rem;
-      align-items: start;
-      padding: 4rem 0;
-    }
-
-    .sidebar-block {
-      position: sticky;
-      top: 80px;
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-    .sidebar-card {
-      background: var(--white);
-      border: var(--border-4);
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-    }
-    .sidebar-card h3 {
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 1rem;
-    }
-
-    .session-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px; height: 40px;
-      background: var(--navy);
-      color: var(--gold);
-      font-family: var(--ff-head);
-      font-weight: 900;
-      font-size: 0.85rem;
-      border: 2px solid var(--navy);
-      flex-shrink: 0;
-    }
-
-    .step-list {
-      list-style: none;
-      counter-reset: steps;
-      display: flex;
-      flex-direction: column;
-      gap: 0.7rem;
-    }
-    .step-list li {
-      display: flex;
-      gap: 0.7rem;
-      align-items: flex-start;
-      counter-increment: steps;
-      font-family: var(--ff-body);
-      font-size: 0.85rem;
-    }
-    .step-list li::before {
-      content: counter(steps);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 22px; height: 22px;
-      background: var(--gold);
-      border: 2px solid var(--navy);
-      font-family: var(--ff-head);
-      font-size: 0.7rem;
-      font-weight: 900;
-      flex-shrink: 0;
-      margin-top: 0.1rem;
-    }
-
-    .sesi-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-    }
-    .sesi-pip {
-      aspect-ratio: 1;
-      background: var(--bg);
-      border: 2px solid var(--navy);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--ff-head);
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--brown);
-    }
-    .sesi-pip.done {
-      background: var(--gold);
-      color: var(--navy);
-    }
-
-    @media (max-width: 900px) {
-      .presensi-layout { grid-template-columns: 1fr; }
-      .sidebar-block    { position: static; }
-    }
-  </style>
+    <title>Test Google Picker Absensi</title>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar" aria-label="Navigasi utama">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-brand">
-      KOMJAR
-      <span>2026 · Komadiksi UNS</span>
-    </a>
-    <button class="hamburger" id="hamburger" aria-label="Buka menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="index.html">Beranda</a></li>
-      <li><a href="index.html#gambaran">Program</a></li>
-      <li><a href="index.html#timeline">Timeline</a></li>
-      <li><a href="presensi.html">Presensi</a></li>
-      <li><a href="daftar.html" class="btn-nav">Daftar</a></li>
-    </ul>
-  </div>
-</nav>
+    <button id="auth_button" onclick="handleAuthClick()">Pilih / Upload Dokumentasi</button>
+    <p id="file_info"></p>
 
-<!-- PAGE HEADER -->
-<header class="page-header">
-  <div class="container">
-    <span class="badge">Logbook Harian</span>
-    <h1>Presensi & Logbook Sesi</h1>
-    <p>Catat kehadiran dan ringkasan materi setiap sesi mengajar. Isi formulir paling lambat 24 jam setelah sesi berlangsung.</p>
-  </div>
-</header>
-<hr class="divider" />
+    <script async defer src="https://apis.google.com/js/api.js" onload="onApiLoad()"></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="onGsiLoad()"></script>
 
-<!-- MAIN CONTENT -->
-<main>
-  <div class="container">
-    <div class="presensi-layout">
+    <script>
+        // 1. MASUKKAN KREDENSIAL ANDA DI SINI
+        const DeveloperKey = 'AIzaSyAuv-eBywmdzW8BhX5aR596WF-s7-WKQlg';
+        const ClientId = 'PASTE_CLIENT_ID_ANDA_DI_SINI';
+        
+        // Scope yang dibutuhkan untuk melihat dan mengupload file ke Drive
+        const Scopes = 'https://www.googleapis.com/auth/drive.file';
 
-      <!-- FORM COLUMN -->
-      <div>
-        <form data-komjar="true" id="form-presensi" novalidate>
-          <div class="form-wrap">
+        let accessToken = null;
+        let pickerInited = false;
+        let gapiInited = false;
 
-            <!-- IDENTITAS -->
-            <div class="form-group">
-              <label for="nama-perwakilan">Nama Perwakilan Kelompok <span class="required">*</span></label>
-              <input
-                type="text"
-                id="nama-perwakilan"
-                name="nama_perwakilan"
-                placeholder="Nama lengkap perwakilan yang mengisi logbook"
-                required
-                autocomplete="name"
-              />
-              <p class="form-hint">Isi dengan nama anggota kelompok yang bertugas merekap sesi ini.</p>
-            </div>
+        function onApiLoad() { gapi.load('picker', () => { gapiInited = true; }); }
+        function onGsiLoad() {
+            tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: ClientId,
+                scope: Scopes,
+                callback: '', // didefinisikan dinamis saat tombol diklik
+            });
+            pickerInited = true;
+        }
 
-            <div class="form-group">
-              <label for="nim-perwakilan">NIM Perwakilan <span class="required">*</span></label>
-              <input
-                type="text"
-                id="nim-perwakilan"
-                name="nim_perwakilan"
-                placeholder="Contoh: H0122001"
-                required
-              />
-            </div>
+        function handleAuthClick() {
+            tokenClient.callback = async (response) => {
+                if (response.error !== undefined) { throw response; }
+                accessToken = response.access_token;
+                createPicker();
+            };
 
-            <div class="form-divider"></div>
+            if (accessToken === null) {
+                // Minta pengguna login ke Google terlebih dahulu
+                tokenClient.requestAccessToken({prompt: 'consent'});
+            } else {
+                createPicker();
+            }
+        }
 
-            <!-- DETAIL SESI -->
-            <div class="form-group">
-              <label for="sesi">Nomor Sesi Pertemuan <span class="required">*</span></label>
-              <div class="select-wrap">
-                <select id="sesi" name="sesi" required>
-                  <option value="" disabled selected>— Pilih sesi pertemuan —</option>
-                  <option value="Pertemuan 1">Pertemuan 1</option>
-                  <option value="Pertemuan 2">Pertemuan 2</option>
-                  <option value="Pertemuan 3">Pertemuan 3</option>
-                  <option value="Pertemuan 4">Pertemuan 4</option>
-                  <option value="Pertemuan 5">Pertemuan 5</option>
-                  <option value="Pertemuan 6">Pertemuan 6</option>
-                  <option value="Pertemuan 7">Pertemuan 7</option>
-                  <option value="Pertemuan 8">Pertemuan 8</option>
-                  <option value="Pertemuan 9">Pertemuan 9</option>
-                  <option value="Pertemuan 10">Pertemuan 10</option>
-                  <option value="Pertemuan 11">Pertemuan 11</option>
-                  <option value="Pertemuan 12">Pertemuan 12</option>
-                  <option value="Pertemuan 13">Pertemuan 13</option>
-                  <option value="Pertemuan 14">Pertemuan 14</option>
-                  <option value="Pertemuan 15">Pertemuan 15</option>
-                  <option value="Pertemuan 16">Pertemuan 16</option>
-                </select>
-              </div>
-            </div>
+        // 2. FUNGSI UNTUK MEMBUAT JENDELA POP-UP PICKER
+        function createPicker() {
+            if (pickerInited && gapiInited) {
+                const view = new google.picker.View(google.picker.ViewId.DOCS);
+                
+                const picker = new google.picker.PickerBuilder()
+                    .addView(view)
+                    .addView(new google.picker.DocsUploadView()) // Menambahkan tab UPLOAD di jendela
+                    .setOAuthToken(accessToken)
+                    .setDeveloperKey(DeveloperKey)
+                    .setCallback(pickerCallback)
+                    .build();
+                
+                picker.setVisible(true);
+            }
+        }
 
-            <div class="form-group">
-              <label for="tanggal">Tanggal Mengajar <span class="required">*</span></label>
-              <input
-                type="date"
-                id="tanggal"
-                name="tanggal"
-                required
-              />
-            </div>
+        // 3. FUNGSI SETELAH PENGGUNA SELESAI MEMILIH/MENGUPLOAD FILE
+        function pickerCallback(data) {
+            if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
+                const doc = data[google.picker.Response.DOCUMENTS][0];
+                const fileId = doc[google.picker.Document.ID];
+                const fileUrl = doc[google.picker.Document.URL];
+                const fileName = doc[google.picker.Document.NAME];
 
-            <div class="form-group">
-              <label for="lokasi">Lokasi Mengajar <span class="required">*</span></label>
-              <div class="select-wrap">
-                <select id="lokasi" name="lokasi" required>
-                  <option value="" disabled selected>— Pilih jenis lokasi —</option>
-                  <option value="Kelas / Sekolah">Kelas / Sekolah</option>
-                  <option value="Rumah Siswa">Rumah Siswa</option>
-                  <option value="Rumah Volunteer">Rumah Volunteer</option>
-                  <option value="Lokasi Lainnya">Lokasi Lainnya</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-divider"></div>
-
-            <!-- MATERI -->
-            <div class="form-group">
-              <label for="materi">Ringkasan Materi yang Diajarkan <span class="required">*</span></label>
-              <textarea
-                id="materi"
-                name="materi"
-                placeholder="Deskripsikan materi yang diajarkan pada sesi ini. Contoh: Pengenalan operasi bilangan bulat menggunakan kartu angka, dilanjutkan dengan latihan soal cerita..."
-                required
-                minlength="80"
-              ></textarea>
-              <p class="form-hint">Minimal 80 karakter. Sertakan metode, alat bantu, dan respons siswa bila memungkinkan.</p>
-            </div>
-
-            <div class="form-group">
-              <label for="kendala">Kendala & Catatan Tambahan</label>
-              <textarea
-                id="kendala"
-                name="kendala"
-                placeholder="Opsional — tuliskan kendala yang dihadapi atau hal-hal yang perlu ditindaklanjuti..."
-                style="min-height:90px;"
-              ></textarea>
-            </div>
-
-            <div class="form-divider"></div>
-
-            <!-- DOKUMENTASI -->
-            <div class="form-group">
-              <label for="dokumentasi">Foto Dokumentasi Kegiatan <span class="required">*</span></label>
-              <div class="file-wrap">
-                <input
-                  type="file"
-                  id="dokumentasi"
-                  name="dokumentasi"
-                  accept="image/*"
-                  required
-                  data-error-id="doc-error"
-                />
-              </div>
-              <p id="doc-error" class="error-msg"></p>
-              <p class="form-hint">Format: JPG, PNG, WEBP. Ukuran maksimal <strong>2MB</strong>. Foto harus menunjukkan kegiatan mengajar berlangsung.</p>
-            </div>
-
-            <div class="form-submit">
-              <button type="submit" class="btn btn-lg" style="background:var(--orange);">Kirim Presensi →</button>
-            </div>
-
-          </div><!-- .form-wrap -->
-        </form>
-      </div>
-
-      <!-- SIDEBAR -->
-      <aside class="sidebar-block" aria-label="Panduan pengisian">
-
-        <div class="sidebar-card" style="background:var(--gold);">
-          <h3>📋 Panduan Pengisian</h3>
-          <ol class="step-list">
-            <li>Isi nama dan NIM perwakilan kelompok</li>
-            <li>Pilih nomor sesi yang sedang dilaporkan</li>
-            <li>Masukkan tanggal dan lokasi mengajar</li>
-            <li>Tulis ringkasan materi dengan detail</li>
-            <li>Unggah foto dokumentasi (maks. 2MB)</li>
-            <li>Klik "Kirim Presensi"</li>
-          </ol>
-        </div>
-
-        <div class="sidebar-card">
-          <h3>📅 Progress Sesi (16 Total)</h3>
-          <p style="font-size:0.82rem;color:var(--brown);margin-bottom:0.8rem;font-family:var(--ff-body);">
-            Kotak kuning = sesi sudah dilaporkan (simulasi).
-          </p>
-          <div class="sesi-grid" aria-hidden="true">
-            <div class="sesi-pip done">1</div>
-            <div class="sesi-pip done">2</div>
-            <div class="sesi-pip done">3</div>
-            <div class="sesi-pip">4</div>
-            <div class="sesi-pip">5</div>
-            <div class="sesi-pip">6</div>
-            <div class="sesi-pip">7</div>
-            <div class="sesi-pip">8</div>
-            <div class="sesi-pip">9</div>
-            <div class="sesi-pip">10</div>
-            <div class="sesi-pip">11</div>
-            <div class="sesi-pip">12</div>
-            <div class="sesi-pip">13</div>
-            <div class="sesi-pip">14</div>
-            <div class="sesi-pip">15</div>
-            <div class="sesi-pip">16</div>
-          </div>
-          <p style="font-size:0.78rem;color:var(--brown);margin-top:0.8rem;font-family:var(--ff-body);">
-            3/16 sesi telah dilaporkan
-          </p>
-        </div>
-
-        <div class="sidebar-card" style="background:var(--navy);">
-          <h3 style="color:var(--gold);">⚠️ Perhatian</h3>
-          <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem;">
-            <li style="font-family:var(--ff-body);font-size:0.82rem;color:rgba(255,255,255,0.8);display:flex;gap:0.5rem;align-items:flex-start;">
-              <span style="color:var(--orange);flex-shrink:0;">!</span>
-              Presensi dikumpulkan paling lambat <strong style="color:var(--gold);">24 jam</strong> setelah sesi
-            </li>
-            <li style="font-family:var(--ff-body);font-size:0.82rem;color:rgba(255,255,255,0.8);display:flex;gap:0.5rem;align-items:flex-start;">
-              <span style="color:var(--orange);flex-shrink:0;">!</span>
-              Foto harus jelas dan relevan dengan kegiatan
-            </li>
-            <li style="font-family:var(--ff-body);font-size:0.82rem;color:rgba(255,255,255,0.8);display:flex;gap:0.5rem;align-items:flex-start;">
-              <span style="color:var(--orange);flex-shrink:0;">!</span>
-              Satu form = satu sesi (jangan double submit)
-            </li>
-          </ul>
-        </div>
-
-      </aside>
-    </div>
-  </div>
-</main>
-
-<!-- FOOTER -->
-<footer>
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <p class="footer-brand">KOMJAR 2026</p>
-        <p>Program Pengabdian Masyarakat<br>Komadiksi Smart — Universitas Sebelas Maret</p>
-      </div>
-      <div>
-        <h4>Navigasi</h4>
-        <ul>
-          <li><a href="index.html">Beranda</a></li>
-          <li><a href="daftar.html">Pendaftaran</a></li>
-          <li><a href="presensi.html">Presensi</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Bantuan</h4>
-        <ul>
-          <li><a href="index.html#contact">Hubungi CP</a></li>
-          <li><a href="index.html#ketentuan">Ketentuan Program</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 Komadiksi Smart UNS — KOMJAR 2026</span>
-    </div>
-  </div>
-</footer>
-
-<script src="js/main.js"></script>
+                // Menampilkan hasil ke halaman web
+                document.getElementById('file_info').innerHTML = 
+                    `File Berhasil Dipilih: <b>${fileName}</b><br><a href="${fileUrl}" target="_blank">Lihat Dokumentasi</a>`;
+                
+                // TIPS: Anda bisa menyimpan 'fileUrl' atau 'fileId' ke database absensi Anda nanti.
+            }
+        }
+    </script>
 </body>
 </html>
