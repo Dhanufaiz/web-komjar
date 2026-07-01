@@ -188,7 +188,8 @@
         </div>
     </section>
 
-    <script>
+<script>
+        // --- KONFIGURASI INTEGRASI STATIS & DEFAULT ---
         let appConfig = {
             sheetUrl: "https://docs.google.com/spreadsheets/d/1FO9gRFT0Ic7UzjTLxsDpOoC3J5CWBlJ7LeA7diYlWC0/edit?gid=0#gid=0",
             formUrl: "https://docs.google.com/forms/d/1o4iVyUagdj72QAl5sSt2FRVrSC_QmrE-wwoy2EEkPqg/formResponse",
@@ -196,19 +197,18 @@
             clientId: "142624619588-rqs1mo7e7encpjb30hjqqev16nd3dehu.apps.googleusercontent.com",
             appId: "142624619588", 
             
-            // 4. Ganti ID entry sesuai dengan komponen input Google Form Anda
+            // Perhatikan spasi di dalam stringnya:
             entries: { 
-                name: "entry.372796305", 
-                nim: "entry.932849858", 
-                date: "entry.1205199448", 
-                duration: "entry.463068910", 
-                desc: "entry.991344699", 
-                photos: "entry.1815951295" 
+                name: "entry.1688002225", 
+                nim: "entry.1395548892", 
+                date: "entry.21792332", 
+                duration: "entry.642258091", 
+                desc: "entry.1056957312",   
+                photos: "entry.19098027"   
             }
         };
 
         // Variabel internal Google API
-// Variabel internal Google API
         let tokenClient;
         let accessToken = null;
         let pickerInited = false;
@@ -217,17 +217,8 @@
         let loggedInUser = null;
 
         // Otomatis sinkronkan config ke input panel admin & muat spreadsheet saat halaman siap
-// Otomatis sinkronkan config ke input panel admin & muat spreadsheet saat halaman siap
         window.addEventListener('DOMContentLoaded', () => {
-            // Hapus atau beri komentar baris localStorage di bawah ini agar kode statis Anda diprioritaskan:
-            /*
-            const savedConfig = localStorage.getItem('komjar_config_nim_2026');
-            if (savedConfig) {
-                appConfig = JSON.parse(savedConfig);
-            }
-            */
-
-            // Masukkan nilai statis ke input elemen di Admin Panel agar sinkron
+            // Memastikan data statis di atas yang selalu dieksekusi utama di awal
             document.getElementById('cfg-sheet-url').value = appConfig.sheetUrl;
             document.getElementById('cfg-form-url').value = appConfig.formUrl;
             document.getElementById('cfg-entry-name').value = appConfig.entries.name;
@@ -252,7 +243,7 @@
                 tokenClient = google.accounts.oauth2.initTokenClient({
                     client_id: appConfig.clientId,
                     scope: 'https://www.googleapis.com/auth/drive.file',
-                    callback: '', // Didefinisikan dinamis saat tombol diklik
+                    callback: '', 
                 });
                 pickerInited = true;
             } catch (err) {
@@ -260,8 +251,7 @@
             }
         }
 
-function onPickerClick() {
-            // Jika belum siap, coba paksa inisialisasi ulang client token jika script-nya sebenarnya sudah termuat
+        function onPickerClick() {
             if (!pickerInited && typeof google !== 'undefined' && google.accounts) {
                 onGisLoad();
             }
@@ -283,19 +273,15 @@ function onPickerClick() {
                     accessToken = response.access_token;
                     createPicker();
                 };
-                // PERBAIKAN: Hapus {prompt: 'none'} agar jendela pilihan akun Gmail mau muncul untuk orang lain
                 tokenClient.requestAccessToken(); 
             } else {
                 createPicker();
             }
         }
         
-        // Fungsi utama yang memunculkan jendela Pop-up Google Drive resmi
         function createPicker() {
             const uploadView = new google.picker.DocsUploadView();
             const view = new google.picker.DocsView(google.picker.ViewId.DOCS);
-            
-            // Mengunci filter hanya untuk aset dokumentasi (Gambar & Video)
             view.setMimeTypes("image/*,video/*");
 
             const picker = new google.picker.PickerBuilder()
@@ -304,26 +290,22 @@ function onPickerClick() {
                 .setDeveloperKey(appConfig.developerKey)
                 .setAppId(appConfig.appId)
                 .setOAuthToken(accessToken)
-                .addView(uploadView) // Tab Utama: Upload File langsung
-                .addView(view)       // Tab Kedua: Pilih dari Drive yang sudah ada
+                .addView(uploadView)
+                .addView(view)
                 .setCallback(pickerCallback)
                 .build();
             picker.setVisible(true);
         }
 
-        // Fungsi pembaca ketika relawan selesai memilih/mengunggah file di pop-up
         function pickerCallback(data) {
             if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
                 const docs = data[google.picker.Response.DOCUMENTS];
-                
-                // Ambil URL publik dari file yang dipilih/diunggah
                 const urls = docs.map(doc => doc[google.picker.Document.URL]);
-                
-                // Masukkan gabungan url ke dalam input link-photos (dipisah koma jika memilih lebih dari 1 file)
                 document.getElementById('link-photos').value = urls.join(', ');
                 document.getElementById('picker-status').classList.remove('hidden');
             }
         }
+
         function loadSpreadsheetData() {
             let csvUrl = appConfig.sheetUrl;
             if (csvUrl.includes('/edit')) {
@@ -389,23 +371,14 @@ function onPickerClick() {
             document.getElementById('login-form').reset();
         });
 
-        document.getElementById('btn-picker-2').addEventListener('click', () => {
-            document.getElementById('sim-upload-2').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('sim-upload-2').classList.add('hidden');
-                document.getElementById('link-photos').value = `https://drive.google.com/drive/folders/KM_FILE_${Math.floor(1000+Math.random()*9000)}`;
-                document.getElementById('photo-preview-box').innerHTML = `<div class="bg-[#F4B942] h-12 text-[10px] p-1 font-bold neo-border flex items-center justify-center">IMG_LINK.TXT</div>`;
-                document.getElementById('photo-preview-box').classList.remove('hidden');
-            }, 800);
-        });
+        // PERBAIKAN: Fungsi pembersih kode bug 'btn-picker-2' yang tidak ada di HTML sudah dihapus dari sini
 
-document.getElementById('presence-form').addEventListener('submit', function(e) {
+        document.getElementById('presence-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-submit-presence');
             btn.innerHTML = "Mengirim Data... ⏳";
             btn.disabled = true;
 
-            // Menggunakan URLSearchParams agar format data persis seperti ketikan manual di browser
             const formBody = new URLSearchParams();
             formBody.append(appConfig.entries.name, loggedInUser.name);
             formBody.append(appConfig.entries.nim, loggedInUser.nim);
@@ -414,7 +387,6 @@ document.getElementById('presence-form').addEventListener('submit', function(e) 
             formBody.append(appConfig.entries.desc, document.getElementById('pres-desc').value);
             formBody.append(appConfig.entries.photos, document.getElementById('link-photos').value);
 
-            // Eksekusi pengiriman dengan header urlencoded
             fetch(appConfig.formUrl, { 
                 method: 'POST', 
                 mode: 'no-cors', 
@@ -428,13 +400,11 @@ document.getElementById('presence-form').addEventListener('submit', function(e) 
                 loggedInUser.history += 1;
                 document.getElementById('vol-history').innerText = `${loggedInUser.history} Sesi`;
                 
-                // Reset form input
                 document.getElementById('pres-date').value = '';
                 document.getElementById('pres-duration').value = '';
                 document.getElementById('pres-desc').value = '';
                 document.getElementById('link-photos').value = '';
                 
-                // Sembunyikan status berkas jika ada
                 if(document.getElementById('picker-status')) {
                     document.getElementById('picker-status').classList.add('hidden');
                 }
@@ -451,6 +421,7 @@ document.getElementById('presence-form').addEventListener('submit', function(e) 
         });
 
         function toggleAdminPanel() { document.getElementById('admin-panel').classList.toggle('hidden'); }
+        
         function showToast(title, message, type) {
             const toast = document.getElementById('toast');
             const icon = document.getElementById('toast-icon');
