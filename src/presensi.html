@@ -1,84 +1,478 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Test Google Picker Absensi</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Presensi Komadiksi Mengajar 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script async defer src="https://apis.google.com/js/api.js" onload="onGsapiLoad()"></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="onGisLoad()"></script>
+    <style>
+        body { background-color: #FFF4E6; color: #1F2A44; font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3, .y2k-font { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+        .neo-border { border: 4px solid #1F2A44; }
+        .neo-shadow { box-shadow: 8px 8px 0px 0px #1F2A44; }
+        .neo-btn { border: 4px solid #1F2A44; box-shadow: 6px 6px 0px 0px #1F2A44; transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .neo-btn:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0px 0px #1F2A44; }
+        .neo-btn:active { transform: translate(4px, 4px); box-shadow: 2px 2px 0px 0px #1F2A44; }
+    </style>
 </head>
-<body>
+<body class="min-h-screen p-4 md:p-8 flex flex-col justify-between">
 
-    <button id="auth_button" onclick="handleAuthClick()">Pilih / Upload Dokumentasi</button>
-    <p id="file_info"></p>
+    <!-- Header Badge -->
+    <header class="max-w-3xl mx-auto w-full mb-8">
+        <div class="bg-[#F4B942] neo-border neo-shadow p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-[#E88A1A] text-white p-3 neo-border text-2xl">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl tracking-tight text-[#1F2A44] uppercase">Komadiksi Mengajar 2026</h1>
+                    <p class="text-xs font-bold tracking-widest uppercase text-[#1F2A44]/80">Portal Presensi Berbasis NIM</p>
+                </div>
+            </div>
+            <a href="dashboard.html" class="bg-white px-3 py-1 neo-border text-xs font-bold uppercase tracking-wider text-center hover:bg-[#F4B942] transition-colors">
+                📊 BUKA DASHBOARD →
+            </a>
+        </div>
+    </header>
 
-    <script async defer src="https://apis.google.com/js/api.js" onload="onApiLoad()"></script>
-    <script async defer src="https://accounts.google.com/gsi/client" onload="onGsiLoad()"></script>
+    <!-- Main Content Area -->
+    <main class="max-w-3xl mx-auto w-full flex-grow space-y-8">
+        
+        <!-- Toast Notification -->
+        <div id="toast" class="hidden fixed top-4 right-4 z-50 max-w-sm bg-white neo-border neo-shadow p-4 flex items-start gap-3">
+            <div id="toast-icon" class="p-2 bg-[#F4B942] neo-border text-[#1F2A44]"></div>
+            <div>
+                <h4 id="toast-title" class="font-bold uppercase text-sm"></h4>
+                <p id="toast-message" class="text-xs mt-1"></p>
+            </div>
+        </div>
+
+        <!-- STAGE 1: NIM CHECK IN -->
+        <section id="section-login" class="bg-white neo-border neo-shadow p-6 md:p-8">
+            <div class="border-b-4 border-dashed border-[#1F2A44] pb-4 mb-6">
+                <span class="bg-[#E88A1A] text-white px-2 py-1 neo-border text-xs font-bold uppercase">Tahap 1</span>
+                <h2 class="text-2xl mt-2 text-[#1F2A44]">MASUKKAN NIM ANDA</h2>
+                <p class="text-sm text-gray-600 mt-1">Sistem akan memuat profil relawan dan mentor Anda secara otomatis.</p>
+            </div>
+
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold uppercase mb-2">Nomor Induk Mahasiswa (NIM)</label>
+                    <input type="text" id="login-nim" required placeholder="Masukkan NIM Anda (Contoh: L0125008)" 
+                        class="w-full p-3 neo-border bg-[#FFF4E6] focus:bg-white focus:outline-none font-bold text-lg text-[#1F2A44] placeholder-gray-400">
+                </div>
+                <button type="submit" class="w-full py-4 bg-[#F4B942] text-[#1F2A44] font-bold uppercase text-lg neo-btn">
+                    Verifikasi Relawan <i class="fa-solid fa-magnifying-glass ml-2"></i>
+                </button>
+            </form>
+
+            <div id="login-loading" class="hidden mt-4 text-center py-2 bg-[#FFF4E6] neo-border border-dashed font-bold animate-pulse text-xs">
+                ⏳ Menghubungkan ke Database Google Sheets...
+            </div>
+        </section>
+
+        <!-- STAGE 2: PRESENCE PORTAL & FORM -->
+        <section id="section-presence" class="hidden space-y-8">
+            
+            <!-- Welcome Profile Banner -->
+            <div class="bg-[#FFF4E6] neo-border neo-shadow p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full md:w-auto">
+                    <div>
+                        <span class="bg-emerald-400 px-2 py-1 neo-border text-xs font-bold uppercase">Relawan Terverifikasi</span>
+                        <h2 id="vol-name" class="text-2xl mt-2 text-[#1F2A44] uppercase">Nama Volunteer</h2>
+                        <p id="vol-nim-display" class="text-xs font-mono font-bold text-gray-600 mt-1"></p>
+                    </div>
+                    <div class="text-sm space-y-1 md:border-l-4 md:border-dashed md:border-[#1F2A44]/40 md:pl-4">
+                        <p class="font-semibold">Kelompok: <span id="vol-group" class="bg-white px-2 py-0.5 neo-border text-xs font-bold">Loading...</span></p>
+                        <p class="font-semibold">Mentor: <span id="vol-mentor" class="bg-white px-2 py-0.5 neo-border text-xs font-bold">Loading...</span></p>
+                    </div>
+                </div>
+                <div class="flex flex-row md:flex-col items-center md:items-end gap-2 w-full md:w-auto shrink-0">
+                    <div class="bg-[#E88A1A] text-white p-3 neo-border text-center flex-1 md:flex-initial w-full sm:w-36">
+                        <div class="text-[10px] uppercase font-bold">Total Mengajar</div>
+                        <div id="vol-history" class="text-xl font-black y2k-font">0 Sesi</div>
+                    </div>
+                    <button id="btn-logout" class="bg-white px-3 py-1 neo-border hover:bg-red-200 text-xs font-bold uppercase transition-colors">
+                        Ganti NIM <i class="fa-solid fa-arrow-right-to-bracket ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Presence Form -->
+            <form id="presence-form" class="bg-white neo-border neo-shadow p-6 md:p-8 space-y-6">
+                <div class="border-b-4 border-dashed border-[#1F2A44] pb-4">
+                    <span class="bg-[#E88A1A] text-white px-2 py-1 neo-border text-xs font-bold uppercase">Tahap 2</span>
+                    <h2 class="text-2xl mt-2 text-[#1F2A44]">PENGISIAN LOG AKTIVITAS</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-700 mb-1">Tanggal Mengajar</label>
+                        <input type="date" id="pres-date" required class="w-full p-3 bg-[#FFF4E6] neo-border font-bold text-[#1F2A44]">
+                    </div>
+                    <!-- SESUDAHNYA -->
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-700 mb-1">Lama Mengajar (Menit) minimal 90 menit</label>
+                    <input type="number" id="pres-duration" min="90" max="480" step="5" required placeholder="contoh: 90" class="w-full p-3 bg-[#FFF4E6] neo-border font-bold text-[#1F2A44]">
+                </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-700 mb-1">Keterangan Mengajar (Materi / Cerita Hari Ini)</label>
+                    <textarea id="pres-desc" rows="3" required placeholder="Ceritakan materi yang diajarkan atau kendala/keseruan mengajar hari ini..." class="w-full p-3 bg-[#FFF4E6] neo-border font-semibold text-sm text-[#1F2A44] focus:outline-none focus:bg-white"></textarea>
+                </div>
+
+                <!-- Dokumentasi Upload Link -->
+                <div class="p-4 bg-[#FFF4E6] neo-border">
+                    <h3 class="text-base mb-1 font-bold"><i class="fa-solid fa-cloud-arrow-up mr-2"></i> Dokumentasi Kegiatan (Kualitas Asli & Video)</h3>
+                    <p class="text-xs text-gray-600 mb-3">Klik tombol di bawah untuk memilih atau mengunggah foto/video langsung ke Google Drive melalui sistem aman Google.</p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-2 mb-2">
+                        <button type="button" id="btn-picker" onclick="onPickerClick()" class="px-4 py-2 bg-[#E88A1A] text-white neo-border font-bold uppercase text-xs transition-colors hover:bg-[#1F2A44] shrink-0">
+                            <i class="fa-solid fa-images mr-1"></i> Pilih / Unggah Berkas
+                        </button>
+                        <input type="url" id="link-photos" required placeholder="Tautan file otomatis terisi setelah upload..." class="w-full p-2 neo-border text-xs bg-gray-100 focus:outline-none font-semibold text-[#1F2A44]" readonly>
+                    </div>
+                    <div id="picker-status" class="hidden text-xs font-bold text-blue-600 mt-1">
+                        ✅ Berkas berhasil ditautkan!
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-submit-presence" class="w-full py-4 bg-[#1F2A44] text-white font-bold uppercase text-lg neo-btn flex items-center justify-center gap-2">
+                    KIRIM DATA PRESENSI <i class="fa-solid fa-paper-plane text-[#F4B942]"></i>
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer / Admin Access -->
+    <footer class="max-w-3xl mx-auto w-full mt-12 border-t-4 border-[#1F2A44] pt-4 flex justify-between items-center text-xs font-bold uppercase">
+        <div>© 2026 KOMADIKSI MENGAJAR.</div>
+        <button onclick="toggleAdminPanel()" class="bg-[#1F2A44] text-[#FFF4E6] p-2 neo-border hover:bg-[#E88A1A]" title="Pengaturan">
+            <i class="fa-solid fa-gears"></i>
+        </button>
+    </footer>
+
+    <!-- ADMIN DRAWER PANEL -->
+    <section id="admin-panel" class="hidden fixed inset-0 z-50 bg-[#1F2A44]/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-[#FFF4E6] neo-border neo-shadow w-full max-w-xl p-6 relative">
+            <button onclick="toggleAdminPanel()" class="absolute -top-4 -right-4 bg-red-400 p-2 neo-border text-xs font-bold">CLOSE [X]</button>
+            <h3 class="text-xl mb-4 text-[#1F2A44] uppercase">⚙️ Pengaturan Integrasi</h3>
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold mb-1">Spreadsheet URL (Tab PENDAFTARAN)</label>
+                    <input type="text" id="cfg-sheet-url" class="w-full p-2 neo-border bg-white" placeholder="Tempel URL spreadsheet di sini">
+                </div>
+                <div>
+                    <label class="block font-bold mb-1">Google Form Response URL</label>
+                    <input type="text" id="cfg-form-url" class="w-full p-2 neo-border bg-white" placeholder="https://docs.google.com/forms/d/e/.../formResponse">
+                </div>
+                <div class="grid grid-cols-2 gap-2 bg-white p-3 neo-border">
+                    <div class="col-span-2 font-bold text-[#E88A1A]">ID ENTRY GOOGLE FORM:</div>
+                    <div><label class="block">Entry Nama</label><input type="text" id="cfg-entry-name" class="w-full p-1 neo-border"></div>
+                    <div><label class="block">Entry NIM</label><input type="text" id="cfg-entry-nim" class="w-full p-1 neo-border"></div>
+                    <div><label class="block">Entry Tanggal</label><input type="text" id="cfg-entry-date" class="w-full p-1 neo-border"></div>
+                    <div><label class="block">Entry Durasi</label><input type="text" id="cfg-entry-duration" class="w-full p-1 neo-border"></div>
+                    <div class="col-span-2"><label class="block">Entry Keterangan/Materi</label><input type="text" id="cfg-entry-desc" class="w-full p-1 neo-border"></div>
+                    <div class="col-span-2"><label class="block">Entry Link Dokumentasi</label><input type="text" id="cfg-entry-photos" class="w-full p-1 neo-border"></div>
+                </div>
+            </div>
+            <button onclick="saveAdminConfig()" class="w-full mt-4 py-3 bg-[#F4B942] text-[#1F2A44] font-bold uppercase neo-btn">Simpan & Sync</button>
+        </div>
+    </section>
 
     <script>
-        // 1. MASUKKAN KREDENSIAL ANDA DI SINI
-        const DeveloperKey = 'AIzaSyAuv-eBywmdzW8BhX5aR596WF-s7-WKQlg';
-        const ClientId = '218024071495-41ea5tb0p004h3u6sp6hv2t9tmq3paad.apps.googleusercontent.com';
-        
-        // Scope yang dibutuhkan untuk melihat dan mengupload file ke Drive
-        const Scopes = 'https://www.googleapis.com/auth/drive.file';
+        let appConfig = {
+            sheetUrl: "https://docs.google.com/spreadsheets/d/1FO9gRFT0Ic7UzjTLxsDpOoC3J5CWBlJ7LeA7diYlWC0/edit?gid=0#gid=0",
+            formUrl: "https://docs.google.com/forms/d/1o4iVyUagdj72QAl5sSt2FRVrSC_QmrE-wwoy2EEkPqg/formResponse",
+            developerKey: "AIzaSyCMpYdOQtXyWIOaYSQVTUu3Pcx53CLYoQQ",
+            clientId: "142624619588-rqs1mo7e7encpjb30hjqqev16nd3dehu.apps.googleusercontent.com",
+            appId: "142624619588", 
+            
+            // 4. Ganti ID entry sesuai dengan komponen input Google Form Anda
+            entries: { 
+                name: "entry.372796305", 
+                nim: "entry.932849858", 
+                date: "entry.1205199448", 
+                duration: "entry.463068910", 
+                desc: "entry.991344699", 
+                photos: "entry.1815951295" 
+            }
+        };
 
+        // Variabel internal Google API
+// Variabel internal Google API
+        let tokenClient;
         let accessToken = null;
         let pickerInited = false;
         let gapiInited = false;
+        let volunteerDb = [];
+        let loggedInUser = null;
 
-        function onApiLoad() { gapi.load('picker', () => { gapiInited = true; }); }
-        function onGsiLoad() {
-            tokenClient = google.accounts.oauth2.initTokenClient({
-                client_id: ClientId,
-                scope: Scopes,
-                callback: '', // didefinisikan dinamis saat tombol diklik
-            });
-            pickerInited = true;
+        // Otomatis sinkronkan config ke input panel admin & muat spreadsheet saat halaman siap
+// Otomatis sinkronkan config ke input panel admin & muat spreadsheet saat halaman siap
+        window.addEventListener('DOMContentLoaded', () => {
+            // Hapus atau beri komentar baris localStorage di bawah ini agar kode statis Anda diprioritaskan:
+            /*
+            const savedConfig = localStorage.getItem('komjar_config_nim_2026');
+            if (savedConfig) {
+                appConfig = JSON.parse(savedConfig);
+            }
+            */
+
+            // Masukkan nilai statis ke input elemen di Admin Panel agar sinkron
+            document.getElementById('cfg-sheet-url').value = appConfig.sheetUrl;
+            document.getElementById('cfg-form-url').value = appConfig.formUrl;
+            document.getElementById('cfg-entry-name').value = appConfig.entries.name;
+            document.getElementById('cfg-entry-nim').value = appConfig.entries.nim;
+            document.getElementById('cfg-entry-date').value = appConfig.entries.date;
+            document.getElementById('cfg-entry-duration').value = appConfig.entries.duration;
+            document.getElementById('cfg-entry-desc').value = appConfig.entries.desc;
+            document.getElementById('cfg-entry-photos').value = appConfig.entries.photos;
+            
+            loadSpreadsheetData();
+        });
+
+        // Fungsi Callback dari Script Tag Google Cloud
+        function onGsapiLoad() { 
+            gapi.load('client:picker', () => {
+                gapiInited = true;
+            }); 
+        }
+        
+        function onGisLoad() {
+            try {
+                tokenClient = google.accounts.oauth2.initTokenClient({
+                    client_id: appConfig.clientId,
+                    scope: 'https://www.googleapis.com/auth/drive.file',
+                    callback: '', // Didefinisikan dinamis saat tombol diklik
+                });
+                pickerInited = true;
+            } catch (err) {
+                console.error("Gagal menginisialisasi Google Identity Services:", err);
+            }
         }
 
-        function handleAuthClick() {
-            tokenClient.callback = async (response) => {
-                if (response.error !== undefined) { throw response; }
-                accessToken = response.access_token;
-                createPicker();
-            };
+        function onPickerClick() {
+            // Jika belum siap, coba paksa inisialisasi ulang client token jika script-nya sebenarnya sudah termuat
+            if (!pickerInited && typeof google !== 'undefined' && google.accounts) {
+                onGisLoad();
+            }
+            if (!gapiInited && typeof gapi !== 'undefined') {
+                onGsapiLoad();
+            }
 
+            if (!gapiInited || !pickerInited) {
+                showToast("Sistem Belum Siap", "Google API sedang memuat, silakan klik tombol sekali lagi dalam 2 detik.", "warning");
+                return;
+            }
+            
             if (accessToken === null) {
-                // Minta pengguna login ke Google terlebih dahulu
-                tokenClient.requestAccessToken({prompt: 'consent'});
+                tokenClient.callback = async (response) => {
+                    if (response.error !== undefined) {
+                        showToast("Autentikasi Gagal", "Gagal mendapatkan izin akses Google Drive.", "warning");
+                        throw (response);
+                    }
+                    accessToken = response.access_token;
+                    createPicker();
+                };
+                tokenClient.requestAccessToken({prompt: 'none'}); // Mengurangi pop-up persetujuan berulang jika sudah login
             } else {
                 createPicker();
             }
         }
 
-        // 2. FUNGSI UNTUK MEMBUAT JENDELA POP-UP PICKER
+        // Fungsi utama yang memunculkan jendela Pop-up Google Drive resmi
         function createPicker() {
-            if (pickerInited && gapiInited) {
-                const view = new google.picker.View(google.picker.ViewId.DOCS);
-                
-                const picker = new google.picker.PickerBuilder()
-                    .addView(view)
-                    .addView(new google.picker.DocsUploadView()) // Menambahkan tab UPLOAD di jendela
-                    .setOAuthToken(accessToken)
-                    .setDeveloperKey(DeveloperKey)
-                    .setCallback(pickerCallback)
-                    .build();
-                
-                picker.setVisible(true);
-            }
+            const uploadView = new google.picker.DocsUploadView();
+            const view = new google.picker.DocsView(google.picker.ViewId.DOCS);
+            
+            // Mengunci filter hanya untuk aset dokumentasi (Gambar & Video)
+            view.setMimeTypes("image/*,video/*");
+
+            const picker = new google.picker.PickerBuilder()
+                .enableFeature(google.picker.Feature.NAV_HIDDEN)
+                .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+                .setDeveloperKey(appConfig.developerKey)
+                .setAppId(appConfig.appId)
+                .setOAuthToken(accessToken)
+                .addView(uploadView) // Tab Utama: Upload File langsung
+                .addView(view)       // Tab Kedua: Pilih dari Drive yang sudah ada
+                .setCallback(pickerCallback)
+                .build();
+            picker.setVisible(true);
         }
 
-        // 3. FUNGSI SETELAH PENGGUNA SELESAI MEMILIH/MENGUPLOAD FILE
+        // Fungsi pembaca ketika relawan selesai memilih/mengunggah file di pop-up
         function pickerCallback(data) {
             if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
-                const doc = data[google.picker.Response.DOCUMENTS][0];
-                const fileId = doc[google.picker.Document.ID];
-                const fileUrl = doc[google.picker.Document.URL];
-                const fileName = doc[google.picker.Document.NAME];
-
-                // Menampilkan hasil ke halaman web
-                document.getElementById('file_info').innerHTML = 
-                    `File Berhasil Dipilih: <b>${fileName}</b><br><a href="${fileUrl}" target="_blank">Lihat Dokumentasi</a>`;
+                const docs = data[google.picker.Response.DOCUMENTS];
                 
-                // TIPS: Anda bisa menyimpan 'fileUrl' atau 'fileId' ke database absensi Anda nanti.
+                // Ambil URL publik dari file yang dipilih/diunggah
+                const urls = docs.map(doc => doc[google.picker.Document.URL]);
+                
+                // Masukkan gabungan url ke dalam input link-photos (dipisah koma jika memilih lebih dari 1 file)
+                document.getElementById('link-photos').value = urls.join(', ');
+                document.getElementById('picker-status').classList.remove('hidden');
             }
+        }
+        function loadSpreadsheetData() {
+            let csvUrl = appConfig.sheetUrl;
+            if (csvUrl.includes('/edit')) {
+                csvUrl = csvUrl.split('/edit')[0] + '/gviz/tq?tqx=out:csv&sheet=PENDAFTARAN';
+            }
+
+            Papa.parse(csvUrl, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    if (results.data && results.data.length > 0) {
+                        volunteerDb = results.data.map(row => {
+                            return {
+                                nim: (row["NIM"] || row["nim"] || "").trim(),
+                                name: row["Nama Lengkap"] || row["nama"] || "Tanpa Nama",
+                                group: row["Nama Kelompok"] || row["kelompok"] || "Umum",
+                                mentor: row["Nama Mentor"] || row["mentor"] || "Belum Ada",
+                                history: parseInt(row["Riwayat Mengajar"] || row["riwayat"] || "0")
+                            };
+                        }).filter(user => user.nim !== "");
+                        showToast("Koneksi Berhasil", "Database pendaftar siap digunakan!", "success");
+                    }
+                },
+                error: function() {
+                    showToast("Koneksi Gagal", "Periksa pengaturan berbagi Google Sheets Anda.", "warning");
+                }
+            });
+        }
+
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nimInput = document.getElementById('login-nim').value.trim();
+            const loader = document.getElementById('login-loading');
+            loader.classList.remove('hidden');
+
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                const foundUser = volunteerDb.find(v => v.nim.toLowerCase() === nimInput.toLowerCase());
+
+                if (foundUser) {
+                    loggedInUser = foundUser;
+                    document.getElementById('section-login').classList.add('hidden');
+                    document.getElementById('section-presence').classList.remove('hidden');
+
+                    document.getElementById('vol-name').innerText = foundUser.name;
+                    document.getElementById('vol-group').innerText = foundUser.group;
+                    document.getElementById('vol-mentor').innerText = foundUser.mentor;
+                    document.getElementById('vol-nim-display').innerText = `NIM: ${foundUser.nim}`;
+                    document.getElementById('vol-history').innerText = `${foundUser.history} Sesi`;
+
+                    showToast("Verifikasi Sukses", `Selamat Datang, ${foundUser.name}`, "success");
+                } else {
+                    showToast("NIM Tidak Ada", "NIM tidak terdaftar di tab PENDAFTARAN.", "warning");
+                }
+            }, 500);
+        });
+
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            loggedInUser = null;
+            document.getElementById('section-presence').classList.add('hidden');
+            document.getElementById('section-login').classList.remove('hidden');
+            document.getElementById('login-form').reset();
+        });
+
+        document.getElementById('btn-picker-2').addEventListener('click', () => {
+            document.getElementById('sim-upload-2').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('sim-upload-2').classList.add('hidden');
+                document.getElementById('link-photos').value = `https://drive.google.com/drive/folders/KM_FILE_${Math.floor(1000+Math.random()*9000)}`;
+                document.getElementById('photo-preview-box').innerHTML = `<div class="bg-[#F4B942] h-12 text-[10px] p-1 font-bold neo-border flex items-center justify-center">IMG_LINK.TXT</div>`;
+                document.getElementById('photo-preview-box').classList.remove('hidden');
+            }, 800);
+        });
+
+document.getElementById('presence-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit-presence');
+            btn.innerHTML = "Mengirim Data... ⏳";
+            btn.disabled = true;
+
+            // Menggunakan URLSearchParams agar format data persis seperti ketikan manual di browser
+            const formBody = new URLSearchParams();
+            formBody.append(appConfig.entries.name, loggedInUser.name);
+            formBody.append(appConfig.entries.nim, loggedInUser.nim);
+            formBody.append(appConfig.entries.date, document.getElementById('pres-date').value);
+            formBody.append(appConfig.entries.duration, document.getElementById('pres-duration').value);
+            formBody.append(appConfig.entries.desc, document.getElementById('pres-desc').value);
+            formBody.append(appConfig.entries.photos, document.getElementById('link-photos').value);
+
+            // Eksekusi pengiriman dengan header urlencoded
+            fetch(appConfig.formUrl, { 
+                method: 'POST', 
+                mode: 'no-cors', 
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formBody.toString() 
+            })
+            .then(() => {
+                showToast("Berhasil", "Presensi Anda sudah tersimpan di Rekap Spreadsheet!", "success");
+                loggedInUser.history += 1;
+                document.getElementById('vol-history').innerText = `${loggedInUser.history} Sesi`;
+                
+                // Reset form input
+                document.getElementById('pres-date').value = '';
+                document.getElementById('pres-duration').value = '';
+                document.getElementById('pres-desc').value = '';
+                document.getElementById('link-photos').value = '';
+                
+                // Sembunyikan status berkas jika ada
+                if(document.getElementById('picker-status')) {
+                    document.getElementById('picker-status').classList.add('hidden');
+                }
+                
+                btn.innerHTML = `KIRIM DATA PRESENSI <i class="fa-solid fa-paper-plane text-[#F4B942]"></i>`;
+                btn.disabled = false;
+            })
+            .catch((error) => {
+                console.error("Error saat mengirim:", error);
+                showToast("Error", "Gagal mengirim data.", "warning");
+                btn.innerHTML = `KIRIM DATA PRESENSI <i class="fa-solid fa-paper-plane text-[#F4B942]"></i>`;
+                btn.disabled = false;
+            });
+        });
+
+        function toggleAdminPanel() { document.getElementById('admin-panel').classList.toggle('hidden'); }
+        function showToast(title, message, type) {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toast-icon');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-message').innerText = message;
+            icon.className = type === 'success' ? "p-2 bg-emerald-400 neo-border" : "p-2 bg-[#E88A1A] neo-border text-white";
+            icon.innerHTML = type === 'success' ? `<i class="fa-solid fa-check"></i>` : `<i class="fa-solid fa-exclamation"></i>`;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 4000);
+        }
+
+        function saveAdminConfig() {
+            appConfig.sheetUrl = document.getElementById('cfg-sheet-url').value.trim();
+            appConfig.formUrl = document.getElementById('cfg-form-url').value.trim();
+            appConfig.entries.name = document.getElementById('cfg-entry-name').value.trim();
+            appConfig.entries.nim = document.getElementById('cfg-entry-nim').value.trim();
+            appConfig.entries.date = document.getElementById('cfg-entry-date').value.trim();
+            appConfig.entries.duration = document.getElementById('cfg-entry-duration').value.trim();
+            appConfig.entries.desc = document.getElementById('cfg-entry-desc').value.trim();
+            appConfig.entries.photos = document.getElementById('cfg-entry-photos').value.trim();
+            localStorage.setItem('komjar_config_nim_2026', JSON.stringify(appConfig));
+            toggleAdminPanel();
+            loadSpreadsheetData();
         }
     </script>
 </body>
