@@ -260,7 +260,7 @@
             }
         }
 
-        function onPickerClick() {
+function onPickerClick() {
             // Jika belum siap, coba paksa inisialisasi ulang client token jika script-nya sebenarnya sudah termuat
             if (!pickerInited && typeof google !== 'undefined' && google.accounts) {
                 onGisLoad();
@@ -283,12 +283,13 @@
                     accessToken = response.access_token;
                     createPicker();
                 };
-                tokenClient.requestAccessToken({prompt: 'none'}); // Mengurangi pop-up persetujuan berulang jika sudah login
+                // PERBAIKAN: Hapus {prompt: 'none'} agar jendela pilihan akun Gmail mau muncul untuk orang lain
+                tokenClient.requestAccessToken(); 
             } else {
                 createPicker();
             }
         }
-
+        
         // Fungsi utama yang memunculkan jendela Pop-up Google Drive resmi
         function createPicker() {
             const uploadView = new google.picker.DocsUploadView();
