@@ -258,6 +258,7 @@
         }
 
 function onPickerClick() {
+            // Memastikan script Google sudah siap
             if (!pickerInited && typeof google !== 'undefined' && google.accounts) { onGisLoad(); }
             if (!gapiInited && typeof gapi !== 'undefined') { onGsapiLoad(); }
 
@@ -266,26 +267,38 @@ function onPickerClick() {
                 return;
             }
             
-            if (accessToken === null) {
+            // PANDUAN HP: Jika token macet atau hang, kita paksa reset nilainya ke null
+            if (accessToken) {
+                // Periksa apakah token masih valid, jika ragu atau macet di beberapa HP, kita ijinkan request ulang
+                // dengan menghapus baris ini jika ingin selalu minta akun baru atau biarkan jika ingin langsung createPicker
+            }
+            
+            try {
                 tokenClient.callback = async (response) => {
                     if (response.error !== undefined) {
                         console.error("OAuth Error:", response);
-                        showToast("Autentikasi Gagal", "Gagal mendapatkan izin akses. Pastikan pop-up diizinkan.", "warning");
+                        // Jika error di HP karena pop-up blocker atau akun, reset token agar bisa di-klik ulang
+                        accessToken = null;
+                        showToast("Autentikasi Gagal", "Gagal akses Google Drive. Pastikan fitur Pop-up di HP Anda diizinkan!", "warning");
                         throw (response);
                     }
                     accessToken = response.access_token;
                     createPicker();
                 };
                 
-                // PERBAIKAN UNTUK HP: Memaksa mode dialog popup interaktif
+                // PERBAIKAN UTAMA UNTUK HP: Memaksa Google memicu dialog penuh, 
+                // ini akan melewati filter proteksi pop-up agresif pada Chrome Mobile/Safari
                 tokenClient.requestAccessToken({
-                    prompt: 'select_account' // Memaksa HP memunculkan pilihan akun secara tegas
+                    prompt: 'select_account'
                 }); 
-            } else {
-                createPicker();
+                
+            } catch (err) {
+                console.error("Kesalahan fatal OAuth Mobile:", err);
+                accessToken = null;
+                showToast("Error", "Gagal memicu Google Auth. Gunakan Google Chrome resmi!", "warning");
             }
         }
-                
+                        
         function createPicker() {
             const uploadView = new google.picker.DocsUploadView();
             const view = new google.picker.DocsView(google.picker.ViewId.DOCS);
