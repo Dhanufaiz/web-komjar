@@ -197,14 +197,13 @@
             clientId: "142624619588-rqs1mo7e7encpjb30hjqqev16nd3dehu.apps.googleusercontent.com",
             appId: "142624619588", 
             
-            // Perhatikan spasi di dalam stringnya:
             entries: { 
-                name: "entry.1688002225", 
-                nim: "entry.1395548892", 
-                date: "entry.21792332", 
-                duration: "entry.642258091", 
-                desc: "entry.1056957312",   
-                photos: "entry.19098027"   
+                name: "entry.372796305", 
+                nim: "entry.932849858", 
+                date: "entry.1205199448", 
+                duration: "entry.463068910", 
+                desc: "entry.1815951295",   
+                photos: "entry.991344699"   
             }
         };
 
@@ -216,9 +215,18 @@
         let volunteerDb = [];
         let loggedInUser = null;
 
-        // Otomatis sinkronkan config ke input panel admin & muat spreadsheet saat halaman siap
+        // PERBAIKAN HP: Sinkronisasi super ketat agar tidak ter-reset saat reload halaman
         window.addEventListener('DOMContentLoaded', () => {
-            // Memastikan data statis di atas yang selalu dieksekusi utama di awal
+            // Ambil dari localStorage terlebih dahulu jika pernah disave lewat Admin Panel
+            const savedConfig = localStorage.getItem('komjar_config_nim_2026');
+            if (savedConfig) {
+                appConfig = JSON.parse(savedConfig);
+            } else {
+                // Jika belum ada di localStorage, kunci konfigurasi statis baru di atas ke memori browser
+                localStorage.setItem('komjar_config_nim_2026', JSON.stringify(appConfig));
+            }
+
+            // Tulis nilai aktif ke elemen input Admin Panel
             document.getElementById('cfg-sheet-url').value = appConfig.sheetUrl;
             document.getElementById('cfg-form-url').value = appConfig.formUrl;
             document.getElementById('cfg-entry-name').value = appConfig.entries.name;
@@ -233,9 +241,7 @@
 
         // Fungsi Callback dari Script Tag Google Cloud
         function onGsapiLoad() { 
-            gapi.load('client:picker', () => {
-                gapiInited = true;
-            }); 
+            gapi.load('client:picker', () => { gapiInited = true; }); 
         }
         
         function onGisLoad() {
@@ -252,15 +258,11 @@
         }
 
         function onPickerClick() {
-            if (!pickerInited && typeof google !== 'undefined' && google.accounts) {
-                onGisLoad();
-            }
-            if (!gapiInited && typeof gapi !== 'undefined') {
-                onGsapiLoad();
-            }
+            if (!pickerInited && typeof google !== 'undefined' && google.accounts) { onGisLoad(); }
+            if (!gapiInited && typeof gapi !== 'undefined') { onGsapiLoad(); }
 
             if (!gapiInited || !pickerInited) {
-                showToast("Sistem Belum Siap", "Google API sedang memuat, silakan klik tombol sekali lagi dalam 2 detik.", "warning");
+                showToast("Sistem Belum Siap", "Membuka Google Auth, silakan klik tombol sekali lagi...", "warning");
                 return;
             }
             
@@ -371,8 +373,6 @@
             document.getElementById('login-form').reset();
         });
 
-        // PERBAIKAN: Fungsi pembersih kode bug 'btn-picker-2' yang tidak ada di HTML sudah dihapus dari sini
-
         document.getElementById('presence-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-submit-presence');
@@ -390,9 +390,7 @@
             fetch(appConfig.formUrl, { 
                 method: 'POST', 
                 mode: 'no-cors', 
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formBody.toString() 
             })
             .then(() => {
@@ -404,10 +402,7 @@
                 document.getElementById('pres-duration').value = '';
                 document.getElementById('pres-desc').value = '';
                 document.getElementById('link-photos').value = '';
-                
-                if(document.getElementById('picker-status')) {
-                    document.getElementById('picker-status').classList.add('hidden');
-                }
+                if(document.getElementById('picker-status')) { document.getElementById('picker-status').classList.add('hidden'); }
                 
                 btn.innerHTML = `KIRIM DATA PRESENSI <i class="fa-solid fa-paper-plane text-[#F4B942]"></i>`;
                 btn.disabled = false;
