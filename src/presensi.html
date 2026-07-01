@@ -257,7 +257,7 @@
             }
         }
 
-        function onPickerClick() {
+function onPickerClick() {
             if (!pickerInited && typeof google !== 'undefined' && google.accounts) { onGisLoad(); }
             if (!gapiInited && typeof gapi !== 'undefined') { onGsapiLoad(); }
 
@@ -269,18 +269,23 @@
             if (accessToken === null) {
                 tokenClient.callback = async (response) => {
                     if (response.error !== undefined) {
-                        showToast("Autentikasi Gagal", "Gagal mendapatkan izin akses Google Drive.", "warning");
+                        console.error("OAuth Error:", response);
+                        showToast("Autentikasi Gagal", "Gagal mendapatkan izin akses. Pastikan pop-up diizinkan.", "warning");
                         throw (response);
                     }
                     accessToken = response.access_token;
                     createPicker();
                 };
-                tokenClient.requestAccessToken(); 
+                
+                // PERBAIKAN UNTUK HP: Memaksa mode dialog popup interaktif
+                tokenClient.requestAccessToken({
+                    prompt: 'select_account' // Memaksa HP memunculkan pilihan akun secara tegas
+                }); 
             } else {
                 createPicker();
             }
         }
-        
+                
         function createPicker() {
             const uploadView = new google.picker.DocsUploadView();
             const view = new google.picker.DocsView(google.picker.ViewId.DOCS);
