@@ -156,12 +156,7 @@
             const tbody = document.getElementById('dash-table-body');
             tbody.innerHTML = sortedDb.map(v => `
                 <tr class="hover:bg-white transition-colors">
-                    <td class="p-2 font-bold text-[#1F2A44] border-r border-[#1F2A44]/20">
-                        <a href="detail.html?nim=${encodeURIComponent(v.nim)}" class="hover:underline hover:text-emerald-600 transition-colors inline-flex items-center gap-1">
-                            ${v.name} <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-50"></i>
-                        </a>
-                        <br><span class="font-mono text-[10px] text-gray-500 font-normal">${v.nim}</span>
-                    </td>
+                    <td class="p-2 font-bold text-[#1F2A44] border-r border-[#1F2A44]/20">${v.name} <br><span class="font-mono text-[10px] text-gray-500 font-normal">${v.nim}</span></td>
                     <td class="p-2 border-r border-[#1F2A44]/20">${v.group}</td>
                     <td class="p-2 border-r border-[#1F2A44]/20 text-gray-600 font-medium">${v.mentor}</td>
                     <td class="p-2 text-center font-black bg-[#F4B942]/10">${v.history} Sesi</td>
