@@ -31,6 +31,9 @@
                     <p class="text-xs font-bold tracking-widest uppercase text-[#1F2A44]/80">Data Rekapitulasi Real-Time Komadiksi 2026</p>
                 </div>
             </div>
+            <a href="presensi.html" class="bg-white px-3 py-1 neo-border text-xs font-bold uppercase tracking-wider text-center hover:bg-emerald-300 transition-colors">
+                ✍️ FORM PRESENSI ←
+            </a>
         </div>
     </header>
 
@@ -123,39 +126,59 @@
             });
         }
 
+        // Fungsi pembantu untuk mencari nama kolom tanpa sensitif huruf besar/kecil
+        function pickField(row, keywords) {
+            const keys = Object.keys(row);
+            for (const k of keys) {
+                const kl = k.toLowerCase();
+                if (keywords.some(w => kl.includes(w))) {
+                    const v = row[k];
+                    if (v !== undefined && v !== null && String(v).trim() !== "") return String(v).trim();
+                }
+            }
+            return "";
+        }
+
         function processData(pendaftaran, presensi) {
             if (pendaftaran.length === 0 && presensi.length === 0) {
                 document.getElementById('dash-table-body').innerHTML = `<tr><td colspan="4" class="p-4 text-center font-bold text-red-500">Gagal memuat data dari Spreadsheet.</td></tr>`;
                 return;
             }
 
-            // Simulasi COUNTIF: Hitung kemunculan NIM di sheet PRESENSI
+            // Hitung total kemunculan tiap NIM di sheet PRESENSI & hitung total menit riil
             const presensiCountMap = {};
+            const presensiMinutesMap = {};
+
             presensi.forEach(row => {
-                let nim = (row["NIM"] || row["nim"] || "").trim();
+                let nim = pickField(row, ['nim']).trim();
+                let menit = parseInt(pickField(row, ['lama mengajar', 'menit', 'durasi'])) || 0;
+                
                 if (nim) {
                     presensiCountMap[nim] = (presensiCountMap[nim] || 0) + 1;
+                    presensiMinutesMap[nim] = (presensiMinutesMap[nim] || 0) + menit;
                 }
             });
 
             const db = pendaftaran.map(row => {
                 let nim = (row["NIM"] || row["nim"] || "").trim();
-                // Menggunakan hitungan presensi (COUNTIF) atau fallback ke isi kolom 'banyak mengajar'
-                let countifSessions = presensiCountMap[nim] !== undefined ? presensiCountMap[nim] : parseInt(row["Banyak Mengajar"] || row["banyak mengajar"] || "0");
+                let countifSessions = presensiCountMap[nim] !== undefined ? presensiCountMap[nim] : 0;
                 
+                // PERBAIKAN: Memetakan ke string kolom kelompok yang benar secara fleksibel
+                let namaKelompok = row["Nama Kelompok"] || row["nama kelompok"] || row["Kelompok"] || row["kelompok"] || "Individu";
+
                 return {
                     nim: nim,
                     name: row["Nama Lengkap"] || row["nama"] || "Tanpa Nama",
-                    group: row["Banyak Mengajar"] || row["kelompok"] || "Kelompok Umum",
+                    group: namaKelompok, // <-- Menggunakan variabel namaKelompok yang sudah diperbaiki
                     mentor: row["Nama Mentor"] || row["mentor"] || "Belum Ada",
                     history: countifSessions,
-                    minutes: countifSessions * 90 // Minimal 90 menit per sesi
+                    minutes: countifSessions * 90 
                 };
             }).filter(user => user.nim !== "");
 
+
             renderDashboard(db);
         }
-
         function renderDashboard(db) {
             let totalSessions = 0;
             let totalMinutes = 0;
