@@ -16,15 +16,11 @@
         h1, h2, h3, .y2k-font { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
         .neo-border { border: 4px solid #1F2A44; }
         .neo-shadow { box-shadow: 8px 8px 0px 0px #1F2A44; }
-        .neo-shadow-sm { box-shadow: 4px 4px 0px 0px #1F2A44; }
         .timeline-line { background-image: repeating-linear-gradient(to bottom, #1F2A44 0, #1F2A44 6px, transparent 6px, transparent 12px); width: 3px; }
-        .clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        .clamp-none { -webkit-line-clamp: unset; }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8 flex flex-col justify-between">
 
-    <!-- Header Badge -->
     <header class="max-w-4xl mx-auto w-full mb-8">
         <div class="bg-[#F4B942] neo-border neo-shadow p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3">
@@ -42,26 +38,19 @@
         </div>
     </header>
 
-    <!-- Main Content Area -->
     <main class="max-w-4xl mx-auto w-full flex-grow">
-
-        <!-- Loading State -->
         <div id="loading-state" class="bg-white neo-border neo-shadow p-8 text-center">
             <div class="text-4xl mb-3"><i class="fa-solid fa-spinner fa-spin"></i></div>
             <p class="font-bold uppercase text-sm text-gray-500">Menghubungkan ke Spreadsheet...</p>
         </div>
 
-        <!-- Error / Not Found State -->
         <div id="error-state" class="hidden bg-white neo-border neo-shadow p-8 text-center">
             <div class="text-4xl mb-3 text-red-500"><i class="fa-solid fa-triangle-exclamation"></i></div>
             <p id="error-message" class="font-bold uppercase text-sm text-red-500">Data tidak ditemukan.</p>
             <a href="dashboard.html" class="inline-block mt-4 bg-[#F4B942] px-4 py-2 neo-border text-xs font-bold uppercase hover:bg-emerald-300 transition-colors">← Kembali</a>
         </div>
 
-        <!-- Content -->
         <div id="content-area" class="hidden">
-
-            <!-- Profile Card -->
             <section class="bg-white neo-border neo-shadow p-6 md:p-8 mb-6">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6">
                     <div class="bg-purple-200 text-[#1F2A44] p-4 neo-border text-3xl shrink-0">
@@ -69,49 +58,43 @@
                     </div>
                     <div class="flex-grow">
                         <h2 id="prof-name" class="text-xl md:text-2xl uppercase leading-tight">-</h2>
-                        <p id="prof-nim" class="font-mono text-xs text-gray-500 font-bold mt-1">NIM: -</p>
+                        <div class="mt-1">
+                            <p id="prof-nim" class="font-mono text-xs text-gray-500 font-bold">NIM: -</p>
+                            <p id="prof-prodi-sub" class="text-xs text-[#1F2A44] font-semibold mt-0.5 uppercase"><i class="fa-solid fa-graduation-cap mr-1 text-[10px]"></i> Prodi: -</p>
+                            <p id="prof-school-sub" class="text-xs text-emerald-600 font-bold mt-0.5 uppercase"><i class="fa-solid fa-school mr-1 text-[10px]"></i> Mengajar di: -</p>
+                        </div>
                         <div class="flex flex-wrap gap-2 mt-3">
                             <span id="prof-group" class="bg-[#FFF4E6] neo-border px-2 py-1 text-[10px] font-bold uppercase"><i class="fa-solid fa-people-group mr-1"></i> - </span>
                             <span id="prof-mentor" class="bg-[#FFF4E6] neo-border px-2 py-1 text-[10px] font-bold uppercase"><i class="fa-solid fa-user-tie mr-1"></i> -</span>
-                            <span id="prof-prodi" class="bg-[#FFF4E6] neo-border px-2 py-1 text-[10px] font-bold uppercase hidden"><i class="fa-solid fa-graduation-cap mr-1"></i> -</span>
-                            <span id="prof-angkatan" class="bg-[#FFF4E6] neo-border px-2 py-1 text-[10px] font-bold uppercase hidden"><i class="fa-solid fa-calendar mr-1"></i> -</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Stats Grid -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-[#F4B942]/20 p-4 neo-border">
-                        <div class="text-[10px] font-bold text-gray-500 uppercase">Total Sesi</div>
-                        <div id="stat-sessions" class="text-2xl font-black y2k-font mt-1">0</div>
+                        <div class="text-[10px] font-bold text-gray-500 uppercase">Banyak Mengajar</div>
+                        <div id="stat-sessions" class="text-2xl font-black y2k-font mt-1">0 Kali</div>
                     </div>
                     <div class="bg-emerald-100 p-4 neo-border">
-                        <div class="text-[10px] font-bold text-gray-500 uppercase">Jam Mengajar</div>
-                        <div id="stat-hours" class="text-2xl font-black y2k-font mt-1">0 Jam</div>
-                    </div>
-                    <div class="bg-purple-100 p-4 neo-border">
-                        <div class="text-[10px] font-bold text-gray-500 uppercase">Sekolah Dikunjungi</div>
-                        <div id="stat-schools" class="text-2xl font-black y2k-font mt-1">0</div>
+                        <div class="text-[10px] font-bold text-gray-500 uppercase">Total Durasi Mengajar</div>
+                        <div id="stat-minutes" class="text-2xl font-black y2k-font mt-1">0 Menit</div>
                     </div>
                     <div class="bg-[#FFF4E6] p-4 neo-border">
-                        <div class="text-[10px] font-bold text-gray-500 uppercase">Mengajar Terakhir</div>
+                        <div class="text-[10px] font-bold text-gray-500 uppercase">Presensi Terakhir</div>
                         <div id="stat-last" class="text-sm font-black y2k-font mt-1">-</div>
                     </div>
                 </div>
             </section>
 
-            <!-- Timeline -->
             <section class="bg-white neo-border neo-shadow p-6 md:p-8">
-                <h3 class="text-sm font-bold uppercase mb-1"><i class="fa-solid fa-timeline mr-2"></i> Riwayat Mengajar</h3>
-                <p class="text-[11px] text-gray-500 font-medium mb-5">Tercatat berdasarkan presensi, diurutkan dari yang paling baru.</p>
+                <h3 class="text-sm font-bold uppercase mb-1"><i class="fa-solid fa-timeline mr-2"></i> Riwayat Pembelajaran (G-Form)</h3>
+                <p class="text-[11px] text-gray-500 font-medium mb-5">Daftar aktivitas mengajar riil yang disinkronisasikan dari form presensi.</p>
                 <div id="timeline-container" class="relative pl-2"></div>
-                <div id="timeline-empty" class="hidden text-center p-6 font-bold text-gray-400 text-sm uppercase">Belum ada riwayat presensi tercatat.</div>
+                <div id="timeline-empty" class="hidden text-center p-6 font-bold text-gray-400 text-sm uppercase">Belum ada riwayat aktivitas.</div>
             </section>
-
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="max-w-4xl mx-auto w-full mt-12 border-t-4 border-[#1F2A44] pt-4 text-xs font-bold uppercase text-gray-500">
         <div>© 2026 KOMADIKSI MENGAJAR. MONITORING SYSTEM.</div>
     </footer>
@@ -121,7 +104,6 @@
             sheetUrl: "https://docs.google.com/spreadsheets/d/1FO9gRFT0Ic7UzjTLxsDpOoC3J5CWBlJ7LeA7diYlWC0/edit?gid=0#gid=0"
         };
 
-        // Ambil NIM dari query string, mis: detail.html?nim=12345
         const urlParams = new URLSearchParams(window.location.search);
         const targetNim = (urlParams.get('nim') || '').trim();
 
@@ -130,7 +112,7 @@
             if (savedConfig) appConfig = JSON.parse(savedConfig);
 
             if (!targetNim) {
-                showError('NIM tidak ditemukan pada tautan. Silakan buka profil dari Dashboard.');
+                showError('NIM tidak ditemukan. Silakan akses profil dari Dashboard.');
                 return;
             }
             loadProfileData();
@@ -148,7 +130,6 @@
             return url;
         }
 
-        // Cari value dari row berdasarkan potongan kata kunci pada nama kolom (case-insensitive)
         function pick(row, keywords) {
             const keys = Object.keys(row);
             for (const k of keys) {
@@ -193,14 +174,13 @@
                         .filter(r => pick(r, ['nim']) === targetNim)
                         .map(r => ({
                             timestamp: pick(r, ['timestamp']),
-                            name: pick(r, ['nama lengkap', 'nama']),
-                            prodi: pick(r, ['prodi']),
-                            angkatan: pick(r, ['angkatan']),
-                            school: pick(r, ['sekolah']) || 'Sekolah tidak tercatat',
-                            teachDate: pick(r, ['tanggal mengajar', 'tanggal']),
-                            studentsList: pick(r, ['daftar peserta didik']),
-                            documentation: pick(r, ['dokumentasi']),
-                            story: pick(r, ['ceritakan', 'pembelajaran hari ini', 'materi'])
+                            school: pick(r, ['sekolah', 'tempat', 'mitra']) || 'Sekolah Terdata',
+                            teachDate: pick(r, ['tanggal']),
+                            duration: parseInt(pick(r, ['lama mengajar', 'menit', 'durasi'])) || 0,
+                            materi: pick(r, ['materi apa yang diajarkan', 'materi', 'mata pelajaran']),
+                            ceritaHariIni: pick(r, ['ceritakan tentang pembelajaran hari ini', 'ceritakan tentang pembelajaran', 'pembelajaran hari ini']),
+                            ceritaWaktuMengajar: pick(r, ['ada cerita apa waktu mengajar', 'cerita waktu mengajar', 'kejadian menarik']),
+                            documentation: pick(r, ['dokumentasi', 'foto'])
                         }));
                     checkDone();
                 },
@@ -210,7 +190,6 @@
 
         function parseDateFlexible(str) {
             if (!str) return null;
-            // Coba format DD/MM/YYYY atau DD-MM-YYYY dulu (umum di form Indonesia)
             let m = str.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
             if (m) {
                 let [, d, mo, y] = m;
@@ -232,55 +211,37 @@
             document.getElementById('loading-state').classList.add('hidden');
 
             if (!profileRow && sessions.length === 0) {
-                showError(`Tidak ditemukan data untuk NIM "${targetNim}".`);
+                showError(`Data NIM "${targetNim}" tidak ditemukan.`);
                 return;
             }
 
             document.getElementById('content-area').classList.remove('hidden');
 
-            // --- Profil ---
-            const name = (profileRow ? pick(profileRow, ['nama lengkap', 'nama']) : '') || (sessions[0] && sessions[0].name) || 'Tanpa Nama';
-            const group = profileRow ? pick(profileRow, ['kelompok']) : '';
-            const mentor = profileRow ? pick(profileRow, ['mentor']) : '';
-            const prodi = (profileRow ? pick(profileRow, ['prodi']) : '') || (sessions[0] && sessions[0].prodi);
-            const angkatan = (profileRow ? pick(profileRow, ['angkatan']) : '') || (sessions[0] && sessions[0].angkatan);
+            const name = (profileRow ? pick(profileRow, ['nama lengkap', 'nama']) : '') || 'Volunteer Komadiksi';
+            const group = profileRow ? pick(profileRow, ['banyak mengajar', 'kelompok', 'nama kelompok']) : 'Nama Kelompok'; 
+            const mentor = profileRow ? pick(profileRow, ['mentor', 'nama mentor']) : 'Belum Ditentukan';
+            const prodi = profileRow ? pick(profileRow, ['prodi', 'program studi']) : 'Belum Terdata';
+
+            const enriched = sessions.map(s => ({ ...s, _date: parseDateFlexible(s.teachDate) || parseDateFlexible(s.timestamp) }));
+            enriched.sort((a, b) => (b._date && a._date) ? b._date - a._date : 0);
+
+            const targetedSchool = enriched.length > 0 ? enriched[0].school : 'Belum Terdata';
 
             document.getElementById('prof-name').innerText = name;
             document.getElementById('prof-nim').innerText = `NIM: ${targetNim}`;
-            document.getElementById('prof-group').innerHTML = `<i class="fa-solid fa-people-group mr-1"></i> ${group || 'Kelompok Umum'}`;
-            document.getElementById('prof-mentor').innerHTML = `<i class="fa-solid fa-user-tie mr-1"></i> Mentor: ${mentor || 'Belum Ada'}`;
-            if (prodi) {
-                const el = document.getElementById('prof-prodi');
-                el.classList.remove('hidden');
-                el.innerHTML = `<i class="fa-solid fa-graduation-cap mr-1"></i> ${prodi}`;
-            }
-            if (angkatan) {
-                const el = document.getElementById('prof-angkatan');
-                el.classList.remove('hidden');
-                el.innerHTML = `<i class="fa-solid fa-calendar mr-1"></i> Angkatan ${angkatan}`;
-            }
+            document.getElementById('prof-prodi-sub').innerHTML = `<i class="fa-solid fa-graduation-cap mr-1 text-[10px]"></i> Prodi: ${prodi}`;
+            document.getElementById('prof-school-sub').innerHTML = `<i class="fa-solid fa-school mr-1 text-[10px]"></i> Mengajar di: ${targetedSchool}`;
+            document.getElementById('prof-group').innerHTML = `<i class="fa-solid fa-people-group mr-1"></i> ${group}`;
+            document.getElementById('prof-mentor').innerHTML = `<i class="fa-solid fa-user-tie mr-1"></i> Mentor: ${mentor}`;
 
-            // --- Urutkan sesi dari terbaru ---
-            const enriched = sessions.map(s => ({ ...s, _date: parseDateFlexible(s.teachDate) || parseDateFlexible(s.timestamp) }));
-            enriched.sort((a, b) => {
-                if (a._date && b._date) return b._date - a._date;
-                if (a._date) return -1;
-                if (b._date) return 1;
-                return 0;
-            });
-
-            // --- Statistik ---
-            const totalSessions = enriched.length;
-            const uniqueSchools = new Set(enriched.map(s => s.school).filter(Boolean));
-            const totalHours = totalSessions * 2; // estimasi 2 jam / sesi presensi
+            const totalCountifSessions = enriched.length; 
+            const totalMinutes = enriched.reduce((sum, s) => sum + s.duration, 0);
             const lastSession = enriched[0];
 
-            document.getElementById('stat-sessions').innerText = totalSessions;
-            document.getElementById('stat-hours').innerText = `${totalHours} Jam`;
-            document.getElementById('stat-schools').innerText = uniqueSchools.size;
+            document.getElementById('stat-sessions').innerText = `${totalCountifSessions} Sesi`;
+            document.getElementById('stat-minutes').innerText = `${totalMinutes} Menit`;
             document.getElementById('stat-last').innerText = lastSession ? (lastSession._date ? formatDateID(lastSession._date) : (lastSession.teachDate || '-')) : '-';
 
-            // --- Timeline ---
             const container = document.getElementById('timeline-container');
             if (enriched.length === 0) {
                 document.getElementById('timeline-empty').classList.remove('hidden');
@@ -289,16 +250,10 @@
             }
 
             container.innerHTML = enriched.map((s, idx) => {
-                const dateLabel = s._date ? formatDateID(s._date) : (s.teachDate || 'Tanggal tidak tercatat');
+                const dateLabel = s._date ? formatDateID(s._date) : (s.teachDate || 'Waktu tidak terekam');
                 const isLast = idx === enriched.length - 1;
                 const docLink = s.documentation && /^https?:\/\//i.test(s.documentation)
-                    ? `<a href="${s.documentation}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[10px] font-bold uppercase bg-[#1F2A44] text-white px-2 py-1 neo-border hover:bg-emerald-500 transition-colors mt-2"><i class="fa-solid fa-camera"></i> Lihat Dokumentasi</a>`
-                    : '';
-                const storyHtml = s.story
-                    ? `<p class="text-xs text-gray-700 mt-2 leading-relaxed">${escapeHtml(s.story)}</p>`
-                    : `<p class="text-xs text-gray-400 mt-2 italic">Tidak ada catatan cerita pembelajaran.</p>`;
-                const studentsHtml = s.studentsList
-                    ? `<p class="text-[10px] text-gray-500 mt-1"><i class="fa-solid fa-users mr-1"></i> ${escapeHtml(s.studentsList)}</p>`
+                    ? `<a href="${s.documentation}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[10px] font-bold uppercase bg-[#1F2A44] text-white px-2 py-1 neo-border hover:bg-emerald-500 transition-colors mt-3"><i class="fa-solid fa-camera"></i> Dokumentasi</a>`
                     : '';
 
                 return `
@@ -308,12 +263,24 @@
                         ${isLast ? '' : '<div class="timeline-line flex-grow mt-1"></div>'}
                     </div>
                     <div class="flex-grow bg-[#FFF4E6] neo-border p-4 -mt-1 mb-1">
-                        <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
-                            <span class="text-xs font-black uppercase text-[#1F2A44]"><i class="fa-solid fa-school mr-1"></i> ${escapeHtml(s.school)}</span>
-                            <span class="text-[10px] font-bold uppercase text-gray-500 bg-white px-2 py-0.5 neo-border">${dateLabel}</span>
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#1F2A44]/20 pb-2">
+                            <span class="text-xs font-black uppercase text-[#1F2A44]"><i class="fa-solid fa-calendar-day mr-1"></i> ${dateLabel}</span>
+                            <span class="text-[10px] font-bold uppercase text-gray-500 bg-white px-2 py-0.5 neo-border"><i class="fa-solid fa-clock mr-1"></i> ${s.duration} Menit</span>
                         </div>
-                        ${studentsHtml}
-                        ${storyHtml}
+                        
+                        <div class="space-y-3 text-xs text-[#1F2A44]">
+                            <div>
+                                <span class="font-bold uppercase tracking-wider text-[10px] text-gray-500 block">Materi yang diajarkan:</span>
+                                <p class="bg-white p-2 neo-border mt-1 font-medium">${s.materi ? escapeHtml(s.materi) : '<span class="italic text-gray-400">Tidak ada data materi</span>'}</p>
+                            </div>
+
+                            ${s.ceritaWaktuMengajar ? `
+                            <div class="border-t border-[#1F2A44]/10 pt-2 italic text-gray-600 bg-yellow-50/50 p-2 border-l-4 border-yellow-500">
+                                <span class="font-bold uppercase tracking-wider text-[9px] text-amber-700 block not-italic"><i class="fa-solid fa-comment-dots mr-1"></i> Catatan/Cerita Waktu Mengajar:</span>
+                                "${escapeHtml(s.ceritaWaktuMengajar)}"
+                            </div>` : ''}
+                        </div>
+                        
                         ${docLink}
                     </div>
                 </div>`;

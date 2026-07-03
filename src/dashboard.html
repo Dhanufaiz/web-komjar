@@ -20,7 +20,6 @@
 </head>
 <body class="min-h-screen p-4 md:p-8 flex flex-col justify-between">
 
-    <!-- Header Badge -->
     <header class="max-w-4xl mx-auto w-full mb-8">
         <div class="bg-[#F4B942] neo-border neo-shadow p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3">
@@ -32,37 +31,31 @@
                     <p class="text-xs font-bold tracking-widest uppercase text-[#1F2A44]/80">Data Rekapitulasi Real-Time Komadiksi 2026</p>
                 </div>
             </div>
-            <a href="presensi.html" class="bg-white px-3 py-1 neo-border text-xs font-bold uppercase tracking-wider text-center hover:bg-emerald-300 transition-colors">
-                ✍️ FORM PRESENSI ←
-            </a>
         </div>
     </header>
 
-    <!-- Main Content Area -->
     <main class="max-w-4xl mx-auto w-full flex-grow">
-        
         <section class="bg-white neo-border neo-shadow p-6 md:p-8">
-            <!-- Stats Grid -->
+            
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 <div class="bg-[#FFF4E6] p-4 neo-border">
                     <div class="text-[10px] font-bold text-gray-500 uppercase">Total Volunteer</div>
                     <div id="dash-total-vol" class="text-2xl font-black y2k-font mt-1">0</div>
                 </div>
                 <div class="bg-[#F4B942]/20 p-4 neo-border">
-                    <div class="text-[10px] font-bold text-gray-500 uppercase">Akumulasi Sesi</div>
-                    <div id="dash-total-sessions" class="text-2xl font-black y2k-font mt-1">0 Sesi</div>
+                    <div class="text-[10px] font-bold text-gray-500 uppercase">Total Banyak Mengajar</div>
+                    <div id="dash-total-sessions" class="text-2xl font-black y2k-font mt-1">0 Kali</div>
                 </div>
                 <div class="bg-emerald-100 p-4 neo-border">
-                    <div class="text-[10px] font-bold text-gray-500 uppercase">Jam Mengajar</div>
-                    <div id="dash-total-hours" class="text-2xl font-black y2k-font mt-1">0 Jam</div>
+                    <div class="text-[10px] font-bold text-gray-500 uppercase">Total Menit Mengajar</div>
+                    <div id="dash-total-minutes" class="text-2xl font-black y2k-font mt-1">0 Mnt</div>
                 </div>
                 <div class="bg-purple-100 p-4 neo-border">
-                    <div class="text-[10px] font-bold text-gray-500 uppercase">Kelompok Aktif</div>
+                    <div class="text-[10px] font-bold text-gray-500 uppercase">Kelompok Terdata</div>
                     <div id="dash-total-groups" class="text-2xl font-black y2k-font mt-1">0</div>
                 </div>
             </div>
 
-            <!-- Global Leaderboard / Activity Track -->
             <div class="neo-border bg-[#FFF4E6] p-4">
                 <h3 class="text-sm font-bold uppercase mb-3"><i class="fa-solid fa-ranking-star mr-2"></i> Keaktifan Mengajar Volunteer</h3>
                 <div class="overflow-x-auto">
@@ -72,7 +65,7 @@
                                 <th class="p-2 border-r-2 border-[#1F2A44]">Nama / NIM</th>
                                 <th class="p-2 border-r-2 border-[#1F2A44]">Kelompok</th>
                                 <th class="p-2 border-r-2 border-[#1F2A44]">Mentor</th>
-                                <th class="p-2 text-center">Total Mengajar</th>
+                                <th class="p-2 text-center">Banyak Mengajar</th>
                             </tr>
                         </thead>
                         <tbody id="dash-table-body" class="divide-y border-t border-[#1F2A44]">
@@ -86,13 +79,11 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="max-w-4xl mx-auto w-full mt-12 border-t-4 border-[#1F2A44] pt-4 text-xs font-bold uppercase text-gray-500">
         <div>© 2026 KOMADIKSI MENGAJAR. MONITORING SYSTEM.</div>
     </footer>
 
     <script>
-        // Mengambil konfigurasi tautan sheet yang sama dari localStorage presensi
         let appConfig = {
             sheetUrl: "https://docs.google.com/spreadsheets/d/1FO9gRFT0Ic7UzjTLxsDpOoC3J5CWBlJ7LeA7diYlWC0/edit?gid=0#gid=0"
         };
@@ -104,52 +95,82 @@
         });
 
         function loadDashboardData() {
-            let csvUrl = appConfig.sheetUrl;
-            if (csvUrl.includes('/edit')) {
-                csvUrl = csvUrl.split('/edit')[0] + '/gviz/tq?tqx=out:csv&sheet=PENDAFTARAN';
+            let baseUrl = appConfig.sheetUrl.split('/edit')[0];
+            let pendaftaranUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=PENDAFTARAN';
+            let presensiUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=PRESENSI';
+
+            let dataPendaftaran = [];
+            let dataPresensi = [];
+            let loaded = 0;
+
+            function checkAndRender() {
+                loaded++;
+                if (loaded === 2) {
+                    processData(dataPendaftaran, dataPresensi);
+                }
             }
 
-            Papa.parse(csvUrl, {
-                download: true,
-                header: true,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    if (results.data && results.data.length > 0) {
-                        const db = results.data.map(row => {
-                            return {
-                                nim: (row["NIM"] || row["nim"] || "").trim(),
-                                name: row["Nama Lengkap"] || row["nama"] || "Tanpa Nama",
-                                group: row["Nama Kelompok"] || row["kelompok"] || "Umum",
-                                mentor: row["Nama Mentor"] || row["mentor"] || "Belum Ada",
-                                history: parseInt(row["Riwayat Mengajar"] || row["riwayat"] || "0"),
-                                hours: parseInt(row["Total Jam"] || row["jam"] || "0")
-                            };
-                        }).filter(user => user.nim !== "");
+            Papa.parse(pendaftaranUrl, {
+                download: true, header: true, skipEmptyLines: true,
+                complete: function(res) { dataPendaftaran = res.data || []; checkAndRender(); },
+                error: function() { checkAndRender(); }
+            });
 
-                        renderDashboard(db);
-                    }
-                },
-                error: function() {
-                    document.getElementById('dash-table-body').innerHTML = `<tr><td colspan="4" class="p-4 text-center font-bold text-red-500">Gagal Sinkronisasi. Pastikan Spreadsheet 'Anyone with link'.</td></tr>`;
+            Papa.parse(presensiUrl, {
+                download: true, header: true, skipEmptyLines: true,
+                complete: function(res) { dataPresensi = res.data || []; checkAndRender(); },
+                error: function() { checkAndRender(); }
+            });
+        }
+
+        function processData(pendaftaran, presensi) {
+            if (pendaftaran.length === 0 && presensi.length === 0) {
+                document.getElementById('dash-table-body').innerHTML = `<tr><td colspan="4" class="p-4 text-center font-bold text-red-500">Gagal memuat data dari Spreadsheet.</td></tr>`;
+                return;
+            }
+
+            // Simulasi COUNTIF: Hitung kemunculan NIM di sheet PRESENSI
+            const presensiCountMap = {};
+            presensi.forEach(row => {
+                let nim = (row["NIM"] || row["nim"] || "").trim();
+                if (nim) {
+                    presensiCountMap[nim] = (presensiCountMap[nim] || 0) + 1;
                 }
             });
+
+            const db = pendaftaran.map(row => {
+                let nim = (row["NIM"] || row["nim"] || "").trim();
+                // Menggunakan hitungan presensi (COUNTIF) atau fallback ke isi kolom 'banyak mengajar'
+                let countifSessions = presensiCountMap[nim] !== undefined ? presensiCountMap[nim] : parseInt(row["Banyak Mengajar"] || row["banyak mengajar"] || "0");
+                
+                return {
+                    nim: nim,
+                    name: row["Nama Lengkap"] || row["nama"] || "Tanpa Nama",
+                    group: row["Banyak Mengajar"] || row["kelompok"] || "Kelompok Umum",
+                    mentor: row["Nama Mentor"] || row["mentor"] || "Belum Ada",
+                    history: countifSessions,
+                    minutes: countifSessions * 90 // Minimal 90 menit per sesi
+                };
+            }).filter(user => user.nim !== "");
+
+            renderDashboard(db);
         }
 
         function renderDashboard(db) {
             let totalSessions = 0;
-            let totalHours = 0;
+            let totalMinutes = 0;
             let uniqueGroups = new Set();
 
             db.forEach(v => {
                 totalSessions += v.history;
-                totalHours += (v.hours || (v.history * 2));
-                if (v.group) uniqueGroups.add(v.group);
+                totalMinutes += v.minutes;
+                if (v.group && v.group !== "Kelompok Umum") uniqueGroups.add(v.group);
             });
 
             document.getElementById('dash-total-vol').innerText = db.length;
-            document.getElementById('dash-total-sessions').innerText = `${totalSessions} Sesi`;
-            document.getElementById('dash-total-hours').innerText = `${totalHours} Jam`;
-            document.getElementById('dash-total-groups').innerText = uniqueGroups.size;
+            document.getElementById('dash-total-sessions').innerText = `${totalSessions} Kali`;
+            document.getElementById('dash-total-minutes').innerText = `${totalMinutes} Mnt`;
+            document.getElementById('dash-total-groups').innerText = uniqueGroups.size > 0 ? uniqueGroups.size : 1;
 
             const sortedDb = [...db].sort((a, b) => b.history - a.history);
 
@@ -162,9 +183,9 @@
                         </a>
                         <br><span class="font-mono text-[10px] text-gray-500 font-normal">${v.nim}</span>
                     </td>
-                    <td class="p-2 border-r border-[#1F2A44]/20">${v.group}</td>
+                    <td class="p-2 border-r border-[#1F2A44]/20 uppercase font-semibold text-gray-700">${v.group}</td>
                     <td class="p-2 border-r border-[#1F2A44]/20 text-gray-600 font-medium">${v.mentor}</td>
-                    <td class="p-2 text-center font-black bg-[#F4B942]/10">${v.history} Sesi</td>
+                    <td class="p-2 text-center font-black bg-[#F4B942]/10">${v.minutes} Mnt<br><span class="text-[10px] text-gray-400 font-normal">(${v.history} Kali Mengajar)</span></td>
                 </tr>
             `).join('');
         }
