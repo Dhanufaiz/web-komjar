@@ -41,9 +41,6 @@
                 <button id="btn-refresh" onclick="loadDashboardData()" class="bg-white px-3 py-2 neo-border text-xs font-bold uppercase tracking-wider text-center hover:bg-emerald-300 transition-colors">
                     <i class="fa-solid fa-rotate"></i> Refresh
                 </button>
-                <a href="presensi.html" class="bg-white px-3 py-2 neo-border text-xs font-bold uppercase tracking-wider text-center hover:bg-emerald-300 transition-colors">
-                    ✍️ FORM PRESENSI
-                </a>
             </div>
         </div>
         <p id="last-updated" class="text-[10px] font-bold uppercase text-gray-500 mt-2 text-right pr-1"></p>
@@ -208,9 +205,13 @@
 
         function loadDashboardData() {
             let baseUrl = appConfig.sheetUrl.split('/edit')[0];
-            let pendaftaranUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=PENDAFTARAN';
-            let presensiUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=PRESENSI';
-            let evalUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=EVAL_MINGGUAN';
+            // Cache-busting: Google Sheets sering nge-cache hasil export CSV selama beberapa menit,
+            // jadi data yang baru dihapus/diedit bisa masih muncul lama. Nilai timestamp unik di query string
+            // memaksa Google & browser selalu ambil versi terbaru tiap kali dashboard dibuka/refresh.
+            const cacheBuster = '&_cb=' + Date.now();
+            let pendaftaranUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=PENDAFTARAN' + cacheBuster;
+            let presensiUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=PRESENSI' + cacheBuster;
+            let evalUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=EVAL_MINGGUAN' + cacheBuster;
 
             let dataPendaftaran = [];
             let dataPresensi = [];

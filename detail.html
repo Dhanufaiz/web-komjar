@@ -181,9 +181,12 @@
 
         function loadProfileData() {
             const baseUrl = getBaseUrl();
-            const pendaftaranUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=PENDAFTARAN';
-            const presensiUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=PRESENSI';
-            const evalUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=EVAL_MINGGUAN';
+            // Cache-busting: sama seperti di dashboard.html, memaksa Google Sheets & browser
+            // selalu kirim data terbaru, bukan versi cache yang mungkin sudah beberapa menit basi.
+            const cacheBuster = '&_cb=' + Date.now();
+            const pendaftaranUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=PENDAFTARAN' + cacheBuster;
+            const presensiUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=PRESENSI' + cacheBuster;
+            const evalUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=EVAL_MINGGUAN' + cacheBuster;
 
             function checkDone() {
                 loadedCount++;
