@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Monitoring Komadiksi Mengajar 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <style>
+        body { background-color: #FFF4E6; color: #1F2A44; font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3, .y2k-font { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+        .neo-border { border: 4px solid #1F2A44; }
+        .neo-shadow { box-shadow: 8px 8px 0px 0px #1F2A44; }
+        .neo-shadow-sm { box-shadow: 4px 4px 0px 0px #1F2A44; }
+        .badge-aktif { background:#bbf7d0; color:#065f46; }
+        .badge-belum { background:#fecaca; color:#991b1b; }
+        .rank-gold { background:#F4B942; }
+        .rank-silver { background:#E5E7EB; }
+        .rank-bronze { background:#F2C29B; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 flex flex-col justify-between">
+
+    <header class="max-w-5xl mx-auto w-full mb-8">
+        <div class="bg-[#F4B942] neo-border neo-shadow p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-[#1F2A44] text-white p-3 neo-border text-2xl">
+                    <i class="fa-solid fa-chart-simple"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl tracking-tight text-[#1F2A44] uppercase">Monitoring Volunteer</h1>
+                    <p class="text-xs font-bold tracking-widest uppercase text-[#1F2A44]/80">Data Rekapitulasi Real-Time Komadiksi 2026</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="btn-refresh" onclick="loadDashboardData()" class="bg-white px-3 py-2 neo-border text-xs font-bold uppercase tracking-wider text-center hover:bg-emerald-300 transition-colors">
+                    <i class="fa-solid fa-rotate"></i> Refresh
+                </button>
+                <a href="presensi.html" class="bg-white px-3 py-2 neo-border text-xs font-bold uppercase tracking-wider text-center hover:bg-emerald-300 transition-colors">
+                    ✍️ FORM PRESENSI
+                </a>
+            </div>
+        </div>
+        <p id="last-updated" class="text-[10px] font-bold uppercase text-gray-500 mt-2 text-right pr-1"></p>
+    </header>
+
+    <main class="max-w-5xl mx-auto w-full flex-grow space-y-6">
+
+        <!-- Ringkasan Statistik -->
+        <section class="bg-white neo-border neo-shadow p-6 md:p-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-[#FFF4E6] p-4 neo-border">
+                    <div class="text-[10px] font-bold text-gray-500 uppercase">Total Volunteer</div>
+                    <div id="dash-total-vol" class="text-2xl font-black y2k-font mt-1">0</div>
+                </div>
+                <div class="bg-[#F4B942]/20 p-4 neo-border">
+                    <div class="text-[10px] font-bold text-gray-500 uppercase">Total Banyak Mengajar</div>
+                    <div id="dash-total-sessions" class="text-2xl font-black y2k-font mt-1">0 Kali</div>
+                </div>
+                <div class="bg-emerald-100 p-4 neo-border">
+                    <div class="text-[10px] font-bold text-gray-500 uppercase">Total Menit Mengajar</div>
+                    <div id="dash-total-minutes" class="text-2xl font-black y2k-font mt-1">0 Mnt</div>
+                </div>
+                <div class="bg-purple-100 p-4 neo-border">
+                    <div class="text-[10px] font-bold text-gray-500 uppercase">Kelompok Terdata</div>
+                    <div id="dash-total-groups" class="text-2xl font-black y2k-font mt-1">0</div>
+                </div>
+                <div class="bg-blue-100 p-4 neo-border">
+                    <div class="text-[10px] font-bold text-gray-500 uppercase">Sekolah Tersasar</div>
+                    <div id="dash-total-schools" class="text-2xl font-black y2k-font mt-1">0</div>
+                </div>
+                <div class="bg-rose-100 p-4 neo-border">
+                    <div class="text-[10px] font-bold text-gray-500 uppercase">Belum Pernah Mengajar</div>
+                    <div id="dash-total-inactive" class="text-2xl font-black y2k-font mt-1">0</div>
+                </div>
+                <div class="bg-amber-100 p-4 neo-border">
+                    <div class="text-[10px] font-bold text-gray-500 uppercase">Rata-rata Durasi/Sesi</div>
+                    <div id="dash-avg-duration" class="text-2xl font-black y2k-font mt-1">0 Mnt</div>
+                </div>
+                <div class="bg-teal-100 p-4 neo-border">
+                    <div class="text-[10px] font-bold text-gray-500 uppercase">Eval Mingguan Terisi</div>
+                    <div id="dash-eval-count" class="text-2xl font-black y2k-font mt-1">0</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leaderboard Volunteer -->
+        <section class="bg-white neo-border neo-shadow p-6 md:p-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+                <h3 class="text-sm font-bold uppercase"><i class="fa-solid fa-ranking-star mr-2"></i> Leaderboard Keaktifan Volunteer</h3>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <input id="filter-search" type="text" placeholder="Cari nama / NIM / kelompok..." class="neo-border px-3 py-1.5 text-xs font-semibold w-full sm:w-56 bg-[#FFF4E6]">
+                    <select id="filter-status" class="neo-border px-2 py-1.5 text-xs font-bold uppercase bg-[#FFF4E6]">
+                        <option value="all">Semua Status</option>
+                        <option value="active">Sudah Mengajar</option>
+                        <option value="inactive">Belum Mengajar</option>
+                    </select>
+                    <select id="filter-sort" class="neo-border px-2 py-1.5 text-xs font-bold uppercase bg-[#FFF4E6]">
+                        <option value="sessions_desc">Urutkan: Sesi Terbanyak</option>
+                        <option value="minutes_desc">Urutkan: Menit Terbanyak</option>
+                        <option value="name_asc">Urutkan: Nama A-Z</option>
+                        <option value="last_desc">Urutkan: Terakhir Mengajar</option>
+                    </select>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="border-b-2 border-[#1F2A44] uppercase font-bold text-gray-600 bg-white">
+                            <th class="p-2 border-r-2 border-[#1F2A44] text-center">#</th>
+                            <th class="p-2 border-r-2 border-[#1F2A44]">Nama / NIM</th>
+                            <th class="p-2 border-r-2 border-[#1F2A44]">Kelompok</th>
+                            <th class="p-2 border-r-2 border-[#1F2A44]">Mentor</th>
+                            <th class="p-2 border-r-2 border-[#1F2A44] text-center">Status</th>
+                            <th class="p-2 border-r-2 border-[#1F2A44] text-center">Eval Mingguan</th>
+                            <th class="p-2 text-center">Banyak Mengajar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dash-table-body" class="divide-y border-t border-[#1F2A44]">
+                        <tr>
+                            <td colspan="7" class="p-4 text-center font-bold text-gray-400">Menghubungkan ke Spreadsheet...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p id="filter-summary" class="text-[10px] font-bold text-gray-400 uppercase mt-2"></p>
+        </section>
+
+        <!-- Peringatan: Belum Pernah Mengajar (dipindah ke bawah leaderboard nama volunteer) -->
+        <section id="alert-inactive-section" class="hidden bg-white neo-border neo-shadow p-6 md:p-8">
+            <h3 class="text-sm font-bold uppercase mb-1 text-rose-700"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Perlu Ditindaklanjuti: Volunteer Belum Pernah Presensi</h3>
+            <p class="text-[11px] text-gray-500 font-medium mb-4">Volunteer berikut sudah terdaftar namun belum tercatat mengajar sama sekali di sheet PRESENSI.</p>
+            <div id="alert-inactive-list" class="flex flex-wrap gap-2 max-h-56 overflow-y-auto pr-1"></div>
+        </section>
+
+        <!-- Leaderboard Kelompok -->
+        <section class="bg-white neo-border neo-shadow p-6 md:p-8">
+            <h3 class="text-sm font-bold uppercase mb-3"><i class="fa-solid fa-people-group mr-2"></i> Leaderboard Kelompok</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="border-b-2 border-[#1F2A44] uppercase font-bold text-gray-600 bg-white">
+                            <th class="p-2 border-r-2 border-[#1F2A44] text-center">#</th>
+                            <th class="p-2 border-r-2 border-[#1F2A44]">Nama Kelompok</th>
+                            <th class="p-2 border-r-2 border-[#1F2A44] text-center">Anggota</th>
+                            <th class="p-2 border-r-2 border-[#1F2A44] text-center">Total Sesi</th>
+                            <th class="p-2 border-r-2 border-[#1F2A44] text-center">Total Menit</th>
+                            <th class="p-2 text-center">Rata-rata Sesi/Anggota</th>
+                        </tr>
+                    </thead>
+                    <tbody id="group-table-body" class="divide-y border-t border-[#1F2A44]">
+                        <tr><td colspan="6" class="p-4 text-center font-bold text-gray-400">Memuat...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Leaderboard Individu: khusus pendaftar dengan Tipe Pendaftaran = Individu, dihitung per Nama -->
+        <section class="bg-white neo-border neo-shadow p-6 md:p-8">
+            <h3 class="text-sm font-bold uppercase mb-1"><i class="fa-solid fa-user mr-2"></i> Leaderboard Individu</h3>
+            <p class="text-[11px] text-gray-500 font-medium mb-4">Volunteer yang mendaftar sebagai Individu (bukan bagian dari kelompok), diperingkat per nama secara terpisah dari Leaderboard Kelompok.</p>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="border-b-2 border-[#1F2A44] uppercase font-bold text-gray-600 bg-white">
+                            <th class="p-2 border-r-2 border-[#1F2A44] text-center">#</th>
+                            <th class="p-2 border-r-2 border-[#1F2A44]">Nama / NIM</th>
+                            <th class="p-2 border-r-2 border-[#1F2A44] text-center">Kontak WA</th>
+                            <th class="p-2 border-r-2 border-[#1F2A44]">Mentor</th>
+                            <th class="p-2 border-r-2 border-[#1F2A44] text-center">Status</th>
+                            <th class="p-2 text-center">Banyak Mengajar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="individu-table-body" class="divide-y border-t border-[#1F2A44]">
+                        <tr><td colspan="6" class="p-4 text-center font-bold text-gray-400">Memuat...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="max-w-5xl mx-auto w-full mt-12 border-t-4 border-[#1F2A44] pt-4 text-xs font-bold uppercase text-gray-500">
+        <div>© 2026 KOMADIKSI MENGAJAR. MONITORING SYSTEM.</div>
+    </footer>
+
+    <script>
+        let appConfig = {
+            sheetUrl: "https://docs.google.com/spreadsheets/d/1FO9gRFT0Ic7UzjTLxsDpOoC3J5CWBlJ7LeA7diYlWC0/edit?gid=0#gid=0"
+        };
+
+        // state.db menyimpan seluruh data volunteer hasil olahan, dipakai ulang oleh filter/sort tanpa fetch ulang
+        let state = { db: [], groupAgg: [], individuAgg: [] };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedConfig = localStorage.getItem('komjar_config_nim_2026');
+            if (savedConfig) appConfig = JSON.parse(savedConfig);
+            loadDashboardData();
+
+            document.getElementById('filter-search').addEventListener('input', renderLeaderboard);
+            document.getElementById('filter-status').addEventListener('change', renderLeaderboard);
+            document.getElementById('filter-sort').addEventListener('change', renderLeaderboard);
+        });
+
+        function loadDashboardData() {
+            let baseUrl = appConfig.sheetUrl.split('/edit')[0];
+            let pendaftaranUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=PENDAFTARAN';
+            let presensiUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=PRESENSI';
+            let evalUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=EVAL_MINGGUAN';
+
+            let dataPendaftaran = [];
+            let dataPresensi = [];
+            let dataEval = [];
+            let loaded = 0;
+
+            function checkAndRender() {
+                loaded++;
+                if (loaded === 3) {
+                    processData(dataPendaftaran, dataPresensi, dataEval);
+                    const now = new Date();
+                    document.getElementById('last-updated').innerText = 'Terakhir diperbarui: ' + now.toLocaleString('id-ID');
+                }
+            }
+
+            Papa.parse(pendaftaranUrl, {
+                download: true, header: true, skipEmptyLines: true,
+                complete: function(res) { dataPendaftaran = res.data || []; checkAndRender(); },
+                error: function() { checkAndRender(); }
+            });
+
+            Papa.parse(presensiUrl, {
+                download: true, header: true, skipEmptyLines: true,
+                complete: function(res) { dataPresensi = res.data || []; checkAndRender(); },
+                error: function() { checkAndRender(); }
+            });
+
+            Papa.parse(evalUrl, {
+                download: true, header: true, skipEmptyLines: true,
+                complete: function(res) { dataEval = res.data || []; checkAndRender(); },
+                error: function() { checkAndRender(); }
+            });
+        }
+
+        // Fungsi pembantu untuk mencari nama kolom tanpa sensitif huruf besar/kecil
+        function pickField(row, keywords) {
+            const keys = Object.keys(row);
+            for (const k of keys) {
+                const kl = k.toLowerCase();
+                if (keywords.some(w => kl.includes(w))) {
+                    const v = row[k];
+                    if (v !== undefined && v !== null && String(v).trim() !== "") return String(v).trim();
+                }
+            }
+            return "";
+        }
+
+        // Mengubah nomor WA mentah dari spreadsheet (format bisa "0895...", "895...", ada tanda kurung/spasi typo, dll)
+        // menjadi format internasional 62xxxxxxxxxx yang dipakai wa.me
+        function normalizeWaNumber(raw) {
+            if (!raw) return '';
+            let digits = String(raw).replace(/\D/g, ''); // buang semua karakter selain angka
+            if (!digits) return '';
+            if (digits.startsWith('0')) digits = '62' + digits.slice(1);
+            else if (!digits.startsWith('62')) digits = '62' + digits;
+            return digits;
+        }
+
+        function waLink(raw) {
+            const num = normalizeWaNumber(raw);
+            return num ? `https://wa.me/${num}` : '';
+        }
+
+        function waButton(raw, extraClass) {
+            const link = waLink(raw);
+            if (!link) return `<span class="text-gray-300 text-[10px]">-</span>`;
+            return `<a href="${link}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 bg-emerald-100 text-emerald-700 neo-border border-emerald-500 px-2 py-1 text-[10px] font-bold uppercase hover:bg-emerald-300 transition-colors ${extraClass || ''}">
+                <i class="fa-brands fa-whatsapp"></i> WA
+            </a>`;
+        }
+
+        // PERBAIKAN: format tanggal dari Google Form adalah M/D/YYYY (bulan lebih dulu), bukan D/M/YYYY.
+        // Versi lama menukar posisi hari & bulan sehingga tanggal terbaca salah (mis. 7/3/2026 -> 7 Maret, seharusnya 3 Juli).
+        function parseDateFlexible(str) {
+            if (!str) return null;
+            let m = String(str).match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
+            if (m) {
+                let [, mo, d, y] = m;
+                if (y.length === 2) y = '20' + y;
+                const dt = new Date(`${y}-${mo.padStart(2,'0')}-${d.padStart(2,'0')}`);
+                if (!isNaN(dt)) return dt;
+            }
+            const dt2 = new Date(str);
+            if (!isNaN(dt2)) return dt2;
+            return null;
+        }
+
+        function processData(pendaftaran, presensi, evalMingguan) {
+            if (pendaftaran.length === 0 && presensi.length === 0) {
+                document.getElementById('dash-table-body').innerHTML = `<tr><td colspan="7" class="p-4 text-center font-bold text-red-500">Gagal memuat data dari Spreadsheet.</td></tr>`;
+                document.getElementById('group-table-body').innerHTML = `<tr><td colspan="6" class="p-4 text-center font-bold text-red-500">Gagal memuat data.</td></tr>`;
+                return;
+            }
+
+            // Hitung total kemunculan tiap NIM di sheet PRESENSI, total menit riil, sekolah unik, dan tanggal terakhir mengajar
+            const presensiAgg = {};
+            presensi.forEach(row => {
+                let nim = pickField(row, ['nim']).trim();
+                if (!nim) return;
+                let menit = parseInt(pickField(row, ['lama mengajar', 'menit', 'durasi'])) || 0;
+                let sekolah = pickField(row, ['nama sekolah', 'sekolah', 'tempat', 'mitra']);
+                let tgl = parseDateFlexible(pickField(row, ['tanggal mengajar', 'tanggal'])) || parseDateFlexible(pickField(row, ['timestamp']));
+
+                if (!presensiAgg[nim]) presensiAgg[nim] = { count: 0, minutes: 0, schools: new Set(), lastDate: null };
+                presensiAgg[nim].count += 1;
+                presensiAgg[nim].minutes += menit;
+                if (sekolah && sekolah !== '-') presensiAgg[nim].schools.add(sekolah);
+                if (tgl && (!presensiAgg[nim].lastDate || tgl > presensiAgg[nim].lastDate)) presensiAgg[nim].lastDate = tgl;
+            });
+
+            // Hitung berapa kali tiap NIM mengisi evaluasi mingguan
+            const evalCountMap = {};
+            evalMingguan.forEach(row => {
+                let nim = pickField(row, ['nim']).trim();
+                if (nim) evalCountMap[nim] = (evalCountMap[nim] || 0) + 1;
+            });
+
+            const db = pendaftaran.map(row => {
+                let nim = (row["NIM"] || row["nim"] || "").trim();
+                let stats = presensiAgg[nim] || { count: 0, minutes: 0, schools: new Set(), lastDate: null };
+
+                // Nama kelompok diambil langsung dari kolom "Nama Kelompok" (bukan pencarian keyword bebas),
+                // karena kolom "Status Kelompok" juga mengandung kata "kelompok" dan bisa salah tertangkap.
+                let namaKelompok = (row["Nama Kelompok"] && row["Nama Kelompok"].trim()) ? row["Nama Kelompok"].trim() : "Individu";
+
+                // Deteksi pendaftar Individu: cek kolom "Tipe Pendaftaran" terlebih dahulu (sumber paling akurat),
+                // fallback ke nama kelompok yang bernilai "Individu" jika kolom tipe kosong/tidak ada.
+                let tipePendaftaran = pickField(row, ['tipe pendaftaran']).toLowerCase();
+                let isIndividu = tipePendaftaran.includes('individu') || namaKelompok.toLowerCase() === 'individu';
+
+                return {
+                    nim: nim,
+                    name: row["Nama Lengkap"] || row["nama"] || "Tanpa Nama",
+                    group: namaKelompok,
+                    mentor: row["Nama Mentor"] || row["mentor"] || "Belum Ada",
+                    phone: pickField(row, ['nomor wa', 'no wa', 'whatsapp', 'no. hp', 'nomor hp']),
+                    isIndividu: isIndividu,
+                    history: stats.count,
+                    minutes: stats.minutes,
+                    schoolCount: stats.schools.size,
+                    lastDate: stats.lastDate,
+                    evalCount: evalCountMap[nim] || 0
+                };
+            }).filter(user => user.nim !== "");
+
+            // Agregasi per kelompok: HANYA untuk pendaftar kelompok (bukan Individu), supaya Leaderboard Kelompok
+            // tidak lagi tercampur dengan puluhan pendaftar Individu yang dulu numpuk jadi satu baris "Individu".
+            const groupMap = {};
+            db.forEach(v => {
+                if (v.isIndividu) return;
+                if (!groupMap[v.group]) groupMap[v.group] = { members: 0, sessions: 0, minutes: 0 };
+                groupMap[v.group].members += 1;
+                groupMap[v.group].sessions += v.history;
+                groupMap[v.group].minutes += v.minutes;
+            });
+            const groupAgg = Object.entries(groupMap).map(([name, s]) => ({
+                name, ...s, avgPerMember: s.members > 0 ? (s.sessions / s.members) : 0
+            })).sort((a, b) => b.sessions - a.sessions);
+
+            // Leaderboard Individu: pendaftar Individu, diperingkat per Nama masing-masing (bukan digabung jadi 1 grup)
+            const individuAgg = db
+                .filter(v => v.isIndividu)
+                .slice()
+                .sort((a, b) => b.history - a.history || b.minutes - a.minutes);
+
+            state.db = db;
+            state.groupAgg = groupAgg;
+            state.individuAgg = individuAgg;
+
+            renderSummary(db, presensi, evalMingguan);
+            renderLeaderboard();
+            renderGroupLeaderboard();
+            renderIndividuLeaderboard();
+        }
+
+        function renderSummary(db, presensi, evalMingguan) {
+            let totalSessions = 0, totalMinutes = 0;
+            let uniqueGroups = new Set();
+            let uniqueSchools = new Set();
+            let inactiveCount = 0;
+
+            db.forEach(v => {
+                totalSessions += v.history;
+                totalMinutes += v.minutes;
+                uniqueGroups.add(v.group);
+                if (v.history === 0) inactiveCount++;
+            });
+
+            presensi.forEach(row => {
+                let sekolah = pickField(row, ['nama sekolah', 'sekolah', 'tempat', 'mitra']);
+                if (sekolah && sekolah !== '-') uniqueSchools.add(sekolah);
+            });
+
+            const evalNimSet = new Set();
+            evalMingguan.forEach(row => {
+                let nim = pickField(row, ['nim']).trim();
+                if (nim) evalNimSet.add(nim);
+            });
+
+            document.getElementById('dash-total-vol').innerText = db.length;
+            document.getElementById('dash-total-sessions').innerText = `${totalSessions} Kali`;
+            document.getElementById('dash-total-minutes').innerText = `${totalMinutes} Mnt`;
+            document.getElementById('dash-total-groups').innerText = uniqueGroups.size > 0 ? uniqueGroups.size : 1;
+            document.getElementById('dash-total-schools').innerText = uniqueSchools.size;
+            document.getElementById('dash-total-inactive').innerText = inactiveCount;
+            document.getElementById('dash-avg-duration').innerText = totalSessions > 0 ? `${Math.round(totalMinutes / totalSessions)} Mnt` : '0 Mnt';
+            document.getElementById('dash-eval-count').innerText = evalNimSet.size;
+
+            const alertSection = document.getElementById('alert-inactive-section');
+            const alertList = document.getElementById('alert-inactive-list');
+            if (inactiveCount > 0) {
+                alertSection.classList.remove('hidden');
+                alertList.innerHTML = db.filter(v => v.history === 0).map(v => `
+                    <span class="inline-flex items-center gap-1.5 bg-rose-50 neo-border border-rose-400 px-3 py-1.5">
+                        <a href="detail.html?nim=${encodeURIComponent(v.nim)}" class="text-[10px] font-bold uppercase hover:underline">
+                            ${v.name} <span class="font-mono font-normal text-rose-500">(${v.nim})</span>
+                        </a>
+                        ${waLink(v.phone) ? `<a href="${waLink(v.phone)}" target="_blank" rel="noopener" class="text-emerald-600 hover:text-emerald-800" title="Hubungi via WA"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+                    </span>
+                `).join('');
+            } else {
+                alertSection.classList.add('hidden');
+            }
+        }
+
+        function formatDateID(dt) {
+            if (!dt) return '-';
+            return dt.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        function renderLeaderboard() {
+            const search = document.getElementById('filter-search').value.trim().toLowerCase();
+            const status = document.getElementById('filter-status').value;
+            const sort = document.getElementById('filter-sort').value;
+
+            let rows = state.db.filter(v => {
+                if (status === 'active' && v.history === 0) return false;
+                if (status === 'inactive' && v.history > 0) return false;
+                if (search) {
+                    const hay = `${v.name} ${v.nim} ${v.group}`.toLowerCase();
+                    if (!hay.includes(search)) return false;
+                }
+                return true;
+            });
+
+            rows.sort((a, b) => {
+                if (sort === 'minutes_desc') return b.minutes - a.minutes;
+                if (sort === 'name_asc') return a.name.localeCompare(b.name);
+                if (sort === 'last_desc') return (b.lastDate || 0) - (a.lastDate || 0);
+                return b.history - a.history;
+            });
+
+            const tbody = document.getElementById('dash-table-body');
+            if (rows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center font-bold text-gray-400">Tidak ada data yang cocok.</td></tr>`;
+            } else {
+                tbody.innerHTML = rows.map((v, idx) => {
+                    let rankBadge = `${idx + 1}`;
+                    let rankClass = '';
+                    if (idx === 0) rankClass = 'rank-gold';
+                    else if (idx === 1) rankClass = 'rank-silver';
+                    else if (idx === 2) rankClass = 'rank-bronze';
+                    const statusBadge = v.history > 0
+                        ? `<span class="badge-aktif px-2 py-0.5 neo-border text-[9px] font-bold uppercase">Aktif</span>`
+                        : `<span class="badge-belum px-2 py-0.5 neo-border text-[9px] font-bold uppercase">Belum</span>`;
+
+                    return `
+                    <tr class="hover:bg-white transition-colors">
+                        <td class="p-2 border-r border-[#1F2A44]/20 text-center font-black">
+                            <span class="inline-flex items-center justify-center w-6 h-6 neo-border ${rankClass} text-[10px]">${rankBadge}</span>
+                        </td>
+                        <td class="p-2 font-bold text-[#1F2A44] border-r border-[#1F2A44]/20">
+                            <a href="detail.html?nim=${encodeURIComponent(v.nim)}" class="hover:underline hover:text-emerald-600 transition-colors inline-flex items-center gap-1">
+                                ${v.name} <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-50"></i>
+                            </a>
+                            <br><span class="font-mono text-[10px] text-gray-500 font-normal">${v.nim}</span>
+                            <br>${waButton(v.phone, 'mt-1')}
+                        </td>
+                        <td class="p-2 border-r border-[#1F2A44]/20 uppercase font-semibold text-gray-700">${v.group}</td>
+                        <td class="p-2 border-r border-[#1F2A44]/20 text-gray-600 font-medium">${v.mentor}</td>
+                        <td class="p-2 border-r border-[#1F2A44]/20 text-center">${statusBadge}</td>
+                        <td class="p-2 border-r border-[#1F2A44]/20 text-center font-bold">${v.evalCount}x</td>
+                        <td class="p-2 text-center font-black bg-[#F4B942]/10">${v.minutes} Mnt<br><span class="text-[10px] text-gray-400 font-normal">(${v.history} Kali · Terakhir: ${formatDateID(v.lastDate)})</span></td>
+                    </tr>`;
+                }).join('');
+            }
+
+            document.getElementById('filter-summary').innerText = `Menampilkan ${rows.length} dari ${state.db.length} volunteer`;
+        }
+
+        function renderGroupLeaderboard() {
+            const tbody = document.getElementById('group-table-body');
+            if (state.groupAgg.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center font-bold text-gray-400">Belum ada data kelompok.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = state.groupAgg.map((g, idx) => `
+                <tr class="hover:bg-white transition-colors">
+                    <td class="p-2 border-r border-[#1F2A44]/20 text-center font-black">${idx + 1}</td>
+                    <td class="p-2 border-r border-[#1F2A44]/20 uppercase font-bold">${g.name}</td>
+                    <td class="p-2 border-r border-[#1F2A44]/20 text-center">${g.members}</td>
+                    <td class="p-2 border-r border-[#1F2A44]/20 text-center font-bold">${g.sessions}x</td>
+                    <td class="p-2 border-r border-[#1F2A44]/20 text-center font-bold">${g.minutes} Mnt</td>
+                    <td class="p-2 text-center">${g.avgPerMember.toFixed(1)}x</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderIndividuLeaderboard() {
+            const tbody = document.getElementById('individu-table-body');
+            if (!state.individuAgg || state.individuAgg.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center font-bold text-gray-400">Belum ada pendaftar Individu.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = state.individuAgg.map((v, idx) => {
+                const statusBadge = v.history > 0
+                    ? `<span class="badge-aktif px-2 py-0.5 neo-border text-[9px] font-bold uppercase">Aktif</span>`
+                    : `<span class="badge-belum px-2 py-0.5 neo-border text-[9px] font-bold uppercase">Belum</span>`;
+                return `
+                <tr class="hover:bg-white transition-colors">
+                    <td class="p-2 border-r border-[#1F2A44]/20 text-center font-black">${idx + 1}</td>
+                    <td class="p-2 font-bold text-[#1F2A44] border-r border-[#1F2A44]/20">
+                        <a href="detail.html?nim=${encodeURIComponent(v.nim)}" class="hover:underline hover:text-emerald-600 transition-colors inline-flex items-center gap-1">
+                            ${v.name} <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-50"></i>
+                        </a>
+                        <br><span class="font-mono text-[10px] text-gray-500 font-normal">${v.nim}</span>
+                    </td>
+                    <td class="p-2 border-r border-[#1F2A44]/20 text-center">${waButton(v.phone)}</td>
+                    <td class="p-2 border-r border-[#1F2A44]/20 text-gray-600 font-medium">${v.mentor}</td>
+                    <td class="p-2 border-r border-[#1F2A44]/20 text-center">${statusBadge}</td>
+                    <td class="p-2 text-center font-black bg-[#F4B942]/10">${v.minutes} Mnt<br><span class="text-[10px] text-gray-400 font-normal">(${v.history} Kali · Terakhir: ${formatDateID(v.lastDate)})</span></td>
+                </tr>`;
+            }).join('');
+        }
+    </script>
+</body>
+</html>

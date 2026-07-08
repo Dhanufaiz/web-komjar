@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Volunteer - Komadiksi Mengajar 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <style>
+        body { background-color: #FFF4E6; color: #1F2A44; font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3, .y2k-font { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+        .neo-border { border: 4px solid #1F2A44; }
+        .neo-shadow { box-shadow: 8px 8px 0px 0px #1F2A44; }
+        .timeline-line { background-image: repeating-linear-gradient(to bottom, #1F2A44 0, #1F2A44 6px, transparent 6px, transparent 12px); width: 3px; }
+        .badge-aktif { background:#bbf7d0; color:#065f46; }
+        .badge-belum { background:#fecaca; color:#991b1b; }
+        .eval-line { background-image: repeating-linear-gradient(to bottom, #6d28d9 0, #6d28d9 6px, transparent 6px, transparent 12px); width: 3px; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 flex flex-col justify-between">
+
+    <header class="max-w-4xl mx-auto w-full mb-8">
+        <div class="bg-[#F4B942] neo-border neo-shadow p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-[#1F2A44] text-white p-3 neo-border text-2xl">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl tracking-tight text-[#1F2A44] uppercase">Profil Volunteer</h1>
+                    <p class="text-xs font-bold tracking-widest uppercase text-[#1F2A44]/80">Riwayat &amp; Progress Individu</p>
+                </div>
+            </div>
+            <a href="dashboard.html" class="bg-white px-3 py-1 neo-border text-xs font-bold uppercase tracking-wider text-center hover:bg-emerald-300 transition-colors">
+                → KEMBALI KE DASHBOARD
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto w-full flex-grow">
+        <div id="loading-state" class="bg-white neo-border neo-shadow p-8 text-center">
+            <div class="text-4xl mb-3"><i class="fa-solid fa-spinner fa-spin"></i></div>
+            <p class="font-bold uppercase text-sm text-gray-500">Menghubungkan ke Spreadsheet...</p>
+        </div>
+
+        <div id="error-state" class="hidden bg-white neo-border neo-shadow p-8 text-center">
+            <div class="text-4xl mb-3 text-red-500"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <p id="error-message" class="font-bold uppercase text-sm text-red-500">Data tidak ditemukan.</p>
+            <a href="dashboard.html" class="inline-block mt-4 bg-[#F4B942] px-4 py-2 neo-border text-xs font-bold uppercase hover:bg-emerald-300 transition-colors">← Kembali</a>
+        </div>
+
+        <div id="content-area" class="hidden space-y-6">
+            <section class="bg-white neo-border neo-shadow p-6 md:p-8">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6">
+                    <div class="bg-purple-200 text-[#1F2A44] p-4 neo-border text-3xl shrink-0">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h2 id="prof-name" class="text-xl md:text-2xl uppercase leading-tight">-</h2>
+                            <span id="prof-status-badge" class="badge-belum px-2 py-0.5 neo-border text-[9px] font-bold uppercase">-</span>
+                        </div>
+                        <div class="mt-1">
+                            <p id="prof-nim" class="font-mono text-xs text-gray-500 font-bold">NIM: -</p>
+                            <p id="prof-prodi-sub" class="text-xs text-[#1F2A44] font-semibold mt-0.5 uppercase"><i class="fa-solid fa-graduation-cap mr-1 text-[10px]"></i> Prodi: -</p>
+                            <p id="prof-school-sub" class="text-xs text-emerald-600 font-bold mt-0.5 uppercase"><i class="fa-solid fa-school mr-1 text-[10px]"></i> Mengajar di: -</p>
+                            <p id="prof-target-school-sub" class="text-xs text-blue-600 font-bold mt-0.5 uppercase"><i class="fa-solid fa-crosshairs mr-1 text-[10px]"></i> Sekolah Sasaran: -</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-3">
+                            <span id="prof-group" class="bg-[#FFF4E6] neo-border px-2 py-1 text-[10px] font-bold uppercase"><i class="fa-solid fa-people-group mr-1"></i> - </span>
+                            <span id="prof-mentor" class="bg-[#FFF4E6] neo-border px-2 py-1 text-[10px] font-bold uppercase"><i class="fa-solid fa-user-tie mr-1"></i> -</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-[#F4B942]/20 p-4 neo-border">
+                        <div class="text-[10px] font-bold text-gray-500 uppercase">Banyak Mengajar</div>
+                        <div id="stat-sessions" class="text-xl font-black y2k-font mt-1">0 Kali</div>
+                    </div>
+                    <div class="bg-emerald-100 p-4 neo-border">
+                        <div class="text-[10px] font-bold text-gray-500 uppercase">Total Durasi</div>
+                        <div id="stat-minutes" class="text-xl font-black y2k-font mt-1">0 Menit</div>
+                    </div>
+                    <div class="bg-purple-100 p-4 neo-border">
+                        <div class="text-[10px] font-bold text-gray-500 uppercase">Rata-rata / Sesi</div>
+                        <div id="stat-avg" class="text-xl font-black y2k-font mt-1">0 Menit</div>
+                    </div>
+                    <div class="bg-blue-100 p-4 neo-border">
+                        <div class="text-[10px] font-bold text-gray-500 uppercase">Sekolah Diajar</div>
+                        <div id="stat-schools" class="text-xl font-black y2k-font mt-1">0</div>
+                    </div>
+                    <div class="bg-[#FFF4E6] p-4 neo-border">
+                        <div class="text-[10px] font-bold text-gray-500 uppercase">Presensi Terakhir</div>
+                        <div id="stat-last" class="text-sm font-black y2k-font mt-1">-</div>
+                    </div>
+                    <div class="bg-amber-100 p-4 neo-border">
+                        <div class="text-[10px] font-bold text-gray-500 uppercase">Peringkat</div>
+                        <div id="stat-rank" class="text-sm font-black y2k-font mt-1">-</div>
+                    </div>
+                    <div class="bg-teal-100 p-4 neo-border">
+                        <div class="text-[10px] font-bold text-gray-500 uppercase">Eval Mingguan Terisi</div>
+                        <div id="stat-eval" class="text-xl font-black y2k-font mt-1">0</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-white neo-border neo-shadow p-6 md:p-8">
+                <h3 class="text-sm font-bold uppercase mb-1"><i class="fa-solid fa-timeline mr-2"></i> Riwayat Pembelajaran (Presensi)</h3>
+                <p class="text-[11px] text-gray-500 font-medium mb-5">Daftar aktivitas mengajar riil yang disinkronisasikan dari form presensi.</p>
+                <div id="timeline-container" class="relative pl-2"></div>
+                <div id="timeline-empty" class="hidden text-center p-6 font-bold text-gray-400 text-sm uppercase">Belum ada riwayat aktivitas.</div>
+            </section>
+
+            <section class="bg-white neo-border neo-shadow p-6 md:p-8">
+                <h3 class="text-sm font-bold uppercase mb-1 text-purple-700"><i class="fa-solid fa-clipboard-list mr-2"></i> Evaluasi Mingguan</h3>
+                <p class="text-[11px] text-gray-500 font-medium mb-5">Kendala, solusi, dan catatan yang disinkronisasikan dari form evaluasi mingguan.</p>
+                <div id="eval-container" class="relative pl-2"></div>
+                <div id="eval-empty" class="hidden text-center p-6 font-bold text-gray-400 text-sm uppercase">Belum ada evaluasi mingguan yang diisi.</div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="max-w-4xl mx-auto w-full mt-12 border-t-4 border-[#1F2A44] pt-4 text-xs font-bold uppercase text-gray-500">
+        <div>© 2026 KOMADIKSI MENGAJAR. MONITORING SYSTEM.</div>
+    </footer>
+
+    <script>
+        let appConfig = {
+            sheetUrl: "https://docs.google.com/spreadsheets/d/1FO9gRFT0Ic7UzjTLxsDpOoC3J5CWBlJ7LeA7diYlWC0/edit?gid=0#gid=0"
+        };
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetNim = (urlParams.get('nim') || '').trim();
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedConfig = localStorage.getItem('komjar_config_nim_2026');
+            if (savedConfig) appConfig = JSON.parse(savedConfig);
+
+            if (!targetNim) {
+                showError('NIM tidak ditemukan. Silakan akses profil dari Dashboard.');
+                return;
+            }
+            loadProfileData();
+        });
+
+        function showError(msg) {
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('error-state').classList.remove('hidden');
+            document.getElementById('error-message').innerText = msg;
+        }
+
+        function getBaseUrl() {
+            let url = appConfig.sheetUrl;
+            if (url.includes('/edit')) return url.split('/edit')[0];
+            return url;
+        }
+
+        function pick(row, keywords) {
+            const keys = Object.keys(row);
+            for (const k of keys) {
+                const kl = k.toLowerCase();
+                if (keywords.some(w => kl.includes(w))) {
+                    const v = row[k];
+                    if (v !== undefined && v !== null && String(v).trim() !== "") return String(v).trim();
+                }
+            }
+            return "";
+        }
+
+        let allPendaftaran = [];
+        let allPresensi = [];
+        let profileRow = null;
+        let sessions = [];
+        let evalSessions = [];
+        let loadedCount = 0;
+
+        function loadProfileData() {
+            const baseUrl = getBaseUrl();
+            const pendaftaranUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=PENDAFTARAN';
+            const presensiUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=PRESENSI';
+            const evalUrl = baseUrl + '/gviz/tq?tqx=out:csv&sheet=EVAL_MINGGUAN';
+
+            function checkDone() {
+                loadedCount++;
+                if (loadedCount === 3) renderAll();
+            }
+
+            Papa.parse(pendaftaranUrl, {
+                download: true, header: true, skipEmptyLines: true,
+                complete: function(results) {
+                    allPendaftaran = results.data || [];
+                    profileRow = allPendaftaran.find(r => pick(r, ['nim']) === targetNim) || null;
+                    checkDone();
+                },
+                error: function() { checkDone(); }
+            });
+
+            Papa.parse(presensiUrl, {
+                download: true, header: true, skipEmptyLines: true,
+                complete: function(results) {
+                    allPresensi = results.data || [];
+                    sessions = allPresensi
+                        .filter(r => pick(r, ['nim']) === targetNim)
+                        .map(r => ({
+                            timestamp: pick(r, ['timestamp']),
+                            school: pick(r, ['nama sekolah', 'sekolah', 'tempat', 'mitra']) || 'Sekolah Terdata',
+                            teachDate: pick(r, ['tanggal mengajar', 'tanggal']),
+                            duration: parseInt(pick(r, ['lama mengajar', 'menit', 'durasi'])) || 0,
+                            // Catatan: di form aslinya "materi" & "cerita" adalah SATU pertanyaan gabungan,
+                            // jadi ditampilkan sebagai satu blok saja (versi lama menampilkannya dobel di dua kotak berbeda).
+                            cerita: pick(r, ['materi apa yang diajarkan', 'ceritakan tentang pembelajaran', 'materi']),
+                            // Daftar peserta didik: field teks utama, dengan fallback link file/gambar jika diisi lewat upload.
+                            pesertaText: pick(r, ['daftar peserta didik']),
+                            pesertaFile: pick(r, ['jika berbentuk file', 'file atau gambar']),
+                            documentation: pick(r, ['dokumentasi', 'foto'])
+                        }));
+                    checkDone();
+                },
+                error: function() { checkDone(); }
+            });
+
+            Papa.parse(evalUrl, {
+                download: true, header: true, skipEmptyLines: true,
+                complete: function(results) {
+                    const rows = results.data || [];
+                    evalSessions = rows
+                        .filter(r => pick(r, ['nim']) === targetNim)
+                        .map(r => ({
+                            timestamp: pick(r, ['timestamp']),
+                            school: pick(r, ['nama sekolah', 'sekolah']) || 'Sekolah Terdata',
+                            // "kendala" cocok di dua kolom sekaligus ("Kendala Mengajar" & "Solusi dari Kendala Mengajar"),
+                            // tapi karena "Kendala Mengajar" urutannya lebih dulu di sheet, pick() akan mengambil kolom yang benar.
+                            kendala: pick(r, ['kendala mengajar']),
+                            solusi: pick(r, ['solusi']),
+                            saran: pick(r, ['saran']),
+                            pengalaman: pick(r, ['pengalaman'])
+                        }));
+                    checkDone();
+                },
+                error: function() { checkDone(); }
+            });
+        }
+
+        function parseDateFlexible(str) {
+            if (!str) return null;
+            // PERBAIKAN: format tanggal Google Form adalah M/D/YYYY (bulan lebih dulu), bukan D/M/YYYY.
+            let m = str.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
+            if (m) {
+                let [, mo, d, y] = m;
+                if (y.length === 2) y = '20' + y;
+                const dt = new Date(`${y}-${mo.padStart(2,'0')}-${d.padStart(2,'0')}`);
+                if (!isNaN(dt)) return dt;
+            }
+            const dt2 = new Date(str);
+            if (!isNaN(dt2)) return dt2;
+            return null;
+        }
+
+        function formatDateID(dt) {
+            if (!dt) return '-';
+            return dt.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        function formatDateShortID(dt) {
+            if (!dt) return '-';
+            return dt.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        // Menghitung peringkat volunteer berdasarkan jumlah sesi mengajar, dibanding seluruh volunteer terdaftar.
+        function computeRank() {
+            const countByNim = {};
+            allPresensi.forEach(r => {
+                const nim = pick(r, ['nim']);
+                if (nim) countByNim[nim] = (countByNim[nim] || 0) + 1;
+            });
+            const allNims = allPendaftaran.map(r => (r['NIM'] || r['nim'] || '').trim()).filter(Boolean);
+            const ranked = allNims
+                .map(nim => ({ nim, count: countByNim[nim] || 0 }))
+                .sort((a, b) => b.count - a.count);
+            const idx = ranked.findIndex(r => r.nim === targetNim);
+            return { rank: idx >= 0 ? idx + 1 : null, total: ranked.length };
+        }
+
+        function renderAll() {
+            document.getElementById('loading-state').classList.add('hidden');
+
+            if (!profileRow && sessions.length === 0) {
+                showError(`Data NIM "${targetNim}" tidak ditemukan.`);
+                return;
+            }
+
+            document.getElementById('content-area').classList.remove('hidden');
+
+            const name = (profileRow ? pick(profileRow, ['nama lengkap', 'nama']) : '') || 'Volunteer Komadiksi';
+            // PERBAIKAN: kelompok diambil langsung dari kolom "Nama Kelompok", bukan pencarian keyword bebas.
+            // Sebelumnya kata kunci "kelompok" juga cocok dengan kolom "Status Kelompok" (isinya "-", "Gabung", dst)
+            // yang urutannya lebih dulu di sheet, sehingga nama kelompok yang tampil sering salah.
+            const group = profileRow && profileRow['Nama Kelompok'] && profileRow['Nama Kelompok'].trim()
+                ? profileRow['Nama Kelompok'].trim() : 'Individu';
+            const mentor = profileRow ? pick(profileRow, ['mentor', 'nama mentor']) : 'Belum Ditentukan';
+            const prodi = profileRow ? pick(profileRow, ['prodi', 'program studi']) : 'Belum Terdata';
+            const targetSchools = profileRow
+                ? [pick(profileRow, ['sekolah sasaran 1']), pick(profileRow, ['sekolah sasaran 2'])].filter(s => s && s !== '-').join(', ')
+                : '';
+
+            const enriched = sessions.map(s => ({ ...s, _date: parseDateFlexible(s.teachDate) || parseDateFlexible(s.timestamp) }));
+            enriched.sort((a, b) => (b._date && a._date) ? b._date - a._date : 0);
+
+            const targetedSchool = enriched.length > 0 ? enriched[0].school : 'Belum Terdata';
+
+            document.getElementById('prof-name').innerText = name;
+            document.getElementById('prof-nim').innerText = `NIM: ${targetNim}`;
+            document.getElementById('prof-prodi-sub').innerHTML = `<i class="fa-solid fa-graduation-cap mr-1 text-[10px]"></i> Prodi: ${prodi}`;
+            document.getElementById('prof-school-sub').innerHTML = `<i class="fa-solid fa-school mr-1 text-[10px]"></i> Mengajar di: ${targetedSchool}`;
+            document.getElementById('prof-target-school-sub').innerHTML = `<i class="fa-solid fa-crosshairs mr-1 text-[10px]"></i> Sekolah Sasaran: ${targetSchools || 'Belum Terdata'}`;
+            document.getElementById('prof-group').innerHTML = `<i class="fa-solid fa-people-group mr-1"></i> ${group}`;
+            document.getElementById('prof-mentor').innerHTML = `<i class="fa-solid fa-user-tie mr-1"></i> Mentor: ${mentor}`;
+
+            const totalSessions = enriched.length;
+            const totalMinutes = enriched.reduce((sum, s) => sum + s.duration, 0);
+            const avgMinutes = totalSessions > 0 ? Math.round(totalMinutes / totalSessions) : 0;
+            const uniqueSchools = new Set(enriched.map(s => s.school).filter(s => s && s !== 'Sekolah Terdata'));
+            const lastSession = enriched[0];
+
+            const statusBadge = document.getElementById('prof-status-badge');
+            if (totalSessions > 0) {
+                statusBadge.innerText = 'Aktif';
+                statusBadge.className = 'badge-aktif px-2 py-0.5 neo-border text-[9px] font-bold uppercase';
+            } else {
+                statusBadge.innerText = 'Belum Mengajar';
+                statusBadge.className = 'badge-belum px-2 py-0.5 neo-border text-[9px] font-bold uppercase';
+            }
+
+            document.getElementById('stat-sessions').innerText = `${totalSessions} Sesi`;
+            document.getElementById('stat-minutes').innerText = `${totalMinutes} Menit`;
+            document.getElementById('stat-avg').innerText = `${avgMinutes} Menit`;
+            document.getElementById('stat-schools').innerText = uniqueSchools.size;
+            document.getElementById('stat-last').innerText = lastSession ? (lastSession._date ? formatDateShortID(lastSession._date) : (lastSession.teachDate || '-')) : '-';
+            document.getElementById('stat-eval').innerText = evalSessions.length;
+
+            const { rank, total } = computeRank();
+            document.getElementById('stat-rank').innerText = rank ? `#${rank} dari ${total}` : '-';
+
+            renderTimeline(enriched);
+            renderEvalMingguan();
+        }
+
+        function renderTimeline(enriched) {
+            const container = document.getElementById('timeline-container');
+            if (enriched.length === 0) {
+                document.getElementById('timeline-empty').classList.remove('hidden');
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = enriched.map((s, idx) => {
+                const dateLabel = s._date ? formatDateID(s._date) : (s.teachDate || 'Waktu tidak terekam');
+                const isLast = idx === enriched.length - 1;
+
+                // Dokumentasi bisa berisi beberapa link Google Drive dipisah koma; render sebagai beberapa tombol.
+                const docLinks = (s.documentation || '')
+                    .split(',')
+                    .map(u => u.trim())
+                    .filter(u => /^https?:\/\//i.test(u));
+                const docButtons = docLinks.map((url, i) => `
+                    <a href="${url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[10px] font-bold uppercase bg-[#1F2A44] text-white px-2 py-1 neo-border hover:bg-emerald-500 transition-colors mt-2 mr-2">
+                        <i class="fa-solid fa-camera"></i> Dokumentasi ${docLinks.length > 1 ? (i + 1) : ''}
+                    </a>`).join('');
+
+                // Daftar peserta didik: tampilkan sebagai teks, atau link jika hanya tersedia dalam bentuk file/gambar.
+                let pesertaBlock = '';
+                if (s.pesertaText) {
+                    const names = s.pesertaText.split(/[,\n]/).map(n => n.trim()).filter(Boolean);
+                    pesertaBlock = `
+                        <div>
+                            <span class="font-bold uppercase tracking-wider text-[10px] text-gray-500 block">Daftar Peserta Didik yang Hadir (${names.length}):</span>
+                            <div class="flex flex-wrap gap-1 mt-1">
+                                ${names.map(n => `<span class="bg-white neo-border px-2 py-0.5 text-[10px] font-semibold">${escapeHtml(n)}</span>`).join('')}
+                            </div>
+                        </div>`;
+                } else if (s.pesertaFile && /^https?:\/\//i.test(s.pesertaFile)) {
+                    pesertaBlock = `
+                        <div>
+                            <span class="font-bold uppercase tracking-wider text-[10px] text-gray-500 block">Daftar Peserta Didik yang Hadir:</span>
+                            <a href="${s.pesertaFile}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[10px] font-bold uppercase bg-white neo-border px-2 py-1 mt-1 hover:bg-emerald-100 transition-colors"><i class="fa-solid fa-file-lines"></i> Lihat Daftar (File/Gambar)</a>
+                        </div>`;
+                } else {
+                    pesertaBlock = `<div><span class="font-bold uppercase tracking-wider text-[10px] text-gray-500 block">Daftar Peserta Didik yang Hadir:</span><p class="italic text-gray-400 text-xs mt-1">Tidak ada data peserta</p></div>`;
+                }
+
+                return `
+                <div class="flex gap-4 ${isLast ? '' : 'pb-6'} relative">
+                    <div class="flex flex-col items-center shrink-0">
+                        <div class="w-4 h-4 rounded-full bg-[#F4B942] neo-border shrink-0 z-10"></div>
+                        ${isLast ? '' : '<div class="timeline-line flex-grow mt-1"></div>'}
+                    </div>
+                    <div class="flex-grow bg-[#FFF4E6] neo-border p-4 -mt-1 mb-1">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#1F2A44]/20 pb-2">
+                            <span class="text-xs font-black uppercase text-[#1F2A44]"><i class="fa-solid fa-calendar-day mr-1"></i> ${dateLabel}</span>
+                            <span class="text-[10px] font-bold uppercase text-gray-500 bg-white px-2 py-0.5 neo-border"><i class="fa-solid fa-clock mr-1"></i> ${s.duration} Menit</span>
+                        </div>
+
+                        <div class="space-y-3 text-xs text-[#1F2A44]">
+                            <div>
+                                <span class="font-bold uppercase tracking-wider text-[10px] text-gray-500 block">Sekolah:</span>
+                                <p class="font-medium mt-1">${escapeHtml(s.school)}</p>
+                            </div>
+
+                            ${pesertaBlock}
+
+                            <div>
+                                <span class="font-bold uppercase tracking-wider text-[10px] text-gray-500 block">Materi & Cerita Pembelajaran:</span>
+                                <p class="bg-white p-2 neo-border mt-1 font-medium">${s.cerita ? escapeHtml(s.cerita) : '<span class="italic text-gray-400">Tidak ada catatan</span>'}</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-1">${docButtons}</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function renderEvalMingguan() {
+            const container = document.getElementById('eval-container');
+            if (evalSessions.length === 0) {
+                document.getElementById('eval-empty').classList.remove('hidden');
+                container.innerHTML = '';
+                return;
+            }
+
+            const enriched = evalSessions.map(s => ({ ...s, _date: parseDateFlexible(s.timestamp) }));
+            enriched.sort((a, b) => (b._date && a._date) ? b._date - a._date : 0);
+
+            container.innerHTML = enriched.map((s, idx) => {
+                const dateLabel = s._date ? formatDateID(s._date) : (s.timestamp || 'Waktu tidak terekam');
+                const isLast = idx === enriched.length - 1;
+                return `
+                <div class="flex gap-4 ${isLast ? '' : 'pb-6'} relative">
+                    <div class="flex flex-col items-center shrink-0">
+                        <div class="w-4 h-4 rounded-full bg-purple-500 neo-border shrink-0 z-10"></div>
+                        ${isLast ? '' : '<div class="eval-line flex-grow mt-1"></div>'}
+                    </div>
+                    <div class="flex-grow bg-purple-50 neo-border p-4 -mt-1 mb-1">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#1F2A44]/20 pb-2">
+                            <span class="text-xs font-black uppercase text-[#1F2A44]"><i class="fa-solid fa-calendar-week mr-1"></i> ${dateLabel}</span>
+                            <span class="text-[10px] font-bold uppercase text-gray-500 bg-white px-2 py-0.5 neo-border"><i class="fa-solid fa-school mr-1"></i> ${escapeHtml(s.school)}</span>
+                        </div>
+                        <div class="space-y-3 text-xs text-[#1F2A44]">
+                            ${s.kendala ? `<div><span class="font-bold uppercase tracking-wider text-[10px] text-gray-500 block">Kendala Mengajar:</span><p class="bg-white p-2 neo-border mt-1 font-medium">${escapeHtml(s.kendala)}</p></div>` : ''}
+                            ${s.solusi ? `<div><span class="font-bold uppercase tracking-wider text-[10px] text-gray-500 block">Solusi dari Kendala:</span><p class="bg-white p-2 neo-border mt-1 font-medium">${escapeHtml(s.solusi)}</p></div>` : ''}
+                            ${s.saran ? `<div><span class="font-bold uppercase tracking-wider text-[10px] text-gray-500 block">Saran Kegiatan:</span><p class="bg-white p-2 neo-border mt-1 font-medium">${escapeHtml(s.saran)}</p></div>` : ''}
+                            ${s.pengalaman ? `<div class="border-t border-[#1F2A44]/10 pt-2 italic text-gray-600 bg-yellow-50/50 p-2 border-l-4 border-yellow-500"><span class="font-bold uppercase tracking-wider text-[9px] text-amber-700 block not-italic"><i class="fa-solid fa-star mr-1"></i> Pengalaman Menarik:</span>${escapeHtml(s.pengalaman)}</div>` : ''}
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
