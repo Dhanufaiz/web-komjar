@@ -298,10 +298,7 @@
 
             document.getElementById('content-area').classList.remove('hidden');
 
-            const name = (profileRow ? pick(profileRow, ['nama lengkap', 'nama']) : '') || 'Volunteer Komadiksi';
-            // PERBAIKAN: kelompok diambil langsung dari kolom "Nama Kelompok", bukan pencarian keyword bebas.
-            // Sebelumnya kata kunci "kelompok" juga cocok dengan kolom "Status Kelompok" (isinya "-", "Gabung", dst)
-            // yang urutannya lebih dulu di sheet, sehingga nama kelompok yang tampil sering salah.
+            const name = profileRow && profileRow['Nama Lengkap'] ? profileRow['Nama Lengkap'].trim() : (profileRow ? pick(profileRow, ['nama lengkap']) : 'Volunteer Komadiksi');            // PERBAIKAN: kelompok diambil langsung dari kolom "Nama Kelompok", bukan pencarian keyword bebas.
             const group = profileRow && profileRow['Nama Kelompok'] && profileRow['Nama Kelompok'].trim()
                 ? profileRow['Nama Kelompok'].trim() : 'Individu';
             const mentor = profileRow ? pick(profileRow, ['mentor', 'nama mentor']) : 'Belum Ditentukan';
