@@ -68,7 +68,6 @@
                             <p id="prof-nim" class="font-mono text-xs text-gray-500 font-bold">NIM: -</p>
                             <p id="prof-prodi-sub" class="text-xs text-[#1F2A44] font-semibold mt-0.5 uppercase"><i class="fa-solid fa-graduation-cap mr-1 text-[10px]"></i> Prodi: -</p>
                             <p id="prof-school-sub" class="text-xs text-emerald-600 font-bold mt-0.5 uppercase"><i class="fa-solid fa-school mr-1 text-[10px]"></i> Mengajar di: -</p>
-                            <p id="prof-target-school-sub" class="text-xs text-blue-600 font-bold mt-0.5 uppercase"><i class="fa-solid fa-crosshairs mr-1 text-[10px]"></i> Sekolah Sasaran: -</p>
                         </div>
                         <div class="flex flex-wrap gap-2 mt-3">
                             <span id="prof-group" class="bg-[#FFF4E6] neo-border px-2 py-1 text-[10px] font-bold uppercase"><i class="fa-solid fa-people-group mr-1"></i> - </span>
@@ -307,20 +306,16 @@
                 ? profileRow['Nama Kelompok'].trim() : 'Individu';
             const mentor = profileRow ? pick(profileRow, ['mentor', 'nama mentor']) : 'Belum Ditentukan';
             const prodi = profileRow ? pick(profileRow, ['prodi', 'program studi']) : 'Belum Terdata';
-            const targetSchools = profileRow
-                ? [pick(profileRow, ['sekolah sasaran 1']), pick(profileRow, ['sekolah sasaran 2'])].filter(s => s && s !== '-').join(', ')
-                : '';
-
             const enriched = sessions.map(s => ({ ...s, _date: parseDateFlexible(s.teachDate) || parseDateFlexible(s.timestamp) }));
             enriched.sort((a, b) => (b._date && a._date) ? b._date - a._date : 0);
 
-            const targetedSchool = enriched.length > 0 ? enriched[0].school : 'Belum Terdata';
+            // PERBAIKAN: Ambil langsung dari kolom 'Sekolah' di sheet PENDAFTARAN (profileRow)
+            const targetedSchool = profileRow ? pick(profileRow, ['sekolah']) : 'Belum Terdata';
 
             document.getElementById('prof-name').innerText = name;
             document.getElementById('prof-nim').innerText = `NIM: ${targetNim}`;
             document.getElementById('prof-prodi-sub').innerHTML = `<i class="fa-solid fa-graduation-cap mr-1 text-[10px]"></i> Prodi: ${prodi}`;
             document.getElementById('prof-school-sub').innerHTML = `<i class="fa-solid fa-school mr-1 text-[10px]"></i> Mengajar di: ${targetedSchool}`;
-            document.getElementById('prof-target-school-sub').innerHTML = `<i class="fa-solid fa-crosshairs mr-1 text-[10px]"></i> Sekolah Sasaran: ${targetSchools || 'Belum Terdata'}`;
             document.getElementById('prof-group').innerHTML = `<i class="fa-solid fa-people-group mr-1"></i> ${group}`;
             document.getElementById('prof-mentor').innerHTML = `<i class="fa-solid fa-user-tie mr-1"></i> Mentor: ${mentor}`;
 
