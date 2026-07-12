@@ -303,12 +303,24 @@
                 ? profileRow['Nama Kelompok'].trim() : 'Individu';
             const mentor = profileRow ? pick(profileRow, ['mentor', 'nama mentor']) : 'Belum Ditentukan';
             const prodi = profileRow ? pick(profileRow, ['prodi', 'program studi']) : 'Belum Terdata';
-            const enriched = sessions.map(s => ({ ...s, _date: parseDateFlexible(s.teachDate) || parseDateFlexible(s.timestamp) }));
-            enriched.sort((a, b) => (b._date && a._date) ? b._date - a._date : 0);
-
-            // PERBAIKAN: Ambil langsung dari kolom 'Sekolah' di sheet PENDAFTARAN (profileRow)
+            
+            // 1. Deklarasikan targetedSchool LEBIH DULU
             const targetedSchool = profileRow ? pick(profileRow, ['sekolah']) : 'Belum Terdata';
 
+            // 2. Baru jalankan map untuk menyamakan data sekolah
+            const enriched = sessions.map(s => {
+                let namaSekolahPresensi = s.school;
+                if (namaSekolahPresensi === 'Sekolah Terdata' || namaSekolahPresensi.trim() === '') {
+                    namaSekolahPresensi = targetedSchool;
+                }
+                return { 
+                    ...s, 
+                    school: namaSekolahPresensi,
+                    _date: parseDateFlexible(s.teachDate) || parseDateFlexible(s.timestamp) 
+                };
+            });
+        
+        enriched.sort((a, b) => (b._date && a._date) ? b._date - a._date : 0);
             document.getElementById('prof-name').innerText = name;
             document.getElementById('prof-nim').innerText = `NIM: ${targetNim}`;
             document.getElementById('prof-prodi-sub').innerHTML = `<i class="fa-solid fa-graduation-cap mr-1 text-[10px]"></i> Prodi: ${prodi}`;
@@ -358,36 +370,40 @@
                 const isLast = idx === enriched.length - 1;
 
                 // Dokumentasi bisa berisi beberapa link Google Drive dipisah koma; render sebagai beberapa tombol.
-                const docLinks = (s.documentation || '')
-                    .split(',')
-                    .map(u => u.trim())
-                    .filter(u => /^https?:\/\//i.test(u));
-                const docButtons = docLinks.map((url, i) => `
-                    <a href="${url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[10px] font-bold uppercase bg-[#1F2A44] text-white px-2 py-1 neo-border hover:bg-emerald-500 transition-colors mt-2 mr-2">
-                        <i class="fa-solid fa-camera"></i> Dokumentasi ${docLinks.length > 1 ? (i + 1) : ''}
-                    </a>`).join('');
+        // 1. Render Tombol Dokumentasi (Tetap sama)
+        const docLinks = (s.documentation || '')
+            .split(',')
+            .map(u => u.trim())
+            .filter(u => /^https?:\/\//i.test(u));
+        const docButtons = docLinks.map((url, i) => `
+            <a href="${url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[10px] font-bold uppercase bg-[#1F2A44] text-white px-2 py-1 neo-border hover:bg-emerald-500 transition-colors mt-2 mr-2">
+                <i class="fa-solid fa-camera"></i> Dokumentasi ${docLinks.length > 1 ? (i + 1) : ''}
+            </a>`).join('');
 
-                // Daftar peserta didik: tampilkan sebagai teks, atau link jika hanya tersedia dalam bentuk file/gambar.
-                let pesertaBlock = '';
-                if (s.pesertaText) {
-                    const names = s.pesertaText.split(/[,\n]/).map(n => n.trim()).filter(Boolean);
-                    pesertaBlock = `
-                        <div>
-                            <span class="font-bold uppercase tracking-wider text-[10px] text-gray-500 block">Daftar Peserta Didik yang Hadir (${names.length}):</span>
-                            <div class="flex flex-wrap gap-1 mt-1">
-                                ${names.map(n => `<span class="bg-white neo-border px-2 py-0.5 text-[10px] font-semibold">${escapeHtml(n)}</span>`).join('')}
-                            </div>
-                        </div>`;
-                } else if (s.pesertaFile && /^https?:\/\//i.test(s.pesertaFile)) {
-                    pesertaBlock = `
-                        <div>
-                            <span class="font-bold uppercase tracking-wider text-[10px] text-gray-500 block">Daftar Peserta Didik yang Hadir:</span>
-                            <a href="${s.pesertaFile}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[10px] font-bold uppercase bg-white neo-border px-2 py-1 mt-1 hover:bg-emerald-100 transition-colors"><i class="fa-solid fa-file-lines"></i> Lihat Daftar (File/Gambar)</a>
-                        </div>`;
-                } else {
-                    pesertaBlock = `<div><span class="font-bold uppercase tracking-wider text-[10px] text-gray-500 block">Daftar Peserta Didik yang Hadir:</span><p class="italic text-gray-400 text-xs mt-1">Tidak ada data peserta</p></div>`;
-                }
+        // 2. Render Tombol File Daftar Hadir (Disamakan dengan gaya dokumentasi)
+        const pesertaLinks = (s.pesertaFile || '')
+            .split(',')
+            .map(u => u.trim())
+            .filter(u => /^https?:\/\//i.test(u));
+        const pesertaButtons = pesertaLinks.map((url, i) => `
+            <a href="${url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[10px] font-bold uppercase bg-[#1F2A44] text-white px-2 py-1 neo-border hover:bg-emerald-500 transition-colors mt-2 mr-2">
+                <i class="fa-solid fa-file-lines"></i> Daftar Hadir ${pesertaLinks.length > 1 ? (i + 1) : ''}
+            </a>`).join('');
 
+        // Daftar peserta didik: jika teks tampilkan chip, jika file kosongkan blok teks karena tombol sudah ditaruh di bawah
+        let pesertaBlock = '';
+        if (s.pesertaText) {
+            const names = s.pesertaText.split(/[,\n]/).map(n => n.trim()).filter(Boolean);
+            pesertaBlock = `
+                <div>
+                    <span class="font-bold uppercase tracking-wider text-[10px] text-gray-500 block">Daftar Peserta Didik yang Hadir (${names.length}):</span>
+                    <div class="flex flex-wrap gap-1 mt-1">
+                        ${names.map(n => `<span class="bg-white neo-border px-2 py-0.5 text-[10px] font-semibold">${escapeHtml(n)}</span>`).join('')}
+                    </div>
+                </div>`;
+        } else if (pesertaLinks.length === 0) {
+            pesertaBlock = `<div><span class="font-bold uppercase tracking-wider text-[10px] text-gray-500 block">Daftar Peserta Didik yang Hadir:</span><p class="italic text-gray-400 text-xs mt-1">Tidak ada data peserta</p></div>`;
+        }
                 return `
                 <div class="flex gap-4 ${isLast ? '' : 'pb-6'} relative">
                     <div class="flex flex-col items-center shrink-0">
