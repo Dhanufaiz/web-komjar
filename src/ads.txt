@@ -1,0 +1,139 @@
+function pindahkanDokumentasiKomjar(e) {
+  // 1. MASUKKAN ID FOLDER "DOKUMENTASI VOLUNTEER"
+  var ID_FOLDER_UTAMA = "1Cr_vDyHiug3FlP7Yy0QTTN0foHHIw4Og"; 
+  
+  // 2. SESUAIKAN NAMA SHEET
+  var NAMA_SHEET_PRESENSI = "PRESENSI";       
+  var NAMA_SHEET_PENDAFTARAN = "PENDAFTARAN"; 
+  
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheetPresensi = e ? e.range.getSheet() : ss.getSheetByName(NAMA_SHEET_PRESENSI);
+  
+  // Pastikan hanya berjalan di sheet presensi
+  if (e && sheetPresensi.getName() !== NAMA_SHEET_PRESENSI) return;
+  
+  var row = e ? e.range.getRow() : sheetPresensi.getLastRow();
+  var headersPresensi = sheetPresensi.getRange(1, 1, 1, sheetPresensi.getLastColumn()).getValues()[0];
+  var dataRow = sheetPresensi.getRange(row, 1, 1, sheetPresensi.getLastColumn()).getValues()[0];
+  
+  var idxNIMPresensi = headersPresensi.indexOf("NIM");
+  var idxDokumentasi = headersPresensi.indexOf("Dokumentasi Kegiatan");
+  var idxDaftarPeserta = headersPresensi.indexOf("Daftar Peserta didik (Jika berbentuk file atau gambar)");
+  
+  if (idxNIMPresensi === -1) return; 
+  
+  var nim = dataRow[idxNIMPresensi].toString().trim();
+  if (!nim) return;
+  
+  // Baca data Pendaftaran
+  var sheetPendaftaran = ss.getSheetByName(NAMA_SHEET_PENDAFTARAN);
+  if (!sheetPendaftaran) {
+    Logger.log("Sheet PENDAFTARAN tidak ditemukan");
+    return;
+  }
+  
+  var dataPendaftaran = sheetPendaftaran.getDataRange().getValues();
+  var headersPendaftaran = dataPendaftaran[0];
+  
+  var idxNIMPendaftaran = headersPendaftaran.indexOf("NIM");
+  var idxTipe = headersPendaftaran.indexOf("Tipe Pendaftaran");
+  var idxSekolah = headersPendaftaran.indexOf("Sekolah");
+  var idxPilihan1 = headersPendaftaran.indexOf("1");
+  var idxNama = headersPendaftaran.indexOf("Nama Lengkap");
+  
+  var tipePendaftaran = "Individu"; 
+  var namaSekolah = "Belum Ditentukan";
+  var namaLengkap = "Unknown";
+  
+  // Cari NIM
+  for (var i = 1; i < dataPendaftaran.length; i++) {
+    if (dataPendaftaran[i][idxNIMPendaftaran].toString().trim() === nim) {
+      tipePendaftaran = dataPendaftaran[i][idxTipe];
+      namaLengkap = dataPendaftaran[i][idxNama];
+      
+      var sekolahUtama = dataPendaftaran[i][idxSekolah];
+      if (!sekolahUtama || sekolahUtama === "-") {
+        namaSekolah = dataPendaftaran[i][idxPilihan1] || "Belum Ditentukan";
+      } else {
+        namaSekolah = sekolahUtama;
+      }
+      break;
+    }
+  }
+  
+  // Buat folder terstruktur
+  var folderUtama;
+  try {
+    folderUtama = DriveApp.getFolderById(ID_FOLDER_UTAMA);
+  } catch(err) {
+    Logger.log("Folder utama gagal diakses. Pastikan ID benar. Error: " + err);
+    return;
+  }
+  
+  var targetFolder;
+  if (tipePendaftaran === "Individu") {
+    var folderIndividu = getOrCreateFolder(folderUtama, "Individu");
+    targetFolder = getOrCreateFolder(folderIndividu, namaSekolah);
+  } else {
+    var folderSekolah = getOrCreateFolder(folderUtama, namaSekolah);
+    targetFolder = getOrCreateFolder(folderSekolah, namaLengkap);
+  }
+  
+  // === FUNGSI PEMROSESAN & UPDATE LINK ===
+  // Fungsi ini memindahkan file, mengubah nama, lalu mengembalikan URL baru yang bersih
+  function processFilesAndUpdateLinks(urlString, prefixName) {
+    if (!urlString) return "";
+    var urls = urlString.split(",");
+    var newUrls = [];
+    
+    for (var j = 0; j < urls.length; j++) {
+      var url = urls[j].trim();
+      if (url.includes("drive.google.com")) {
+        try {
+          var fileId = url.match(/[-\w]{25,}/)[0];
+          var file = DriveApp.getFileById(fileId);
+          
+          file.moveTo(targetFolder);
+          
+          var oldName = file.getName();
+          var ext = oldName.includes(".") ? oldName.substring(oldName.lastIndexOf(".")) : "";
+          
+          // Format nama: NIM_Nama_Dokumentasi_1.jpeg
+          var newFileName = nim + "_" + namaLengkap + "_" + prefixName + "_" + (j+1) + ext;
+          file.setName(newFileName);
+          
+          // Ambil URL file yang bersih dan masukkan ke daftar
+          newUrls.push(file.getUrl());
+        } catch (err) {
+          Logger.log("Error memindah file: " + err.message);
+          newUrls.push(url); // Jika gagal, simpan link lama
+        }
+      } else {
+        newUrls.push(url);
+      }
+    }
+    return newUrls.join(", ");
+  }
+  
+  // 3. PROSES KOLOM DOKUMENTASI & TULIS ULANG KE SPREADSHEET
+  if (idxDokumentasi !== -1 && dataRow[idxDokumentasi]) {
+    var updatedDokumentasi = processFilesAndUpdateLinks(dataRow[idxDokumentasi].toString(), "Dokumentasi");
+    // getRange menggunakan sistem index 1 (sehingga idxDokumentasi + 1)
+    sheetPresensi.getRange(row, idxDokumentasi + 1).setValue(updatedDokumentasi);
+  }
+  
+  // 4. PROSES KOLOM DAFTAR HADIR & TULIS ULANG KE SPREADSHEET
+  if (idxDaftarPeserta !== -1 && dataRow[idxDaftarPeserta]) {
+    var updatedDaftarPeserta = processFilesAndUpdateLinks(dataRow[idxDaftarPeserta].toString(), "DaftarHadir");
+    sheetPresensi.getRange(row, idxDaftarPeserta + 1).setValue(updatedDaftarPeserta);
+  }
+}
+
+function getOrCreateFolder(parentFolder, folderName) {
+  var folders = parentFolder.getFoldersByName(folderName);
+  if (folders.hasNext()) {
+    return folders.next();
+  } else {
+    return parentFolder.createFolder(folderName);
+  }
+}
