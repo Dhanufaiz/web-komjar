@@ -130,8 +130,8 @@
 
         <!-- Peringatan: Belum Pernah Mengajar (dipindah ke bawah leaderboard nama volunteer) -->
         <section id="alert-inactive-section" class="hidden bg-white neo-border neo-shadow p-6 md:p-8">
-            <h3 class="text-sm font-bold uppercase mb-1 text-rose-700"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Perlu Ditindaklanjuti: Volunteer Belum Pernah Presensi</h3>
-            <p class="text-[11px] text-gray-500 font-medium mb-4">Volunteer berikut sudah terdaftar namun belum tercatat mengajar sama sekali di sheet PRESENSI.</p>
+            <h3 class="text-sm font-bold uppercase mb-1 text-#42f578"><i class="fa-solid fa-triangle-exclamation mr-2"></i> VOLUNTEER YANG SUDAH 12x PRESENSI</h3>
+            <p class="text-[11px] text-gray-500 font-medium mb-4">Volunteer berikut sudah memenuhi syarat 12x presensi.</p>
             <div id="alert-inactive-list" class="flex flex-wrap gap-2 max-h-56 overflow-y-auto pr-1"></div>
         </section>
 
@@ -424,10 +424,10 @@
             const alertList = document.getElementById('alert-inactive-list');
             if (inactiveCount > 0) {
                 alertSection.classList.remove('hidden');
-                alertList.innerHTML = db.filter(v => v.history === 0).map(v => `
-                    <span class="inline-flex items-center gap-1.5 bg-rose-50 neo-border border-rose-400 px-3 py-1.5">
+                alertList.innerHTML = db.filter(v => v.history >= 12).map(v => `
+                    <span class="inline-flex items-center gap-1.5 bg-green-50 neo-border border-green-400 px-3 py-1.5">
                         <a href="detail.html?nim=${encodeURIComponent(v.nim)}" class="text-[10px] font-bold uppercase hover:underline">
-                            ${v.name} <span class="font-mono font-normal text-rose-500">(${v.nim})</span>
+                            ${v.name} <span class="font-mono font-normal text-black-500">(${v.nim})</span>
                         </a>
                         ${waLink(v.phone) ? `<a href="${waLink(v.phone)}" target="_blank" rel="noopener" class="text-emerald-600 hover:text-emerald-800" title="Hubungi via WA"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
                     </span>
